@@ -1,0 +1,32 @@
+{
+  "name": "daivinci",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "ghost",
+  "license": "MIT",
+  "scripts": {
+    "start": "concurrently \"yarn run start:d-server\" \"yarn run start:d-web\"",
+    "start:d-web": "yarn --cwd ./packages/d-web/ start",
+    "start:d-server": "yarn --cwd ./packages/d-server/ start",
+    "install": "yarn run install:d-server && yarn run install:d-web",
+    "install:d-web": "yarn --cwd ./packages/d-web/ install",
+    "install:d-server": "yarn --cwd ./packages/d-server/ install"
+  },
+  "dependencies": {
+    "@visx/axis": "^3.3.0",
+    "@visx/curve": "^3.3.0",
+    "@visx/drag": "^3.3.0",
+    "@visx/gradient": "^3.3.0",
+    "@visx/grid": "^3.3.0",
+    "@visx/group": "^3.3.0",
+    "@visx/scale": "^3.3.0",
+    "concurrently": "^6.5.1"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb": "^19.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.0"
+  }
+}
