@@ -123,7 +123,7 @@ function Register() {
           ))}
           <LoadingButton
             className="mx-auto my-2"
-            variant="outline-dai"
+            variant="outline-wom"
             onClick={handleLogin}
             disabled={
               !data.name || !data.confirm || !data.email || !data.password

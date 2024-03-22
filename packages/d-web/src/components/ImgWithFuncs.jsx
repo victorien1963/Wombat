@@ -89,7 +89,7 @@ function ImgWithFunc({ setting }) {
         <div className="position-relative imgHover w-100 h-100 d-flex">
           <FontAwesomeIcon
             icon={faImage}
-            className="text-dai-white h-25 m-auto"
+            className="text-wom-white h-25 m-auto"
           />
           <div
               className="h-100 w-100 position-absolute d-flex funsHover"
@@ -102,7 +102,7 @@ function ImgWithFunc({ setting }) {
               aria-hidden
             >
               <Button
-                variant="btn-dai text-light m-auto"
+                variant="btn-wom text-light m-auto"
                 title="上傳"
                 onClick={(e) => {
                   e.stopPropagation()
@@ -132,7 +132,7 @@ function ImgWithFunc({ setting }) {
                 }}
               />
               <Button
-                variant="btn-dai text-light m-auto"
+                variant="btn-wom text-light m-auto"
                 title="刪除"
                 onClick={(e) => {
                   handlePicChange('')
@@ -143,7 +143,7 @@ function ImgWithFunc({ setting }) {
               </Button>
               <Button
                 title="下載"
-                variant="btn-dai text-light m-auto"
+                variant="btn-wom text-light m-auto"
                 href={src}
                 target="_blank"
                 onClick={(e) => {
@@ -201,7 +201,7 @@ function ImgWithFunc({ setting }) {
               aria-hidden
             >
               <Button
-                variant="btn-dai text-light m-auto"
+                variant="btn-wom text-light m-auto"
                 title="上傳"
                 onClick={(e) => {
                   e.stopPropagation()
@@ -231,7 +231,7 @@ function ImgWithFunc({ setting }) {
                 }}
               />
               <Button
-                variant="btn-dai text-light m-auto"
+                variant="btn-wom text-light m-auto"
                 title="刪除"
                 onClick={(e) => {
                   handlePicChange('')
@@ -242,7 +242,7 @@ function ImgWithFunc({ setting }) {
               </Button>
               <Button
                 title="下載"
-                variant="btn-dai text-light m-auto"
+                variant="btn-wom text-light m-auto"
                 href={src}
                 target="_blank"
                 onClick={(e) => {

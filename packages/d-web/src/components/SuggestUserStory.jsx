@@ -299,7 +299,7 @@ function SuggestUserStory({ setting }) {
   } = module
 
   return (
-    <div className="h-100 w-100 overflow-scroll text-dai border-table-dai p-3">
+    <div className="h-100 w-100 overflow-scroll text-wom border-table-wom p-3">
       <Row
         className="h-34"
         style={{
@@ -326,7 +326,7 @@ function SuggestUserStory({ setting }) {
           ) : (
             <FontAwesomeIcon
               icon={faImage}
-              className="text-dai-lighter h-25 m-auto"
+              className="text-wom-lighter h-25 m-auto"
             />
           )}
         </Col>
@@ -437,7 +437,7 @@ function SuggestUserStory({ setting }) {
           }}
         >
           <Form.Control
-            className="my-auto h-100 py-1 fw-regular fs-7 text-dai"
+            className="my-auto h-100 py-1 fw-regular fs-7 text-wom"
             style={{
               backgroundColor: 'transparent',
               borderColor: 'transparent',
@@ -455,7 +455,7 @@ function SuggestUserStory({ setting }) {
           }}
         >
           <Form.Control
-            className="my-auto h-100 py-1 fw-regular fs-7 text-dai"
+            className="my-auto h-100 py-1 fw-regular fs-7 text-wom"
             style={{
               backgroundColor: 'transparent',
               borderColor: 'transparent',
@@ -473,7 +473,7 @@ function SuggestUserStory({ setting }) {
           }}
         >
           <Form.Control
-            className="my-auto h-100 py-1 fw-regular fs-7 text-dai"
+            className="my-auto h-100 py-1 fw-regular fs-7 text-wom"
             style={{
               backgroundColor: 'transparent',
               borderColor: 'transparent',
@@ -491,7 +491,7 @@ function SuggestUserStory({ setting }) {
           }}
         >
           <Form.Control
-            className="my-auto h-100 py-1 fw-regular fs-7 text-dai"
+            className="my-auto h-100 py-1 fw-regular fs-7 text-wom"
             style={{
               backgroundColor: 'transparent',
               borderColor: 'transparent',
@@ -509,7 +509,7 @@ function SuggestUserStory({ setting }) {
           }}
         >
           <Form.Control
-            className="my-auto h-100 py-1 fw-regular fs-7 text-dai"
+            className="my-auto h-100 py-1 fw-regular fs-7 text-wom"
             style={{
               backgroundColor: 'transparent',
               borderColor: 'transparent',
@@ -548,7 +548,7 @@ function SuggestUserStory({ setting }) {
             }}
           >
             <Form.Control
-              className="my-auto h-100 py-1 fw-regular fs-7 text-dai"
+              className="my-auto h-100 py-1 fw-regular fs-7 text-wom"
               style={{
                 backgroundColor: 'transparent',
                 borderColor: 'transparent',
@@ -592,7 +592,7 @@ function SuggestUserStory({ setting }) {
                 </Tooltip>
               }
             >
-              <FontAwesomeIcon className="text-dai" icon={faCircleInfo} />
+              <FontAwesomeIcon className="text-wom" icon={faCircleInfo} />
             </OverlayTrigger>
           </span>
         </Col>
@@ -625,7 +625,7 @@ function SuggestUserStory({ setting }) {
         {ows.map((ow, i) => (
           <Col className="d-flex h-100">
             <Form.Control
-              className="my-auto h-100 py-1 fw-regular fs-7 text-dai"
+              className="my-auto h-100 py-1 fw-regular fs-7 text-wom"
               style={{
                 backgroundColor: 'transparent',
                 borderColor: 'transparent',

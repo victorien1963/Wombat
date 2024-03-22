@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Row, Col } from 'react-bootstrap'
 import SideNavBar from './SideNavBar'
 import TopBar from './TopBar'
-import GPTHelper from './GPTHelper'
+// import GPTHelper from './GPTHelper'
 import { AuthContext, DraftContext } from './ContextProvider'
 
 function AppWrapper({ children }) {
@@ -56,11 +56,12 @@ function AppWrapper({ children }) {
         >
           {children}
         </Row>
-        <div className="small fw-bold text-dai-light pt-2">
-          Copyright © 2023 TDRI. all rights reserved.
+        <div className="small fw-bold text-wom-light pt-2">
+          Copyright © 2024 Wavenet all rights reserved. ｜ Powered by Wavenet
+          Inc.
         </div>
       </Col>
-      <GPTHelper setting={{}} />
+      {/* <GPTHelper setting={{}} /> */}
     </div>
   ) : (
     <div

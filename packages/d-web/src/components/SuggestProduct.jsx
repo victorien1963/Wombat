@@ -45,7 +45,7 @@ function ColorForm({ setting }) {
   return (
     <>
       <Row
-        className="w-100 flex-fill mx-0 p-0 text-dai fw-bold rounded my-1 p-2"
+        className="w-100 flex-fill mx-0 p-0 text-wom fw-bold rounded my-1 p-2"
         style={{
           border: colors[index % 5],
           backgroundColor: bgcolors[index % 5],
@@ -56,7 +56,7 @@ function ColorForm({ setting }) {
         </div>
         <div className="d-flex flex-fill" style={{ width: '9%' }}>
           <Form.Control
-            className="my-auto py-0 fw-regular fs-7 text-dai text-center"
+            className="my-auto py-0 fw-regular fs-7 text-wom text-center"
             style={{
               backgroundColor: 'transparent',
               borderColor: 'transparent',
@@ -109,7 +109,7 @@ function ColorForm({ setting }) {
               <Col className="d-flex">
                 <p className="w-10 my-auto">{i + 1}.</p>
                 <Form.Control
-                  className="my-auto py-0 fw-regular fs-7 text-dai"
+                  className="my-auto py-0 fw-regular fs-7 text-wom"
                   style={{
                     backgroundColor: 'transparent',
                     borderColor: 'transparent',
@@ -168,7 +168,7 @@ function ColorForm({ setting }) {
               <Col className="d-flex">
                 <p className="w-10 my-auto">{i + 1}.</p>
                 <Form.Control
-                  className="my-auto py-0 fw-regular fs-7 text-dai"
+                  className="my-auto py-0 fw-regular fs-7 text-wom"
                   style={{
                     backgroundColor: 'transparent',
                     borderColor: 'transparent',
@@ -221,7 +221,7 @@ function ColorForm({ setting }) {
         </Col>
         <Col xs={1} className="d-flex px-1 flex-fill">
           <Form.Control
-            className="my-auto py-0 fw-regular fs-7 text-dai"
+            className="my-auto py-0 fw-regular fs-7 text-wom"
             style={{
               backgroundColor: 'transparent',
               borderColor: 'transparent',
@@ -272,7 +272,7 @@ function ColorForm({ setting }) {
         </Col>
         <Col xs={1} className="d-flex px-1 flex-fill">
           <Form.Control
-            className="my-auto py-0 fw-regular fs-7 text-dai"
+            className="my-auto py-0 fw-regular fs-7 text-wom"
             style={{
               backgroundColor: 'transparent',
               borderColor: 'transparent',
@@ -323,7 +323,7 @@ function ColorForm({ setting }) {
         </Col>
         <Col xs={1} className="d-flex px-1 flex-fill">
           <Form.Control
-            className="my-auto py-0 fw-regular fs-7 text-dai"
+            className="my-auto py-0 fw-regular fs-7 text-wom"
             style={{
               backgroundColor: 'transparent',
               borderColor: 'transparent',

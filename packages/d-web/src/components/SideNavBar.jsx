@@ -74,7 +74,7 @@ function SideNavBar() {
           drop="end"
           className="h-100 w-100"
           title={
-            <div className="text-dai fw-bolder pt-3">
+            <div className="text-wom fw-bolder pt-3">
               <div
                 style={{
                   height: '50px',
@@ -102,7 +102,7 @@ function SideNavBar() {
               active={location.pathname === link}
               onClick={() => navigate(link)}
               className="w-75 mx-auto my-2"
-              variant="outline-dai"
+              variant="outline-wom"
               size="sm"
             >
               {label}
@@ -111,7 +111,7 @@ function SideNavBar() {
           <Button
             onClick={() => setDraftId('')}
             className="w-75 mx-auto my-2"
-            variant="outline-dai"
+            variant="outline-wom"
             size="sm"
           >
             <FontAwesomeIcon icon={faReply} />
@@ -120,7 +120,7 @@ function SideNavBar() {
           <Button
             onClick={() => ref.current.click()}
             className="w-75 mx-auto mb-2 mt-auto"
-            variant="outline-dai"
+            variant="outline-wom"
             size="sm"
           >
             上傳檔案
@@ -155,7 +155,7 @@ function SideNavBar() {
               )
             }
             className="w-75 mx-auto my-2"
-            variant="outline-dai"
+            variant="outline-wom"
             size="sm"
           >
             匯出檔案
@@ -172,7 +172,7 @@ function SideNavBar() {
           window.location.replace('/')
         }}
         className={`w-75 mx-auto ${isInDraft ? '' : 'mt-auto'} my-2`}
-        variant="outline-dai"
+        variant="outline-wom"
         size="sm"
       >
         登出

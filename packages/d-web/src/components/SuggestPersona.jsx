@@ -15,7 +15,7 @@ import {
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { DraftContext } from './ContextProvider'
 import ImgWithFunc from './ImgWithFuncs'
-import VideoWithFunc from './VideoWithFuncs'
+// import VideoWithFunc from './VideoWithFuncs'
 import FloatInput from './FloatInput'
 
 const colors = [
@@ -58,7 +58,7 @@ function ColorForm({ setting }) {
 
   return (
     <Row
-      className="w-100 mx-0 my-1 p-0 text-dai fw-bold rounded"
+      className="w-100 mx-0 my-1 p-0 text-wom fw-bold rounded"
       style={{
         height: '5vh',
         border: colors[(i !== undefined ? i : index) % 5],
@@ -81,7 +81,7 @@ function ColorForm({ setting }) {
       )}
       <div className="d-flex" style={{ width: '15%' }}>
         <Form.Control
-          className="my-auto py-0 fw-regular fs-7 text-dai text-center"
+          className="my-auto py-0 fw-regular fs-7 text-wom text-center"
           style={{
             backgroundColor: 'transparent',
             borderColor: 'transparent',
@@ -104,7 +104,7 @@ function ColorForm({ setting }) {
       </div>
       <Col xs={2} className="d-flex px-1 flex-fill">
         <Form.Control
-          className="my-auto py-0 fw-regular fs-7 text-dai"
+          className="my-auto py-0 fw-regular fs-7 text-wom"
           style={{
             backgroundColor: 'transparent',
             borderColor: 'transparent',
@@ -127,7 +127,7 @@ function ColorForm({ setting }) {
       </Col>
       <Col xs={2} className="d-flex px-1 flex-fill">
         <Form.Control
-          className="my-auto py-0 fw-regular fs-7 text-dai"
+          className="my-auto py-0 fw-regular fs-7 text-wom"
           style={{
             backgroundColor: 'transparent',
             borderColor: 'transparent',
@@ -150,7 +150,7 @@ function ColorForm({ setting }) {
       </Col>
       <Col xs={2} className="d-flex px-1 flex-fill">
         <Form.Control
-          className="my-auto py-0 fw-regular fs-7 text-dai"
+          className="my-auto py-0 fw-regular fs-7 text-wom"
           style={{
             backgroundColor: 'transparent',
             borderColor: 'transparent',
@@ -208,7 +208,7 @@ function Insert({ setting }) {
     case 'textarea':
       return (
         <Row
-          className="w-100 mx-0 p-0 text-dai fw-bold rounded my-1"
+          className="w-100 mx-0 p-0 text-wom fw-bold rounded my-1"
           style={{
             minHeight: '125px',
             maxHeight: '125px',
@@ -273,7 +273,7 @@ function Insert({ setting }) {
     case 'image':
       return (
         <Row
-          className="w-100 h-100 flex-fill mx-0 p-0 text-dai fw-bold rounded my-1"
+          className="w-100 h-100 flex-fill mx-0 p-0 text-wom fw-bold rounded my-1"
           style={{
             minHeight: '125px',
             maxHeight: '125px',
@@ -318,7 +318,7 @@ function Insert({ setting }) {
     case 'video':
       return (
         <Row
-          className="w-100 mx-0 p-0 text-dai fw-bold rounded my-1"
+          className="w-100 mx-0 p-0 text-wom fw-bold rounded my-1"
           style={{
             minHeight: '125px',
             maxHeight: '125px',
@@ -327,7 +327,7 @@ function Insert({ setting }) {
           }}
         >
           <Col xs={10} className="p-0 h-100">
-            <VideoWithFunc
+            {/* <VideoWithFunc
               setting={{
                 id: `insert_${index}`,
                 scale: '100%',
@@ -341,7 +341,7 @@ function Insert({ setting }) {
                 },
                 maxHeight: '123px',
               }}
-            />
+            /> */}
           </Col>
           <Col xs={2} className="d-flex px-0 ms-auto">
             <div className="w-50 h-100 d-flex ms-auto">
@@ -363,7 +363,7 @@ function Insert({ setting }) {
     case 'html':
       return (
         <Row
-          className="w-100 mx-0 p-0 text-dai fw-bold rounded my-1"
+          className="w-100 mx-0 p-0 text-wom fw-bold rounded my-1"
           style={{
             minHeight: '125px',
             maxHeight: '125px',
@@ -434,7 +434,7 @@ function Insert({ setting }) {
     default:
       return (
         <Row
-          className="w-100 h-50 flex-fill mx-0 p-0 text-dai fw-bold rounded my-1"
+          className="w-100 h-50 flex-fill mx-0 p-0 text-wom fw-bold rounded my-1"
           // style={{
           //   border: colors[index % 5],
           //   backgroundColor: bgcolors[index % 5],
@@ -522,7 +522,7 @@ function ColorCard({ setting }) {
   })
   return (
     <Card
-      className="w-100 p-0 text-dai fw-bold border-0"
+      className="w-100 p-0 text-wom fw-bold border-0"
       style={{
         backgroundColor: 'transparent',
         minHeight: '200px',
@@ -558,7 +558,7 @@ function ColorCard({ setting }) {
                             ref={dragProvided.innerRef}
                             {...dragProvided.draggableProps}
                             {...dragProvided.dragHandleProps}
-                            className="text-dai fs-7 px-2 d-flex flex-column flex-grow-1 me-auto"
+                            className="text-wom fs-7 px-2 d-flex flex-column flex-grow-1 me-auto"
                             style={{
                               borderRadius: '0.375rem',
                               minHeight: page === 1 ? '7vh' : '130px',
@@ -670,7 +670,7 @@ function Module2Modal({ setting }) {
           取消
         </Button>
         <Button
-          variant="outline-dai"
+          variant="outline-wom"
           onClick={() =>
             handleClose(selected.map((index) => [...product[index], index]))
           }
@@ -731,11 +731,11 @@ function SuggestPersona({ setting }) {
   })
 
   return (
-    <div className="w-100 h-100 rounded text-dai px-4 overflow-scroll">
+    <div className="w-100 h-100 rounded text-wom px-4 overflow-scroll">
       <Row
-        className="w-100 h-100 rounded-top border-bottom-0 text-dai overflow-hidden"
+        className="w-100 h-100 rounded-top border-bottom-0 text-wom overflow-hidden"
         style={{
-          border: '1px solid rgb(35, 61, 99, 0.7)',
+          border: '1px solid rgb(99, 35, 35, 0.7)',
         }}
       >
         <Col xs={4} className="h-100 d-flex flex-column ps-2 pe-3 rounded">
@@ -751,7 +751,7 @@ function SuggestPersona({ setting }) {
             <div
               className="d-flex h-100 flex-wrap px-0"
               style={{
-                border: '1px dashed rgb(35, 61, 99, 0.7)',
+                border: '1px dashed rgb(99, 35, 35, 0.7)',
                 borderRadius: '5px',
                 maxHeight: '100%',
               }}
@@ -781,7 +781,7 @@ function SuggestPersona({ setting }) {
               ) : (
                 <FontAwesomeIcon
                   icon={faImage}
-                  className="text-dai-lighter h-25 m-auto"
+                  className="text-wom-lighter h-25 m-auto"
                 />
               )}
               {/* <Image /> */}
@@ -799,7 +799,7 @@ function SuggestPersona({ setting }) {
             <Col
               className="h-100 d-flex px-0 rounded"
               style={{
-                border: '1px dashed rgb(35, 61, 99, 0.7)',
+                border: '1px dashed rgb(99, 35, 35, 0.7)',
               }}
             >
               <Form.Control
@@ -832,7 +832,7 @@ function SuggestPersona({ setting }) {
             <Col
               className="h-100 d-flex px-0 rounded"
               style={{
-                border: '1px dashed rgb(35, 61, 99, 0.7)',
+                border: '1px dashed rgb(99, 35, 35, 0.7)',
               }}
             >
               <Form.Control
@@ -892,7 +892,7 @@ function SuggestPersona({ setting }) {
               <div key={i} className="d-flex">
                 <p className="w-10 my-auto">{i + 1}.</p>
                 <Form.Control
-                  className="my-auto py-0 fw-regular fs-7 text-dai"
+                  className="my-auto py-0 fw-regular fs-7 text-wom"
                   style={{
                     backgroundColor: 'transparent',
                     borderColor: 'transparent',
@@ -927,9 +927,9 @@ function SuggestPersona({ setting }) {
         </Col>
       </Row>
       <Row
-        className="w-100 h-60 border-bottom-0 border-top-0 text-dai d-flex flex-column"
+        className="w-100 h-60 border-bottom-0 border-top-0 text-wom d-flex flex-column"
         style={{
-          border: '1px solid rgb(35, 61, 99, 0.7)',
+          border: '1px solid rgb(99, 35, 35, 0.7)',
           overflowY: 'auto',
         }}
       >
@@ -949,7 +949,7 @@ function SuggestPersona({ setting }) {
             <Button
               onClick={() => setShow(true)}
               className="mb-auto ms-auto h-100"
-              variant="outline-dai"
+              variant="outline-wom"
               size="sm"
             >
               帶入競品分析資料 <FontAwesomeIcon icon={faFileImport} />
@@ -982,9 +982,9 @@ function SuggestPersona({ setting }) {
         </div>
       </Row>
       <Row
-        className="w-100 h-60 rounded-bottom border-top-0 text-dai d-flex flex-column"
+        className="w-100 h-60 rounded-bottom border-top-0 text-wom d-flex flex-column"
         style={{
-          border: '1px solid rgb(35, 61, 99, 0.7)',
+          border: '1px solid rgb(99, 35, 35, 0.7)',
           overflowY: 'auto',
         }}
       >
@@ -1002,7 +1002,7 @@ function SuggestPersona({ setting }) {
               <Dropdown.Toggle
                 className="btn-outline-lucaLight fs-7 w-100 h-100"
                 id="dropdown-basic"
-                variant="outline-dai"
+                variant="outline-wom"
                 size="sm"
               >
                 新增版位 <FontAwesomeIcon icon={faCirclePlus} />

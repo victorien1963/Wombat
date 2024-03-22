@@ -31,6 +31,18 @@ import {
   faSearch,
   faFileArrowUp,
   faCloudArrowDown,
+  faMusic,
+  faGhost,
+  faHeart,
+  faWandMagicSparkles,
+  faFaceLaughSquint,
+  faBrain,
+  faCapsules,
+  faRobot,
+  faPaw,
+  faMeteor,
+  faUtensils,
+  faUserSecret,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   AuthContext,
@@ -65,7 +77,7 @@ function Warn({ setting }) {
       <Modal.Body className="d-flex AccformCard">
         <div className="assPermis w-100">
           <Form className="px-2 Form-card flex-grow-1">
-            <Form.Group className="px-5 lh-md text-center text-dai">
+            <Form.Group className="px-5 lh-md text-center text-wom">
               <FontAwesomeIcon
                 icon={faCircleExclamation}
                 style={{ height: '5rem' }}
@@ -87,7 +99,7 @@ function Warn({ setting }) {
         <Button variant="secondary" onClick={() => handleClose(false)}>
           取消
         </Button>
-        <Button variant="dai" onClick={() => handleClose(show)}>
+        <Button variant="wom" onClick={() => handleClose(show)}>
           確定
         </Button>
       </Modal.Footer>
@@ -197,7 +209,7 @@ function Home() {
         <>
           <Row className="py-3">
             <Col>
-              <h5 className="text-nowrap text-dai">專案列表</h5>
+              <h5 className="text-nowrap text-wom">專案列表</h5>
             </Col>
           </Row>
           <Row>
@@ -217,7 +229,7 @@ function Home() {
                   }}
                 />
                 <Button
-                  variant="outline-dai"
+                  variant="outline-wom"
                   id="button-addon2"
                   title="搜 尋"
                   onClick={() => setSearch(tempSearch)}
@@ -230,7 +242,7 @@ function Home() {
               <Button
                 className="w-100 ms-auto me-2"
                 onClick={() => ref.current.click()}
-                variant="outline-dai"
+                variant="outline-wom"
               >
                 上傳專案&ensp;
                 <FontAwesomeIcon
@@ -261,7 +273,7 @@ function Home() {
               <Button
                 className="w-100 ms-auto"
                 onClick={() => handleDraftAdd()}
-                variant="outline-dai"
+                variant="outline-wom"
               >
                 新建專案&ensp;
                 <FontAwesomeIcon
@@ -275,7 +287,236 @@ function Home() {
               </Button>
             </Col>
           </Row>
-          <Row className="pt-3 text-dai">
+
+          <Row className="my-2 p-2" style={{ height: '10vw' }}>
+            <Col xs={1}>
+              <div
+                className="m-auto"
+                style={{
+                  display: 'flex',
+                  borderRadius: '50%',
+                  backgroundColor: '#c9e4e5',
+                  height: '4vw',
+                  width: '4vw',
+                }}
+              >
+                <FontAwesomeIcon
+                  style={{ color: '#317985' }}
+                  className="m-auto fs-4"
+                  icon={faMusic}
+                />
+              </div>
+              <h6 className="m-auto py-1">音樂</h6>
+            </Col>
+            <Col xs={1}>
+              <div
+                className="m-auto"
+                style={{
+                  display: 'flex',
+                  borderRadius: '50%',
+                  backgroundColor: '#ffe8f4',
+                  height: '4vw',
+                  width: '4vw',
+                }}
+              >
+                <FontAwesomeIcon
+                  className="m-auto text-danger fs-4"
+                  icon={faHeart}
+                />
+              </div>
+              <h6 className="m-auto py-1">愛情</h6>
+            </Col>
+            <Col xs={1}>
+              <div
+                className="m-auto"
+                style={{
+                  display: 'flex',
+                  borderRadius: '50%',
+                  backgroundColor: '#dfd9e3',
+                  height: '4vw',
+                  width: '4vw',
+                }}
+              >
+                <FontAwesomeIcon
+                  className="text-dark m-auto fs-4"
+                  icon={faGhost}
+                />
+              </div>
+              <h6 className="m-auto py-1">驚悚</h6>
+            </Col>
+            <Col xs={1}>
+              <div
+                className="m-auto"
+                style={{
+                  display: 'flex',
+                  borderRadius: '50%',
+                  backgroundColor: '#f8edff',
+                  height: '4vw',
+                  width: '4vw',
+                }}
+              >
+                <FontAwesomeIcon
+                  style={{ color: 'purple' }}
+                  className="m-auto fs-4"
+                  icon={faWandMagicSparkles}
+                />
+              </div>
+              <h6 className="m-auto py-1">奇幻</h6>
+            </Col>
+            <Col xs={1}>
+              <div
+                className="m-auto"
+                style={{
+                  display: 'flex',
+                  borderRadius: '50%',
+                  backgroundColor: '#ffe4d0',
+                  height: '4vw',
+                  width: '4vw',
+                }}
+              >
+                <FontAwesomeIcon
+                  style={{ color: 'orange' }}
+                  className="m-auto fs-4"
+                  icon={faPaw}
+                />
+              </div>
+              <h6 className="m-auto py-1">寵物</h6>
+            </Col>
+            <Col xs={1}>
+              <div
+                className="m-auto"
+                style={{
+                  display: 'flex',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgb(255 236 177)',
+                  height: '4vw',
+                  width: '4vw',
+                }}
+              >
+                <FontAwesomeIcon
+                  className="text-warning m-auto fs-5"
+                  icon={faFaceLaughSquint}
+                />
+              </div>
+              <h6 className="m-auto py-1">喜劇</h6>
+            </Col>
+            <Col xs={1}>
+              <div
+                className="m-auto"
+                style={{
+                  display: 'flex',
+                  borderRadius: '50%',
+                  backgroundColor: '#dde5ee',
+                  height: '4vw',
+                  width: '4vw',
+                }}
+              >
+                <FontAwesomeIcon
+                  style={{ color: '#4b64e8' }}
+                  className="m-auto fs-4"
+                  icon={faBrain}
+                />
+              </div>
+              <h6 className="m-auto py-1">知識</h6>
+            </Col>
+            <Col xs={1}>
+              <div
+                className="m-auto"
+                style={{
+                  display: 'flex',
+                  borderRadius: '50%',
+                  backgroundColor: '#ddd',
+                  height: '4vw',
+                  width: '4vw',
+                }}
+              >
+                <FontAwesomeIcon
+                  style={{ color: 'grey' }}
+                  className="m-auto fs-4"
+                  icon={faUserSecret}
+                />
+              </div>
+              <h6 className="m-auto py-1">犯罪</h6>
+            </Col>
+            <Col xs={1}>
+              <div
+                className="m-auto"
+                style={{
+                  display: 'flex',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgb(255 223 223)',
+                  height: '4vw',
+                  width: '4vw',
+                }}
+              >
+                <FontAwesomeIcon
+                  style={{ color: 'brown' }}
+                  className="m-auto fs-4"
+                  icon={faUtensils}
+                />
+              </div>
+              <h6 className="m-auto py-1">美食</h6>
+            </Col>
+            <Col xs={1}>
+              <div
+                className="m-auto"
+                style={{
+                  display: 'flex',
+                  borderRadius: '50%',
+                  backgroundColor: '#eed',
+                  height: '4vw',
+                  width: '4vw',
+                }}
+              >
+                <FontAwesomeIcon
+                  style={{ color: 'green' }}
+                  className="m-auto fs-4"
+                  icon={faCapsules}
+                />
+              </div>
+              <h6 className="m-auto py-1">醫療</h6>
+            </Col>
+            <Col xs={1}>
+              <div
+                className="m-auto"
+                style={{
+                  display: 'flex',
+                  borderRadius: '50%',
+                  backgroundColor: '#e7ddee',
+                  height: '4vw',
+                  width: '4vw',
+                }}
+              >
+                <FontAwesomeIcon
+                  style={{ color: 'indigo' }}
+                  className="m-auto fs-4"
+                  icon={faMeteor}
+                />
+              </div>
+              <h6 className="m-auto py-1">科幻</h6>
+            </Col>
+            <Col xs={1}>
+              <div
+                className="m-auto"
+                style={{
+                  display: 'flex',
+                  borderRadius: '50%',
+                  backgroundColor: '#ddd',
+                  height: '4vw',
+                  width: '4vw',
+                }}
+              >
+                <FontAwesomeIcon
+                  style={{ color: '#666' }}
+                  className="m-auto fs-4"
+                  icon={faRobot}
+                />
+              </div>
+              <h6 className="m-auto py-1">未來</h6>
+            </Col>
+          </Row>
+
+          <Row className="pt-3 text-wom">
             <Col xs={1} className="ps-4">
               編號
             </Col>
@@ -329,7 +570,7 @@ function Home() {
                                     dragProvided.draggableProps.style
                                   ),
                                   height: '100px',
-                                  // className="position-absolute text-dai fs-7"
+                                  // className="position-absolute text-wom" fs-7"
                                   // top: `${5}%`,
                                   // left: `${3 + i * 32}%`,
                                   // height: '85%',
@@ -338,16 +579,16 @@ function Home() {
                               >
                                 <Row
                                   key={draft_id}
-                                  className="w-100 h-100 mx-0 p-0 text-dai fw-bold rounded my-1 py-2 text-center"
+                                  className="w-100 h-100 mx-0 p-0 text-wom fw-bold rounded my-1 py-2 text-center"
                                   onClick={() => setDraftId(draft_id)}
                                   style={{
-                                    border: '1px solid rgb(35, 61, 99, 0.7)',
-                                    backgroundColor: 'rgb(35, 61, 99, 0.1)',
+                                    border: '1px solid rgb(99, 35, 35, 0.7)',
+                                    backgroundColor: 'rgb(254 215 187 / 11%)',
                                   }}
                                 >
                                   <Col xs={1} className="d-flex">
                                     <Form.Control
-                                      className="my-auto h-75 py-0 fw-regular fs-7 text-dai text-center"
+                                      className="my-auto h-75 py-0 fw-regular fs-7 text-wom text-center"
                                       style={{
                                         backgroundColor: 'transparent',
                                         borderColor: 'transparent',
@@ -379,7 +620,7 @@ function Home() {
                                     className="d-flex h-100 flex-column"
                                   >
                                     <Form.Control
-                                      className="my-auto h-75 py-0 fw-regular fs-7 text-dai text-center"
+                                      className="my-auto h-75 py-0 fw-regular fs-7 text-wom text-center"
                                       style={{
                                         backgroundColor: 'transparent',
                                         borderColor: 'transparent',
@@ -411,7 +652,7 @@ function Home() {
                                   </Col>
                                   <Col xs={3} className="d-flex">
                                     <Form.Control
-                                      className="my-auto h-75 py-0 fw-regular fs-7 text-dai text-center"
+                                      className="my-auto h-75 py-0 fw-regular fs-7 text-wom text-center"
                                       style={{
                                         backgroundColor: 'transparent',
                                         borderColor: 'transparent',
@@ -462,7 +703,7 @@ function Home() {
                                     className="d-flex justify-content-center"
                                   >
                                     <Button
-                                      className="w-25 h-50 btn-hover-dai my-auto"
+                                      className="w-25 h-50 btn-hover-wom my-auto"
                                       onClick={(e) => {
                                         setEditing(
                                           editing && draft_id === editing
@@ -486,7 +727,7 @@ function Home() {
                                       />
                                     </Button>
                                     <Button
-                                      className="w-25 h-50 btn-hover-dai my-auto"
+                                      className="w-25 h-50 btn-hover-wom my-auto"
                                       onClick={(e) => {
                                         setshowWarn(draft_id)
                                         e.stopPropagation()
@@ -502,7 +743,7 @@ function Home() {
                                       />
                                     </Button>
                                     <Button
-                                      className="w-25 h-50 btn-hover-dai my-auto"
+                                      className="w-25 h-50 btn-hover-wom my-auto"
                                       onClick={async (e) => {
                                         e.stopPropagation()
                                         setloading(true)
@@ -545,7 +786,7 @@ function Home() {
                                           // cursor: 'grabbing',
                                         }
                                       }
-                                      className="w-25 my-auto fs-5 text-dai-light"
+                                      className="w-25 my-auto fs-5 text-wom"
                                       // onClick={() => handleDraftDelete(draft_id)}
                                       title="排 序"
                                     />
@@ -627,7 +868,7 @@ function Home() {
               ))}
               <LoadingButton
                 className="mx-auto my-2"
-                variant="outline-dai"
+                variant="outline-wom"
                 onClick={handleLogin}
                 btnText="登入"
               />

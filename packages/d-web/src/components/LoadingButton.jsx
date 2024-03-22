@@ -37,7 +37,7 @@ LoadingButton.propTypes = {
 
 LoadingButton.defaultProps = {
   style: {},
-  variant: 'outline-dai',
+  variant: 'outline-wom',
   btnText: '確 定',
   className: '',
   onClick: () => {},

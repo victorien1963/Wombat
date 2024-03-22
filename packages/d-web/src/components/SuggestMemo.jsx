@@ -13,7 +13,7 @@ function ColorCard({ setting }) {
   } = setting
   return (
     <Card
-      className="h-100 w-100 p-0 text-dai fw-bold"
+      className="h-100 w-100 p-0 text-wom fw-bold"
       style={{
         backgroundColor: bgcolor,
         border: color,
@@ -27,11 +27,11 @@ function ColorCard({ setting }) {
       {module[label] && (
         <Card.Body className="position-relative d-flex flex-column">
           {module[label].map(([tag, content, memo], i) => (
-            <div className="my-auto py-0 fw-regular fs-6 text-dai d-flex px-2">
-              <p className="my-auto fw-regular text-dai fs-6">{i + 1}.</p>
+            <div className="my-auto py-0 fw-regular fs-6 text-wom d-flex px-2">
+              <p className="my-auto fw-regular text-wom fs-6">{i + 1}.</p>
               <Form.Control
                 key={tag}
-                className="text-dai"
+                className="text-wom"
                 style={{
                   backgroundColor: 'transparent',
                   borderColor: 'transparent',

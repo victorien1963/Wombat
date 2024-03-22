@@ -22,7 +22,7 @@ function MenuCard() {
       </Card.Body>
       <Card.Footer className="d-flex justify-content-around">
         <Link to="/info" className="align-item-start">
-          <Button variant="outline-dai">修 改 密 碼</Button>
+          <Button variant="outline-wom">修 改 密 碼</Button>
         </Link>
         {/* <Button
           variant="lucaLight"

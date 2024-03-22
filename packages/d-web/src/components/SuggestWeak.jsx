@@ -71,7 +71,7 @@ function ColorForm({ setting }) {
                     ref={dragProvided.innerRef}
                     {...dragProvided.draggableProps}
                     {...dragProvided.dragHandleProps}
-                    className="text-dai fs-7 p-2 d-flex mx-1 flex-column"
+                    className="text-wom fs-7 p-2 d-flex mx-1 flex-column"
                     style={{
                       background: bgcolors[id % 5],
                       border: '1px solid #ced4da',
@@ -93,7 +93,7 @@ function ColorForm({ setting }) {
                       <Col xs={3} className="d-flex">
                         <p className="w-10 my-auto">{i + 1}.</p>
                         <Form.Control
-                          className="my-auto py-0 fw-regular fs-7 text-dai"
+                          className="my-auto py-0 fw-regular fs-7 text-wom"
                           style={{
                             backgroundColor: 'transparent',
                             borderColor: 'transparent',
@@ -110,7 +110,7 @@ function ColorForm({ setting }) {
                       </Col>
                       <Col className="d-flex h-100 flex-column">
                         <Form.Control
-                          className="my-auto py-0 fw-regular fs-7 text-dai"
+                          className="my-auto py-0 fw-regular fs-7 text-wom"
                           style={{
                             backgroundColor: 'transparent',
                             borderColor: 'transparent',
@@ -137,7 +137,7 @@ function ColorForm({ setting }) {
                           style={{
                             cursor: 'pointer',
                           }}
-                          className="ms-auto mb-auto fs-7 text-dai-light"
+                          className="ms-auto mb-auto fs-7 text-wom-light"
                           onClick={() => handleCardDelete('weak', i)}
                           title="刪除"
                         />
@@ -148,9 +148,9 @@ function ColorForm({ setting }) {
               </Draggable>
             ))}
             <div
-              className="text-dai fs-7 p-2 d-flex mx-1 flex-column"
+              className="text-wom fs-7 p-2 d-flex mx-1 flex-column"
               style={{
-                background: 'rgba(35, 61, 99, 0.1)',
+                background: 'rgb(254 215 187 / 11%)',
                 border: '1px solid #ced4da',
                 borderRadius: '0.375rem',
                 width: '100%',
@@ -161,7 +161,7 @@ function ColorForm({ setting }) {
                 style={{
                   cursor: 'pointer',
                 }}
-                className="m-auto fs-2 text-dai-lighter"
+                className="m-auto fs-2 text-wom-lighter"
                 onClick={() => handleCardAdd('weak')}
                 title="新增"
               />
@@ -249,9 +249,9 @@ function ColorCard({ setting }) {
               {list.map(([tag, content, id], i) =>
                 tag.plus ? (
                   <div
-                    className="text-dai fs-7 p-3 d-flex mx-1 mb-2 flex-column"
+                    className="text-wom fs-7 p-3 d-flex mx-1 mb-2 flex-column"
                     style={{
-                      background: 'rgba(35, 61, 99, 0.1)',
+                      background: 'rgb(254 215 187 / 11%)',
                       border: '1px solid #ced4da',
                       borderRadius: '0.375rem',
                       width: '19%',
@@ -262,7 +262,7 @@ function ColorCard({ setting }) {
                       style={{
                         cursor: 'pointer',
                       }}
-                      className="m-auto fs-2 text-dai-lighter"
+                      className="m-auto fs-2 text-wom-lighter"
                       onClick={() => handleCardAdd('weak')}
                       title="新增"
                     />
@@ -275,7 +275,7 @@ function ColorCard({ setting }) {
                           ref={dragProvided.innerRef}
                           {...dragProvided.draggableProps}
                           {...dragProvided.dragHandleProps}
-                          className="text-dai fs-7 p-2 d-flex mx-1 flex-column"
+                          className="text-wom fs-7 p-2 d-flex mx-1 flex-column"
                           style={{
                             background: bgcolors[id % 5],
                             border: '1px solid #ced4da',
@@ -297,7 +297,7 @@ function ColorCard({ setting }) {
                             <Col xs={2} />
                             <Col>
                               <Form.Control
-                                className="my-auto py-0 fw-regular fs-7 text-dai text-center"
+                                className="my-auto py-0 fw-regular fs-7 text-wom text-center"
                                 style={{
                                   backgroundColor: 'transparent',
                                   borderColor: 'transparent',
@@ -321,7 +321,7 @@ function ColorCard({ setting }) {
                                 style={{
                                   cursor: 'pointer',
                                 }}
-                                className="ms-auto mt-auto fs-7 text-dai-light"
+                                className="ms-auto mt-auto fs-7 text-wom-light"
                                 onClick={() =>
                                   handleCardDelete('weak', index * 5 + i)
                                 }

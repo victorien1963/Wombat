@@ -73,10 +73,10 @@ function ColorCard({ setting }) {
   return (
     <>
       <Card
-        className="w-100 p-0 text-dai fw-bold"
+        className="w-100 p-0 text-wom fw-bold"
         style={{
           height: '100%',
-          border: '1px solid rgb(35, 61, 99, 0.7)',
+          border: '1px solid rgb(99, 35, 35, 0.7)',
           backgroundColor: bgcolor,
           // border: 'none',
         }}
@@ -90,12 +90,12 @@ function ColorCard({ setting }) {
               whiteSpace: 'nowrap',
             }}
           >
-            <Col xs={2} className="fs-6 text-dai">
+            <Col xs={2} className="fs-6 text-wom">
               方案{index + 1}
             </Col>
             <Col xs={10}>
               <Form.Control
-                className="my-auto py-0 fw-regular fs-6 text-dai text-center h-100"
+                className="my-auto py-0 fw-regular fs-6 text-wom text-center h-100"
                 style={{
                   backgroundColor: 'transparent',
                   borderColor: 'transparent',
@@ -158,7 +158,7 @@ function ColorCard({ setting }) {
                 style={{
                   cursor: 'pointer',
                 }}
-                className="m-auto fs-7 text-dai-light"
+                className="m-auto fs-7 text-wom-light"
                 onMouseEnter={() => setHoverRate(rate)}
                 onMouseLeave={() => setHoverRate(0)}
                 onClick={() =>

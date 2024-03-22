@@ -61,7 +61,7 @@ function GPTHelper() {
         }}
       >
         <div className="d-flex h-6">
-          <h6 className="mx-auto fw-bolder fs-7 text-dai">dAI 小幫手</h6>
+          <h6 className="mx-auto fw-bolder fs-7 text-wom">wom 小幫手</h6>
           <div
             className="position-absolute fs-7"
             style={{ top: '3.5%', right: '11.5%', cursor: 'pointer' }}
@@ -96,9 +96,9 @@ function GPTHelper() {
                         height: '1.5rem',
                         width: 'auto',
                       }}
-                      className="ms-auto mt-auto fs-1 text-dai-light"
+                      className="ms-auto mt-auto fs-1 text-wom-light"
                       // onClick={() => setShow(!show)}
-                      title={show ? '隱 藏' : 'dAI 小 幫 手'}
+                      title={show ? '隱 藏' : 'wom 小 幫 手'}
                     />
                   </Col>
                 )}
@@ -109,7 +109,7 @@ function GPTHelper() {
                   <div
                     className={`border rounded px-2 py-1 ${
                       from === 'gpt'
-                        ? 'text-start bg-dai-light'
+                        ? 'text-start bg-wom-light'
                         : 'text-end bg-grey'
                     }`}
                   >
@@ -135,9 +135,9 @@ function GPTHelper() {
                     height: '1.5rem',
                     width: 'auto',
                   }}
-                  className="ms-auto mt-auto fs-1 text-dai-light"
+                  className="ms-auto mt-auto fs-1 text-wom-light"
                   // onClick={() => setShow(!show)}
-                  title={show ? '隱 藏' : 'dAI 小 幫 手'}
+                  title={show ? '隱 藏' : 'wom 小 幫 手'}
                 />
               </Col>
 
@@ -173,9 +173,9 @@ function GPTHelper() {
             width: 'auto',
             pointerEvents: 'auto',
           }}
-          className="ms-auto mt-auto fs-1 text-dai-light"
+          className="ms-auto mt-auto fs-1 text-wom-light"
           onClick={() => setShow(!show)}
-          title={show ? '隱 藏' : 'dAI 小 幫 手'}
+          title={show ? '隱 藏' : 'wom 小 幫 手'}
         />
         <i
           className="loader-dot mx-auto mt-auto"
@@ -189,7 +189,7 @@ function GPTHelper() {
           fontWeight: '900',
         }}
       >
-        dAI Robot
+        wom Robot
       </Row>
     </div>
   )

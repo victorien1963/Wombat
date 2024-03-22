@@ -463,7 +463,7 @@ function ColorForm({ setting }) {
   return (
     <>
       <Row
-        className="w-100 flex-fill mx-0 p-0 text-dai fw-bold rounded my-1 p-2"
+        className="w-100 flex-fill mx-0 p-0 text-wom fw-bold rounded my-1 p-2"
         style={{
           border: colors[index % 5],
           backgroundColor: bgcolors[index % 5],
@@ -472,7 +472,7 @@ function ColorForm({ setting }) {
       >
         <Col className="d-flex">
           <Form.Control
-            className="my-auto py-0 fw-regular fs-7 text-dai text-center"
+            className="my-auto py-0 fw-regular fs-7 text-wom text-center"
             style={{
               backgroundColor: 'transparent',
               borderColor: 'transparent',
@@ -521,7 +521,7 @@ function ColorForm({ setting }) {
         </Col>
         <Col className="d-flex px-1">
           <Form.Control
-            className="my-auto py-0 fw-regular fs-7 text-dai"
+            className="my-auto py-0 fw-regular fs-7 text-wom"
             style={{
               backgroundColor: 'transparent',
               borderColor: 'transparent',
@@ -573,7 +573,7 @@ function ColorForm({ setting }) {
         </Col>
         <Col className="d-flex px-1">
           <Form.Control
-            className="my-auto py-0 fw-regular fs-7 text-dai"
+            className="my-auto py-0 fw-regular fs-7 text-wom"
             style={{
               backgroundColor: 'transparent',
               borderColor: 'transparent',
@@ -693,7 +693,7 @@ function SuggestMatrix({ setting }) {
                 </Tooltip>
               }
             >
-              <FontAwesomeIcon className="text-dai" icon={faCircleInfo} />
+              <FontAwesomeIcon className="text-wom" icon={faCircleInfo} />
             </OverlayTrigger>
           </Col>
           <Col>主要客群</Col>
@@ -722,10 +722,10 @@ function SuggestMatrix({ setting }) {
               ))}
           <Button
             title="新增"
-            className="text-dai fs-7 p-2 d-flex mx-0 my-1 flex-column"
+            className="text-wom fs-7 p-2 d-flex mx-0 my-1 flex-column"
             style={{
-              background: 'rgba(35, 61, 99, 0.1)',
-              border: '1px solid rgba(35, 61, 99, 0.1)',
+              background: 'rgb(255 218 193 / 11%)',
+              border: '1px solid rgba(99, 35, 35, 0.7)',
               borderRadius: '0.375rem',
               width: '100%',
               cursor: 'pointer',
@@ -745,7 +745,7 @@ function SuggestMatrix({ setting }) {
           >
             <FontAwesomeIcon
               icon={faCirclePlus}
-              className="m-auto fs-4 text-dai-lighter fs-8"
+              className="m-auto fs-4 text-wom-lighter fs-8"
             />
           </Button>
         </div>

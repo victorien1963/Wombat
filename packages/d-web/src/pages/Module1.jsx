@@ -127,7 +127,7 @@ function Module1() {
             key={t}
             active={tab === t}
             onClick={() => setTab(t)}
-            className="w-75 mx-auto my-2 text-dai"
+            className="w-75 mx-auto my-2 text-wom"
             variant="light"
             size="sm"
           >

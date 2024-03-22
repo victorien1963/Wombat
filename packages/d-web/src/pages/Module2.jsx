@@ -338,7 +338,7 @@ function Module2() {
                 onClick={() =>
                   setTab(t === '創新機會' ? '創新機會_產品創新' : t)
                 }
-                className="h-100 w-20 mx-auto text-dai"
+                className="h-100 w-20 mx-auto text-wom"
                 variant="light"
                 size="sm"
               >

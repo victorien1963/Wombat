@@ -31,7 +31,7 @@ function Warn({ setting }) {
       <Modal.Body className="d-flex AccformCard">
         <div className="assPermis w-100">
           <Form className="px-2 Form-card flex-grow-1">
-            <Form.Group className="px-5 lh-md text-center text-dai">
+            <Form.Group className="px-5 lh-md text-center text-wom">
               <FontAwesomeIcon
                 icon={faCircleExclamation}
                 style={{ height: '5rem' }}
@@ -48,7 +48,7 @@ function Warn({ setting }) {
         <Button variant="secondary" onClick={() => handleClose(false)}>
           取消
         </Button>
-        <Button variant="dai" onClick={() => handleClose(show)}>
+        <Button variant="wom" onClick={() => handleClose(show)}>
           確定
         </Button>
       </Modal.Footer>
@@ -120,7 +120,7 @@ function ColorCard({ setting }) {
   })
   return (
     <Card
-      className="w-100 h-100 p-0 text-dai fw-bold"
+      className="w-100 h-100 p-0 text-wom fw-bold"
       style={{
         border: color,
         backgroundColor: bgcolor,
@@ -140,7 +140,7 @@ function ColorCard({ setting }) {
             style={{
               cursor: 'pointer',
             }}
-            className="ms-auto my-auto fs-7 text-dai-light"
+            className="ms-auto my-auto fs-7 text-wom-light"
             onClick={() => handleCardAdd(label)}
             title="新增"
           />
@@ -173,7 +173,7 @@ function ColorCard({ setting }) {
                             //   dragSnapshot.isDragging,
                             //   dragProvided.draggableProps.style
                             // )}
-                            className="text-dai fs-7 p-2 d-flex flex-column flex-grow-1 mx-1"
+                            className="text-wom fs-7 p-2 d-flex flex-column flex-grow-1 mx-1"
                             style={{
                               background: 'white',
                               border: '1px solid #ced4da',
@@ -187,7 +187,7 @@ function ColorCard({ setting }) {
                                 dragSnapshot.isDragging,
                                 dragProvided.draggableProps.style
                               ),
-                              // className="position-absolute text-dai fs-7"
+                              // className="position-absolute text-wom fs-7"
                               // top: `${5}%`,
                               // left: `${3 + i * 32}%`,
                               // height: '85%',
@@ -205,7 +205,7 @@ function ColorCard({ setting }) {
                               <Col xs={2} />
                               <Col>
                                 <Form.Control
-                                  className="my-auto py-0 fw-regular fs-7 text-dai text-center"
+                                  className="my-auto py-0 fw-regular fs-7 text-wom text-center"
                                   style={{
                                     backgroundColor: 'transparent',
                                     borderColor: 'transparent',
@@ -229,7 +229,7 @@ function ColorCard({ setting }) {
                                   style={{
                                     cursor: 'pointer',
                                   }}
-                                  className="ms-auto mt-auto fs-7 text-dai-light"
+                                  className="ms-auto mt-auto fs-7 text-wom-light"
                                   onClick={() =>
                                     setshowWarn({
                                       show: true,
@@ -293,8 +293,8 @@ function SuggestCard({ setting }) {
           label: '政治',
           engLabel: 'Political',
           key: 'Political',
-          bgcolor: 'rgb(35, 61, 99, 0.1)',
-          color: '1px solid rgb(35, 61, 99, 0.7)',
+          bgcolor: 'rgb(99 35 35 / 5%)',
+          color: '1px solid rgb(99 35 35 / 5%)',
         },
         {
           label: '經濟',

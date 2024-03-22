@@ -75,7 +75,7 @@ function Loading({ setting }) {
             animation: 'spinner-border 1.5s linear infinite',
           }}
         />
-        <h5 className="text-dai fs-4 my-auto ms-2">
+        <h5 className="text-wom fs-4 my-auto ms-2">
           {step ? `${step}...` : '資料生成中...'}
         </h5>
       </div>
@@ -100,7 +100,7 @@ function Loading({ setting }) {
       </ProgressBar>
       <div className="d-flex mb-auto mt-3 justify-content-center">
         <span
-          className="text-dai fs-8"
+          className="text-wom fs-8"
           style={{
             textDecoration: 'underline',
             cursor: 'pointer',

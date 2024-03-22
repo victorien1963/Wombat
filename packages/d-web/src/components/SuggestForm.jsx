@@ -32,7 +32,7 @@ function ColorForm({ setting }) {
   return (
     <>
       <Row
-        className="w-100 mx-0 p-0 text-dai fw-bold rounded my-1 p-2"
+        className="w-100 mx-0 p-0 text-wom fw-bold rounded my-1 p-2"
         style={{
           border: color,
           backgroundColor: bgcolor,
@@ -52,7 +52,7 @@ function ColorForm({ setting }) {
               <Col className="d-flex" xs={2}>
                 <p className="w-10 my-auto">{i + 1}.</p>
                 <Form.Control
-                  className="my-auto py-0 fw-regular fs-7 text-dai"
+                  className="my-auto py-0 fw-regular fs-7 text-wom"
                   style={{
                     backgroundColor: 'transparent',
                     borderColor: 'transparent',
@@ -88,7 +88,7 @@ function ColorForm({ setting }) {
               </Col>
               <Col className="d-flex">
                 <Form.Control
-                  className="my-auto py-0 fw-regular fs-7 text-dai"
+                  className="my-auto py-0 fw-regular fs-7 text-wom"
                   style={{
                     backgroundColor: 'transparent',
                     borderColor: 'transparent',

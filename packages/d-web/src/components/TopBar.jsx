@@ -149,7 +149,7 @@ function PromptOptions({ setting }) {
               /> */}
                 {method && (
                   <Button
-                    variant="outline-dai"
+                    variant="outline-wom"
                     id="button-addon2"
                     title="搜 尋"
                     onClick={() => {
@@ -248,8 +248,8 @@ function TopBar() {
           <Button
             // disabled={model === 'gpt-3.5-turbo'}
             onClick={() => handleModelChange('gpt-3.5-turbo')}
-            className="w-50 text-dai d-flex"
-            variant="outline-dai"
+            className="w-50 text-wom d-flex"
+            variant="outline-wom"
             style={{
               height: '94%',
             }}
@@ -261,8 +261,8 @@ function TopBar() {
           <Button
             // disabled={model === 'gpt-4'}
             onClick={() => handleModelChange('gpt-4')}
-            className="w-50 text-dai d-flex"
-            variant="outline-dai"
+            className="w-50 text-wom d-flex"
+            variant="outline-wom"
             style={{
               height: '94%',
             }}
@@ -278,7 +278,7 @@ function TopBar() {
           <Button
             disabled={!cursor}
             onClick={() => handleRecover(cursor - 1)}
-            className="w-50 text-dai d-flex py-2"
+            className="w-50 text-wom d-flex py-2"
             style={{
               height: '94%',
               border: '1px solid #0a004e',
@@ -287,7 +287,7 @@ function TopBar() {
             size="sm"
           >
             <FontAwesomeIcon
-              className="m-auto text-dai w-100"
+              className="m-auto text-wom w-100"
               icon={faRotateLeft}
               title="復原"
             />
@@ -295,7 +295,7 @@ function TopBar() {
           <Button
             disabled={cursor === history.length - 1}
             onClick={() => handleRecover(cursor + 1)}
-            className="w-50 text-dai d-flex py-2"
+            className="w-50 text-wom d-flex py-2"
             style={{
               height: '94%',
               border: '1px solid #0a004e',
@@ -304,7 +304,7 @@ function TopBar() {
             size="sm"
           >
             <FontAwesomeIcon
-              className="m-auto text-dai w-100"
+              className="m-auto text-wom w-100"
               icon={faRotateRight}
               title="取消復原"
             />
