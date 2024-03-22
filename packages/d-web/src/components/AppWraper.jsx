@@ -56,7 +56,7 @@ function AppWrapper({ children }) {
         >
           {children}
         </Row>
-        <div className="small fw-bold text-wom-light pt-2">
+        <div className="small fw-bold text-wom py-1">
           Copyright © 2024 Wavenet all rights reserved. ｜ Powered by Wavenet
           Inc.
         </div>

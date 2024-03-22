@@ -595,8 +595,8 @@ function Home() {
                                     className="w-100 h-100 mx-0 p-0 text-wom fw-bold rounded my-1 py-2 text-center"
                                     onClick={() => setDraftId(draft_id)}
                                     style={{
-                                      border: '1px solid rgb(99, 35, 35, 0.7)',
-                                      backgroundColor: 'rgb(254 215 187 / 11%)',
+                                      border: '1px solid #aaa',
+                                      backgroundColor: 'rgb(252 234 234 / 11%)',
                                     }}
                                   >
                                     <Col xs={1} className="d-flex">
@@ -889,8 +889,8 @@ function Home() {
                                     className="w-100 h-100 mx-0 p-0 text-wom fw-bold rounded my-1 py-2 text-center"
                                     onClick={() => setDraftId(draft_id)}
                                     style={{
-                                      border: '1px solid rgb(99, 35, 35, 0.7)',
-                                      backgroundColor: 'rgb(254 215 187 / 11%)',
+                                      border: '1px solid #aaa',
+                                      backgroundColor: 'rgb(252 234 234 / 11%)',
                                     }}
                                   >
                                     <Col xs={1} className="d-flex">
