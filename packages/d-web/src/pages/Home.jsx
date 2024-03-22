@@ -317,6 +317,7 @@ function Home() {
                   backgroundColor: '#ffe8f4',
                   height: '4vw',
                   width: '4vw',
+                  cursor: 'pointer',
                 }}
               >
                 <FontAwesomeIcon
@@ -335,6 +336,7 @@ function Home() {
                   backgroundColor: '#dfd9e3',
                   height: '4vw',
                   width: '4vw',
+                  cursor: 'pointer',
                 }}
               >
                 <FontAwesomeIcon
@@ -353,6 +355,7 @@ function Home() {
                   backgroundColor: '#f8edff',
                   height: '4vw',
                   width: '4vw',
+                  cursor: 'pointer',
                 }}
               >
                 <FontAwesomeIcon
@@ -372,6 +375,7 @@ function Home() {
                   backgroundColor: '#ffe4d0',
                   height: '4vw',
                   width: '4vw',
+                  cursor: 'pointer',
                 }}
               >
                 <FontAwesomeIcon
@@ -391,6 +395,7 @@ function Home() {
                   backgroundColor: 'rgb(255 236 177)',
                   height: '4vw',
                   width: '4vw',
+                  cursor: 'pointer',
                 }}
               >
                 <FontAwesomeIcon
@@ -409,6 +414,7 @@ function Home() {
                   backgroundColor: '#dde5ee',
                   height: '4vw',
                   width: '4vw',
+                  cursor: 'pointer',
                 }}
               >
                 <FontAwesomeIcon
@@ -428,6 +434,7 @@ function Home() {
                   backgroundColor: '#ddd',
                   height: '4vw',
                   width: '4vw',
+                  cursor: 'pointer',
                 }}
               >
                 <FontAwesomeIcon
@@ -447,6 +454,7 @@ function Home() {
                   backgroundColor: 'rgb(255 223 223)',
                   height: '4vw',
                   width: '4vw',
+                  cursor: 'pointer',
                 }}
               >
                 <FontAwesomeIcon
@@ -466,6 +474,7 @@ function Home() {
                   backgroundColor: '#eed',
                   height: '4vw',
                   width: '4vw',
+                  cursor: 'pointer',
                 }}
               >
                 <FontAwesomeIcon
@@ -485,6 +494,7 @@ function Home() {
                   backgroundColor: '#e7ddee',
                   height: '4vw',
                   width: '4vw',
+                  cursor: 'pointer',
                 }}
               >
                 <FontAwesomeIcon
@@ -504,6 +514,7 @@ function Home() {
                   backgroundColor: '#ddd',
                   height: '4vw',
                   width: '4vw',
+                  cursor: 'pointer',
                 }}
               >
                 <FontAwesomeIcon
@@ -516,302 +527,599 @@ function Home() {
             </Col>
           </Row>
 
-          <Row className="pt-3 text-wom">
-            <Col xs={1} className="ps-4">
-              編號
-            </Col>
-            <Col xs={3}>專案名稱</Col>
-            <Col xs={3}>備註</Col>
-            <Col>建立時間</Col>
-            <Col>更新時間</Col>
-            <Col xs={2}>操作</Col>
-          </Row>
-          <DragDropContext
-            onDragEnd={(e) => {
-              const result = Array.from(drafts)
-              const [removed] = result.splice(e.source.index, 1)
-              result.splice(e.destination.index, 0, removed)
-              setDrafts(result)
+          <div
+            style={{
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              height: 'auto',
             }}
           >
-            <Droppable droppableId="droppable" direction="vertical">
-              {(dropProvided, dropSnapshot) => (
-                <div
-                  {...dropProvided.droppableProps}
-                  ref={dropProvided.innerRef}
-                  style={getListStyle(dropSnapshot.isDraggingOver)}
-                  className="w-100 h-100 overflow-scroll"
-                >
-                  {drafts ? (
-                    drafts
-                      .filter(({ setting }) => {
-                        const { name, remark } = setting
-                        return (
-                          !search ||
-                          (name && name.includes(search)) ||
-                          (remark && remark.includes(search))
-                        )
-                      })
-                      .map(
-                        ({ draft_id, setting, created_on, updated_on }, i) => (
-                          <Draggable
-                            key={`${draft_id}`}
-                            draggableId={`${draft_id}`}
-                            index={i}
-                          >
-                            {(dragProvided, dragSnapshot) => (
-                              <div
-                                ref={dragProvided.innerRef}
-                                {...dragProvided.draggableProps}
-                                {...dragProvided.dragHandleProps}
-                                style={{
-                                  ...getItemStyle(
-                                    dragSnapshot.isDragging,
-                                    dragProvided.draggableProps.style
-                                  ),
-                                  height: '100px',
-                                  // className="position-absolute text-wom" fs-7"
-                                  // top: `${5}%`,
-                                  // left: `${3 + i * 32}%`,
-                                  // height: '85%',
-                                  // width: '30%',
-                                }}
-                              >
-                                <Row
-                                  key={draft_id}
-                                  className="w-100 h-100 mx-0 p-0 text-wom fw-bold rounded my-1 py-2 text-center"
-                                  onClick={() => setDraftId(draft_id)}
+            {/* 1 */}
+            <Row className="px-3 fs-5 fw-bold text-wom">最近的模板</Row>
+            <DragDropContext
+              onDragEnd={(e) => {
+                const result = Array.from(drafts)
+                const [removed] = result.splice(e.source.index, 1)
+                result.splice(e.destination.index, 0, removed)
+                setDrafts(result)
+              }}
+            >
+              <Droppable droppableId="droppable" direction="vertical">
+                {(dropProvided, dropSnapshot) => (
+                  <div
+                    {...dropProvided.droppableProps}
+                    ref={dropProvided.innerRef}
+                    style={getListStyle(dropSnapshot.isDraggingOver)}
+                    className="w-100 h-auto"
+                  >
+                    {drafts ? (
+                      drafts
+                        .filter(({ setting }) => {
+                          const { name, remark } = setting
+                          return (
+                            !search ||
+                            (name && name.includes(search)) ||
+                            (remark && remark.includes(search))
+                          )
+                        })
+                        .map(
+                          (
+                            { draft_id, setting, created_on, updated_on },
+                            i
+                          ) => (
+                            <Draggable
+                              key={`${draft_id}`}
+                              draggableId={`${draft_id}`}
+                              index={i}
+                            >
+                              {(dragProvided, dragSnapshot) => (
+                                <div
+                                  ref={dragProvided.innerRef}
+                                  {...dragProvided.draggableProps}
+                                  {...dragProvided.dragHandleProps}
                                   style={{
-                                    border: '1px solid rgb(99, 35, 35, 0.7)',
-                                    backgroundColor: 'rgb(254 215 187 / 11%)',
+                                    ...getItemStyle(
+                                      dragSnapshot.isDragging,
+                                      dragProvided.draggableProps.style
+                                    ),
+                                    height: '100px',
+                                    // className="position-absolute text-wom" fs-7"
+                                    // top: `${5}%`,
+                                    // left: `${3 + i * 32}%`,
+                                    // height: '85%',
+                                    // width: '30%',
                                   }}
                                 >
-                                  <Col xs={1} className="d-flex">
-                                    <Form.Control
-                                      className="my-auto h-75 py-0 fw-regular fs-7 text-wom text-center"
-                                      style={{
-                                        backgroundColor: 'transparent',
-                                        borderColor: 'transparent',
-                                        boxShadow:
-                                          editing === draft_id
-                                            ? '0 0 0 0.2rem inset rgb(202, 198, 230)'
-                                            : '',
-                                        color: '#0a004e',
-                                        fontWeight: '700',
-                                      }}
-                                      onClick={(e) => {
-                                        if (editing && editing !== draft_id) {
-                                          setEditing(draft_id)
-                                        }
-                                        e.stopPropagation()
-                                      }}
-                                      defaultValue={setting.id || draft_id}
-                                      // value={setting.name || ''}
-                                      onChange={(e) =>
-                                        setDraft(
-                                          { id: e.target.value },
-                                          draft_id
-                                        )
-                                      }
-                                    />
-                                  </Col>
-                                  <Col
-                                    xs={3}
-                                    className="d-flex h-100 flex-column"
+                                  <Row
+                                    key={draft_id}
+                                    className="w-100 h-100 mx-0 p-0 text-wom fw-bold rounded my-1 py-2 text-center"
+                                    onClick={() => setDraftId(draft_id)}
+                                    style={{
+                                      border: '1px solid rgb(99, 35, 35, 0.7)',
+                                      backgroundColor: 'rgb(254 215 187 / 11%)',
+                                    }}
                                   >
-                                    <Form.Control
-                                      className="my-auto h-75 py-0 fw-regular fs-7 text-wom text-center"
-                                      style={{
-                                        backgroundColor: 'transparent',
-                                        borderColor: 'transparent',
-                                        boxShadow:
-                                          editing === draft_id
-                                            ? '0 0 0 0.2rem inset rgb(202, 198, 230)'
-                                            : '',
-                                        color: '#0a004e',
-                                        fontWeight: '700',
-                                      }}
-                                      onClick={(e) => {
-                                        if (editing && editing !== draft_id) {
-                                          setEditing(draft_id)
-                                        }
-                                        e.stopPropagation()
-                                      }}
-                                      defaultValue={
-                                        setting.name ||
-                                        `專案${setting.id || draft_id}`
-                                      }
-                                      // value={setting.name || ''}
-                                      onChange={(e) =>
-                                        setDraft(
-                                          { name: e.target.value },
-                                          draft_id
-                                        )
-                                      }
-                                    />
-                                  </Col>
-                                  <Col xs={3} className="d-flex">
-                                    <Form.Control
-                                      className="my-auto h-75 py-0 fw-regular fs-7 text-wom text-center"
-                                      style={{
-                                        backgroundColor: 'transparent',
-                                        borderColor: 'transparent',
-                                        boxShadow:
-                                          editing === draft_id
-                                            ? '0 0 0 0.2rem inset rgb(202, 198, 230)'
-                                            : '',
-                                        color: '#0a004e',
-                                        fontWeight: '700',
-                                      }}
-                                      placeholder={
-                                        editing === draft_id
-                                          ? '編輯備註...'
-                                          : ''
-                                      }
-                                      defaultValue={setting.remark || ''}
-                                      // value={setting.name || ''}
-                                      onClick={(e) => {
-                                        if (editing && editing !== draft_id) {
-                                          setEditing(draft_id)
-                                        }
-                                        e.stopPropagation()
-                                      }}
-                                      onChange={(e) =>
-                                        setDraft(
-                                          { remark: e.target.value },
-                                          draft_id
-                                        )
-                                      }
-                                    />
-                                  </Col>
-                                  <Col className="d-flex">
-                                    <p className="m-auto">
-                                      {moment(created_on)
-                                        .tz('Asia/Taipei')
-                                        .format('yyyy-MM-DD HH:mm')}
-                                    </p>
-                                  </Col>
-                                  <Col className="d-flex">
-                                    <p className="m-auto">
-                                      {moment(updated_on)
-                                        .tz('Asia/Taipei')
-                                        .format('yyyy-MM-DD HH:mm')}
-                                    </p>
-                                  </Col>
-                                  <Col
-                                    xs={2}
-                                    className="d-flex justify-content-center"
-                                  >
-                                    <Button
-                                      className="w-25 h-50 btn-hover-wom my-auto"
-                                      onClick={(e) => {
-                                        setEditing(
-                                          editing && draft_id === editing
-                                            ? ''
-                                            : draft_id
-                                        )
-                                        e.stopPropagation()
-                                      }}
-                                      title="編 輯"
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={
-                                          editing === draft_id
-                                            ? faCheckSquare
-                                            : faEdit
-                                        }
+                                    <Col xs={1} className="d-flex">
+                                      <Form.Control
+                                        className="my-auto h-75 py-0 fw-regular fs-7 text-wom text-center"
                                         style={{
-                                          cursor: 'pointer',
+                                          backgroundColor: 'transparent',
+                                          borderColor: 'transparent',
+                                          boxShadow:
+                                            editing === draft_id
+                                              ? '0 0 0 0.2rem inset rgb(202, 198, 230)'
+                                              : '',
+                                          color: '#0a004e',
+                                          fontWeight: '700',
                                         }}
-                                        className="m-auto fs-5"
-                                      />
-                                    </Button>
-                                    <Button
-                                      className="w-25 h-50 btn-hover-wom my-auto"
-                                      onClick={(e) => {
-                                        setshowWarn(draft_id)
-                                        e.stopPropagation()
-                                      }}
-                                      title="刪 除"
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faTrashAlt}
-                                        style={{
-                                          cursor: 'pointer',
-                                        }}
-                                        className="my-auto fs-5"
-                                      />
-                                    </Button>
-                                    <Button
-                                      className="w-25 h-50 btn-hover-wom my-auto"
-                                      onClick={async (e) => {
-                                        e.stopPropagation()
-                                        setloading(true)
-                                        await file.makeFile(
-                                          setting,
-                                          [
-                                            'module1',
-                                            'module2',
-                                            'module3',
-                                            'module4',
-                                          ],
-                                          async (downloadFunc) => {
-                                            const delay = (ms) =>
-                                              new Promise((resolve) =>
-                                                setTimeout(resolve, ms)
-                                              )
-                                            await delay(5000)
-
-                                            setloading((prevState) => {
-                                              if (prevState) downloadFunc()
-                                              return false
-                                            })
+                                        onClick={(e) => {
+                                          if (editing && editing !== draft_id) {
+                                            setEditing(draft_id)
                                           }
-                                        )
-                                      }}
-                                      title="匯出專案"
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faCloudArrowDown}
-                                        style={{
-                                          cursor: 'pointer',
+                                          e.stopPropagation()
                                         }}
-                                        className="my-auto fs-5"
-                                      />
-                                    </Button>
-                                    <FontAwesomeIcon
-                                      icon={faBars}
-                                      style={
-                                        {
-                                          // cursor: 'grabbing',
+                                        defaultValue={setting.id || draft_id}
+                                        // value={setting.name || ''}
+                                        onChange={(e) =>
+                                          setDraft(
+                                            { id: e.target.value },
+                                            draft_id
+                                          )
                                         }
-                                      }
-                                      className="w-25 my-auto fs-5 text-wom"
-                                      // onClick={() => handleDraftDelete(draft_id)}
-                                      title="排 序"
-                                    />
-                                  </Col>
-                                </Row>
-                              </div>
-                            )}
-                          </Draggable>
+                                      />
+                                    </Col>
+                                    <Col
+                                      xs={3}
+                                      className="d-flex h-100 flex-column"
+                                    >
+                                      <Form.Control
+                                        className="my-auto h-75 py-0 fw-regular fs-7 text-wom text-center"
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          borderColor: 'transparent',
+                                          boxShadow:
+                                            editing === draft_id
+                                              ? '0 0 0 0.2rem inset rgb(202, 198, 230)'
+                                              : '',
+                                          color: '#0a004e',
+                                          fontWeight: '700',
+                                        }}
+                                        onClick={(e) => {
+                                          if (editing && editing !== draft_id) {
+                                            setEditing(draft_id)
+                                          }
+                                          e.stopPropagation()
+                                        }}
+                                        defaultValue={
+                                          setting.name ||
+                                          `專案${setting.id || draft_id}`
+                                        }
+                                        // value={setting.name || ''}
+                                        onChange={(e) =>
+                                          setDraft(
+                                            { name: e.target.value },
+                                            draft_id
+                                          )
+                                        }
+                                      />
+                                    </Col>
+                                    <Col xs={3} className="d-flex">
+                                      <Form.Control
+                                        className="my-auto h-75 py-0 fw-regular fs-7 text-wom text-center"
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          borderColor: 'transparent',
+                                          boxShadow:
+                                            editing === draft_id
+                                              ? '0 0 0 0.2rem inset rgb(202, 198, 230)'
+                                              : '',
+                                          color: '#0a004e',
+                                          fontWeight: '700',
+                                        }}
+                                        placeholder={
+                                          editing === draft_id
+                                            ? '編輯備註...'
+                                            : ''
+                                        }
+                                        defaultValue={setting.remark || ''}
+                                        // value={setting.name || ''}
+                                        onClick={(e) => {
+                                          if (editing && editing !== draft_id) {
+                                            setEditing(draft_id)
+                                          }
+                                          e.stopPropagation()
+                                        }}
+                                        onChange={(e) =>
+                                          setDraft(
+                                            { remark: e.target.value },
+                                            draft_id
+                                          )
+                                        }
+                                      />
+                                    </Col>
+                                    <Col className="d-flex">
+                                      <p className="m-auto">
+                                        {moment(created_on)
+                                          .tz('Asia/Taipei')
+                                          .format('yyyy-MM-DD HH:mm')}
+                                      </p>
+                                    </Col>
+                                    <Col className="d-flex">
+                                      <p className="m-auto">
+                                        {moment(updated_on)
+                                          .tz('Asia/Taipei')
+                                          .format('yyyy-MM-DD HH:mm')}
+                                      </p>
+                                    </Col>
+                                    <Col
+                                      xs={2}
+                                      className="d-flex justify-content-center"
+                                    >
+                                      <Button
+                                        className="w-25 h-50 btn-hover-wom my-auto"
+                                        onClick={(e) => {
+                                          setEditing(
+                                            editing && draft_id === editing
+                                              ? ''
+                                              : draft_id
+                                          )
+                                          e.stopPropagation()
+                                        }}
+                                        title="編 輯"
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={
+                                            editing === draft_id
+                                              ? faCheckSquare
+                                              : faEdit
+                                          }
+                                          style={{
+                                            cursor: 'pointer',
+                                          }}
+                                          className="m-auto fs-5"
+                                        />
+                                      </Button>
+                                      <Button
+                                        className="w-25 h-50 btn-hover-wom my-auto"
+                                        onClick={(e) => {
+                                          setshowWarn(draft_id)
+                                          e.stopPropagation()
+                                        }}
+                                        title="刪 除"
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faTrashAlt}
+                                          style={{
+                                            cursor: 'pointer',
+                                          }}
+                                          className="my-auto fs-5"
+                                        />
+                                      </Button>
+                                      <Button
+                                        className="w-25 h-50 btn-hover-wom my-auto"
+                                        onClick={async (e) => {
+                                          e.stopPropagation()
+                                          setloading(true)
+                                          await file.makeFile(
+                                            setting,
+                                            [
+                                              'module1',
+                                              'module2',
+                                              'module3',
+                                              'module4',
+                                            ],
+                                            async (downloadFunc) => {
+                                              const delay = (ms) =>
+                                                new Promise((resolve) =>
+                                                  setTimeout(resolve, ms)
+                                                )
+                                              await delay(5000)
+
+                                              setloading((prevState) => {
+                                                if (prevState) downloadFunc()
+                                                return false
+                                              })
+                                            }
+                                          )
+                                        }}
+                                        title="匯出專案"
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faCloudArrowDown}
+                                          style={{
+                                            cursor: 'pointer',
+                                          }}
+                                          className="my-auto fs-5"
+                                        />
+                                      </Button>
+                                      <FontAwesomeIcon
+                                        icon={faBars}
+                                        style={
+                                          {
+                                            // cursor: 'grabbing',
+                                          }
+                                        }
+                                        className="w-25 my-auto fs-5 text-wom"
+                                        // onClick={() => handleDraftDelete(draft_id)}
+                                        title="排 序"
+                                      />
+                                    </Col>
+                                  </Row>
+                                </div>
+                              )}
+                            </Draggable>
+                          )
                         )
-                      )
-                  ) : (
-                    <Row>
-                      <Col>專案名</Col>
-                      <Col>狀態</Col>
-                      <Col>建立日期</Col>
-                      <Col>更新時間</Col>
-                      <Col>備註</Col>
-                      <Col>操作</Col>
-                    </Row>
-                  )}
-                  {dropProvided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+                    ) : (
+                      <Row>
+                        <Col>專案名</Col>
+                        <Col>狀態</Col>
+                        <Col>建立日期</Col>
+                        <Col>更新時間</Col>
+                        <Col>備註</Col>
+                        <Col>操作</Col>
+                      </Row>
+                    )}
+                    {dropProvided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+
+            {/* 2 */}
+            <Row className="px-3 pt-3 fs-5 fw-bold text-wom">
+              你可能會喜歡...
+            </Row>
+            <DragDropContext
+              onDragEnd={(e) => {
+                const result = Array.from(drafts)
+                const [removed] = result.splice(e.source.index, 1)
+                result.splice(e.destination.index, 0, removed)
+                setDrafts(result)
+              }}
+            >
+              <Droppable droppableId="droppable" direction="vertical">
+                {(dropProvided, dropSnapshot) => (
+                  <div
+                    {...dropProvided.droppableProps}
+                    ref={dropProvided.innerRef}
+                    style={getListStyle(dropSnapshot.isDraggingOver)}
+                    className="w-100 h-auto"
+                  >
+                    {drafts ? (
+                      drafts
+                        .filter(({ setting }) => {
+                          const { name, remark } = setting
+                          return (
+                            !search ||
+                            (name && name.includes(search)) ||
+                            (remark && remark.includes(search))
+                          )
+                        })
+                        .map(
+                          (
+                            { draft_id, setting, created_on, updated_on },
+                            i
+                          ) => (
+                            <Draggable
+                              key={`${draft_id}`}
+                              draggableId={`${draft_id}`}
+                              index={i}
+                            >
+                              {(dragProvided, dragSnapshot) => (
+                                <div
+                                  ref={dragProvided.innerRef}
+                                  {...dragProvided.draggableProps}
+                                  {...dragProvided.dragHandleProps}
+                                  style={{
+                                    ...getItemStyle(
+                                      dragSnapshot.isDragging,
+                                      dragProvided.draggableProps.style
+                                    ),
+                                    height: '100px',
+                                    // className="position-absolute text-wom" fs-7"
+                                    // top: `${5}%`,
+                                    // left: `${3 + i * 32}%`,
+                                    // height: '85%',
+                                    // width: '30%',
+                                  }}
+                                >
+                                  <Row
+                                    key={draft_id}
+                                    className="w-100 h-100 mx-0 p-0 text-wom fw-bold rounded my-1 py-2 text-center"
+                                    onClick={() => setDraftId(draft_id)}
+                                    style={{
+                                      border: '1px solid rgb(99, 35, 35, 0.7)',
+                                      backgroundColor: 'rgb(254 215 187 / 11%)',
+                                    }}
+                                  >
+                                    <Col xs={1} className="d-flex">
+                                      <Form.Control
+                                        className="my-auto h-75 py-0 fw-regular fs-7 text-wom text-center"
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          borderColor: 'transparent',
+                                          boxShadow:
+                                            editing === draft_id
+                                              ? '0 0 0 0.2rem inset rgb(202, 198, 230)'
+                                              : '',
+                                          color: '#0a004e',
+                                          fontWeight: '700',
+                                        }}
+                                        onClick={(e) => {
+                                          if (editing && editing !== draft_id) {
+                                            setEditing(draft_id)
+                                          }
+                                          e.stopPropagation()
+                                        }}
+                                        defaultValue={setting.id || draft_id}
+                                        // value={setting.name || ''}
+                                        onChange={(e) =>
+                                          setDraft(
+                                            { id: e.target.value },
+                                            draft_id
+                                          )
+                                        }
+                                      />
+                                    </Col>
+                                    <Col
+                                      xs={3}
+                                      className="d-flex h-100 flex-column"
+                                    >
+                                      <Form.Control
+                                        className="my-auto h-75 py-0 fw-regular fs-7 text-wom text-center"
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          borderColor: 'transparent',
+                                          boxShadow:
+                                            editing === draft_id
+                                              ? '0 0 0 0.2rem inset rgb(202, 198, 230)'
+                                              : '',
+                                          color: '#0a004e',
+                                          fontWeight: '700',
+                                        }}
+                                        onClick={(e) => {
+                                          if (editing && editing !== draft_id) {
+                                            setEditing(draft_id)
+                                          }
+                                          e.stopPropagation()
+                                        }}
+                                        defaultValue={
+                                          setting.name ||
+                                          `專案${setting.id || draft_id}`
+                                        }
+                                        // value={setting.name || ''}
+                                        onChange={(e) =>
+                                          setDraft(
+                                            { name: e.target.value },
+                                            draft_id
+                                          )
+                                        }
+                                      />
+                                    </Col>
+                                    <Col xs={3} className="d-flex">
+                                      <Form.Control
+                                        className="my-auto h-75 py-0 fw-regular fs-7 text-wom text-center"
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          borderColor: 'transparent',
+                                          boxShadow:
+                                            editing === draft_id
+                                              ? '0 0 0 0.2rem inset rgb(202, 198, 230)'
+                                              : '',
+                                          color: '#0a004e',
+                                          fontWeight: '700',
+                                        }}
+                                        placeholder={
+                                          editing === draft_id
+                                            ? '編輯備註...'
+                                            : ''
+                                        }
+                                        defaultValue={setting.remark || ''}
+                                        // value={setting.name || ''}
+                                        onClick={(e) => {
+                                          if (editing && editing !== draft_id) {
+                                            setEditing(draft_id)
+                                          }
+                                          e.stopPropagation()
+                                        }}
+                                        onChange={(e) =>
+                                          setDraft(
+                                            { remark: e.target.value },
+                                            draft_id
+                                          )
+                                        }
+                                      />
+                                    </Col>
+                                    <Col className="d-flex">
+                                      <p className="m-auto">
+                                        {moment(created_on)
+                                          .tz('Asia/Taipei')
+                                          .format('yyyy-MM-DD HH:mm')}
+                                      </p>
+                                    </Col>
+                                    <Col className="d-flex">
+                                      <p className="m-auto">
+                                        {moment(updated_on)
+                                          .tz('Asia/Taipei')
+                                          .format('yyyy-MM-DD HH:mm')}
+                                      </p>
+                                    </Col>
+                                    <Col
+                                      xs={2}
+                                      className="d-flex justify-content-center"
+                                    >
+                                      <Button
+                                        className="w-25 h-50 btn-hover-wom my-auto"
+                                        onClick={(e) => {
+                                          setEditing(
+                                            editing && draft_id === editing
+                                              ? ''
+                                              : draft_id
+                                          )
+                                          e.stopPropagation()
+                                        }}
+                                        title="編 輯"
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={
+                                            editing === draft_id
+                                              ? faCheckSquare
+                                              : faEdit
+                                          }
+                                          style={{
+                                            cursor: 'pointer',
+                                          }}
+                                          className="m-auto fs-5"
+                                        />
+                                      </Button>
+                                      <Button
+                                        className="w-25 h-50 btn-hover-wom my-auto"
+                                        onClick={(e) => {
+                                          setshowWarn(draft_id)
+                                          e.stopPropagation()
+                                        }}
+                                        title="刪 除"
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faTrashAlt}
+                                          style={{
+                                            cursor: 'pointer',
+                                          }}
+                                          className="my-auto fs-5"
+                                        />
+                                      </Button>
+                                      <Button
+                                        className="w-25 h-50 btn-hover-wom my-auto"
+                                        onClick={async (e) => {
+                                          e.stopPropagation()
+                                          setloading(true)
+                                          await file.makeFile(
+                                            setting,
+                                            [
+                                              'module1',
+                                              'module2',
+                                              'module3',
+                                              'module4',
+                                            ],
+                                            async (downloadFunc) => {
+                                              const delay = (ms) =>
+                                                new Promise((resolve) =>
+                                                  setTimeout(resolve, ms)
+                                                )
+                                              await delay(5000)
+
+                                              setloading((prevState) => {
+                                                if (prevState) downloadFunc()
+                                                return false
+                                              })
+                                            }
+                                          )
+                                        }}
+                                        title="匯出專案"
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faCloudArrowDown}
+                                          style={{
+                                            cursor: 'pointer',
+                                          }}
+                                          className="my-auto fs-5"
+                                        />
+                                      </Button>
+                                      <FontAwesomeIcon
+                                        icon={faBars}
+                                        style={
+                                          {
+                                            // cursor: 'grabbing',
+                                          }
+                                        }
+                                        className="w-25 my-auto fs-5 text-wom"
+                                        // onClick={() => handleDraftDelete(draft_id)}
+                                        title="排 序"
+                                      />
+                                    </Col>
+                                  </Row>
+                                </div>
+                              )}
+                            </Draggable>
+                          )
+                        )
+                    ) : (
+                      <Row>
+                        <Col>專案名</Col>
+                        <Col>狀態</Col>
+                        <Col>建立日期</Col>
+                        <Col>更新時間</Col>
+                        <Col>備註</Col>
+                        <Col>操作</Col>
+                      </Row>
+                    )}
+                    {dropProvided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </div>
         </>
       ) : (
         <>
