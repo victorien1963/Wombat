@@ -70,11 +70,9 @@ function Book({ setting }) {
     <Card
       className="w-100 h-100 fw-bold"
       style={{
-        color: '#0a004e',
-        backgroundColor: 'rgba(35, 61, 99, 0.1)',
+        color: 'rgb(33 5 5)',
+        backgroundColor: 'rgb(246 246 246)',
         border: '1px solid rgba(35, 61, 99, 0.7)',
-        borderTop: '3px solid rgba(35, 61, 99, 0.7)',
-        borderBottom: '3px solid rgba(35, 61, 99, 0.7)',
       }}
     >
       <Card.Body className="d-flex flex-column py-2">
@@ -404,6 +402,7 @@ function Home() {
   return (
     <Container
       className="bg-dots-light h-100 w-100 d-flex flex-column position-relative"
+      style={{ overflowY: 'auto', overflowX: 'hidden' }}
       // onClick={() => setEditing('')}
     >
       <Loading
@@ -521,9 +520,10 @@ function Home() {
             ))}
           </Row>
           <div
-            className="overflow-scroll"
             style={{
               height: '80vh',
+              overflowY: 'auto',
+              overflowX: 'hidden',
             }}
           >
             {/* 1 */}
@@ -656,7 +656,7 @@ function Home() {
                     {...dropProvided.droppableProps}
                     ref={dropProvided.innerRef}
                     style={getListStyle(dropSnapshot.isDraggingOver)}
-                    className="w-100 h-auto d-flex"
+                    className="w-100 h-60 d-flex overflow-scroll"
                   >
                     {articles ? (
                       articles
