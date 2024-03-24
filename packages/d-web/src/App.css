@@ -442,6 +442,11 @@
   padding-bottom: 0% !important;
 }
 
+.stepList > .list-group-item.active {
+  background-color: white !important;
+  color: grey;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
