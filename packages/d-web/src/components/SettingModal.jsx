@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Modal,
   Row,
@@ -10,13 +10,16 @@ import {
   Image,
 } from 'react-bootstrap'
 import PropTypes from 'prop-types'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { logoFull } from '../asset'
 import apiServices from '../services/apiServices'
 // import { AuthContext } from './ContextProvider'
 
 function SettingModal({ setting }) {
   //   const { auth } = useContext(AuthContext)
-  const { show, handleClose } = setting
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { show, handleClose, article_id } = setting
 
   const [datas, setdatas] = useState({
     topic: '',
@@ -89,31 +92,21 @@ function SettingModal({ setting }) {
     ],
     Article: {
       thumbnail: '',
-      content: [
-        {
-          Section: 'Introduction',
-          Text: 'This is Introduction',
-        },
-        {
-          Section: 'First Section',
-          Text: 'This is First Section',
-        },
-        {
-          Section: 'Second Section',
-          Text: 'This is Second Section',
-        },
-        {
-          Section: 'Final Section',
-          Text: 'This is Final Section',
-        },
-        {
-          Section: 'Ending',
-          Text: 'This is Ending',
-        },
-      ],
+      Text: '',
       status: 'pending',
     },
   })
+  const getArticle = async () => {
+    const res = await apiServices.data({
+      path: `/article/${article_id}`,
+      method: 'get',
+    })
+    setdatas(res.setting)
+  }
+  useEffect(() => {
+    if (article_id) getArticle()
+  }, [article_id])
+
   const handleDataChange = (key, value) =>
     setdatas({
       ...datas,
@@ -207,6 +200,7 @@ function SettingModal({ setting }) {
             </ListGroupItem>
             {datas.Pkeywords.map(({ label }) => (
               <ListGroupItem
+                key={label}
                 action
                 className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
                 style={{
@@ -219,6 +213,7 @@ function SettingModal({ setting }) {
                   className="my-auto me-2"
                   type="radio"
                   checked={datas.Pkeyword[0] === label}
+                  readOnly
                 />
                 <span className="my-auto">{label}</span>
               </ListGroupItem>
@@ -259,6 +254,7 @@ function SettingModal({ setting }) {
             </ListGroupItem>
             {datas.titles.map(({ label }) => (
               <ListGroupItem
+                key={label}
                 action
                 className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
                 style={{
@@ -271,6 +267,7 @@ function SettingModal({ setting }) {
                   className="my-auto me-2"
                   type="radio"
                   checked={datas.title === label}
+                  readOnly
                 />
                 <span className="my-auto">{label}</span>
               </ListGroupItem>
@@ -310,6 +307,7 @@ function SettingModal({ setting }) {
             </ListGroupItem>
             {datas.Skeywords.map(({ label }) => (
               <ListGroupItem
+                key={label}
                 action
                 className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
                 style={{
@@ -328,6 +326,7 @@ function SettingModal({ setting }) {
                 <Form.Check
                   className="my-auto me-2"
                   checked={datas.Skeyword.includes(label)}
+                  readOnly
                 />
                 <span className="my-auto">{label}</span>
               </ListGroupItem>
@@ -340,62 +339,64 @@ function SettingModal({ setting }) {
     //   title: 'Additional Settings',
     //   form: <div />,
     // },
-    {
-      title: 'Select Headings',
-      form: (
-        <>
-          <Row>
-            <h3>Select an Outline to Structure Your Content</h3>
-          </Row>
-          <Row>
-            <h6>
-              Choose an outline that best represents the structure and flow you
-              envision for your article.
-            </h6>
-          </Row>
-          <Row />
-          <ListGroup className="h-100 w-100 stepList">
-            <ListGroupItem
-              action
-              className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
-              style={{
-                height: '20%',
-              }}
-            >
-              <Form.Check className="my-auto me-1" type="radio" />
-              <Form.Control
-                size="sm"
-                className="h-75 my-auto border-0"
-                placeholder="Add Your Own Title"
-              />
-            </ListGroupItem>
-            {datas.headings.map((hs) => (
-              <ListGroupItem
-                action
-                className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
-                onClick={() => handleDataChange('heading', hs)}
-                active={datas.heading.every((h, i) => hs[i] === h)}
-              >
-                <div className="me-2">
-                  <Form.Check
-                    className="my-auto"
-                    type="radio"
-                    checked={datas.heading.every((h, i) => hs[i] === h)}
-                  />
-                </div>
-                <Col>
-                  {hs.map((h, i) => (
-                    <p key={h} className="w-100 my-0">
-                      Section {i + 1}: {h}
-                    </p>
-                  ))}
-                </Col>
-              </ListGroupItem>
-            ))}
-          </ListGroup>
-        </>
-      ),
-    },
+    // {
+    //   title: 'Select Headings',
+    //   form: (
+    //     <>
+    //       <Row>
+    //         <h3>Select an Outline to Structure Your Content</h3>
+    //       </Row>
+    //       <Row>
+    //         <h6>
+    //           Choose an outline that best represents the structure and flow you
+    //           envision for your article.
+    //         </h6>
+    //       </Row>
+    //       <Row />
+    //       <ListGroup className="h-100 w-100 stepList">
+    //         <ListGroupItem
+    //           action
+    //           className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
+    //           style={{
+    //             height: '20%',
+    //           }}
+    //         >
+    //           <Form.Check className="my-auto me-1" type="radio" />
+    //           <Form.Control
+    //             size="sm"
+    //             className="h-75 my-auto border-0"
+    //             placeholder="Add Your Own Title"
+    //           />
+    //         </ListGroupItem>
+    //         {datas.headings.map((hs, index) => (
+    //           <ListGroupItem
+    //             key={index}
+    //             action
+    //             className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
+    //             onClick={() => handleDataChange('heading', hs)}
+    //             active={datas.heading.every((h, i) => hs[i] === h)}
+    //           >
+    //             <div className="me-2">
+    //               <Form.Check
+    //                 className="my-auto"
+    //                 type="radio"
+    //                 checked={datas.heading.every((h, i) => hs[i] === h)}
+    //                 readOnly
+    //               />
+    //             </div>
+    //             <Col>
+    //               {hs.map((h, i) => (
+    //                 <p key={h} className="w-100 my-0">
+    //                   Section {i + 1}: {h}
+    //                 </p>
+    //               ))}
+    //             </Col>
+    //           </ListGroupItem>
+    //         ))}
+    //       </ListGroup>
+    //     </>
+    //   ),
+    // },
     {
       title: 'Finalize Outline',
       form: (
@@ -427,6 +428,7 @@ function SettingModal({ setting }) {
             </ListGroupItem>
             {datas.heading.map((label, i) => (
               <ListGroupItem
+                key={i}
                 action
                 className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
                 style={{
@@ -461,11 +463,7 @@ function SettingModal({ setting }) {
           <Row>
             <Image className="w-50 mx-auto" src={logoFull} />
           </Row>
-          <Row>
-            {datas.Article.content.map((c) => (
-              <Row>{c.Text}</Row>
-            ))}
-          </Row>
+          <Row>{datas.Article.Text}</Row>
         </>
       ),
     },
@@ -473,14 +471,14 @@ function SettingModal({ setting }) {
 
   const nextStep = async () => {
     const res = await apiServices.data({
-      path: '/article',
+      path: `article/${article_id}`,
       method: 'put',
       data: {
         datas,
         step,
       },
     })
-    console.log(res)
+    setdatas(res.setting)
   }
 
   return (
@@ -509,6 +507,7 @@ function SettingModal({ setting }) {
             <ListGroup className="h-100 w-100 rounded-radius stepList">
               {steps.map(({ title }, index) => (
                 <ListGroupItem
+                  key={index}
                   action
                   active={index === step.now}
                   //   disabled={index > step.max}
@@ -536,18 +535,44 @@ function SettingModal({ setting }) {
                 {steps[step.now].form}
               </Row>
               <Row>
-                <Col xs={2} className="ms-auto">
+                {step.now ? (
+                  <Col xs={2} className="ms-auto d-flex">
+                    <Button
+                      className="ms-auto"
+                      variant="secondary"
+                      onClick={() => {
+                        nextStep()
+                        setstep({
+                          now: step.now - 1,
+                          max: step.max,
+                        })
+                      }}
+                    >
+                      Back
+                    </Button>
+                  </Col>
+                ) : (
+                  <Col className="ms-auto" />
+                )}
+                <Col xs={2} className="ms-2">
                   <Button
                     variant="wom"
                     onClick={() => {
-                      nextStep()
-                      setstep({
-                        now: step.now + 1,
-                        max: Math.max(step.now + 1, step.max),
-                      })
+                      if (step.now === 5) {
+                        if (!location.pathname.includes('/book')) {
+                          navigate(`/book/${article_id}`)
+                        }
+                        handleClose()
+                      } else {
+                        nextStep()
+                        setstep({
+                          now: step.now + 1,
+                          max: Math.max(step.now + 1, step.max),
+                        })
+                      }
                     }}
                   >
-                    Continue
+                    {step.now === 5 ? 'Start Edit' : 'Continue'}
                   </Button>
                 </Col>
               </Row>
@@ -555,14 +580,6 @@ function SettingModal({ setting }) {
           </Col>
         </Row>
       </Modal.Body>
-      {/* <Modal.Footer className="sendForm justify-content-center py-3">
-        <Button variant="secondary" onClick={() => handleClose(false)}>
-          取消
-        </Button>
-        <Button variant="wom" onClick={() => handleClose(show)}>
-          確定
-        </Button>
-      </Modal.Footer> */}
     </Modal>
   )
 }

@@ -19,6 +19,13 @@ function SideNavBar() {
     () => location.pathname.includes('book'),
     [location]
   )
+
+  const article_id = useMemo(() => {
+    if (location.pathname.includes('/book/'))
+      return location.pathname.split('/book/')[1]
+    return ''
+  }, [location])
+
   // const locationNames = {
   //   '/Module1': 'module1',
   //   '/Module2': 'module2',
@@ -150,6 +157,7 @@ function SideNavBar() {
         setting={{
           show: showSetting,
           handleClose: () => setshowSetting(false),
+          article_id,
         }}
       />
     </div>

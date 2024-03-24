@@ -75,7 +75,7 @@ function Book({ setting }) {
         border: '1px solid rgba(35, 61, 99, 0.7)',
       }}
     >
-      <Card.Body className="d-flex flex-column py-2">
+      <Card.Body className="d-flex flex-column h-100 py-2">
         <Row>
           <p className="text-center mb-0">{title}</p>
         </Row>
@@ -86,7 +86,12 @@ function Book({ setting }) {
             {moment(created_on).format('yyyy-MM-DD')}
           </Col>
         </Row>
-        <Row className="flex-fill d-flex">
+        <Row
+          className="d-flex overflow-scroll p-3"
+          style={{
+            height: '68%',
+          }}
+        >
           <p className="m-auto">{content}</p>
         </Row>
         <hr className="my-1" />
@@ -389,6 +394,7 @@ function Home() {
   ]
 
   const [showSetting, setshowSetting] = useState(false)
+  const [id, setid] = useState('')
 
   const handleArticleAdd = async () => {
     const res = await apiServices.data({
@@ -396,6 +402,7 @@ function Home() {
       method: 'post',
     })
     setarticles([res, ...articles])
+    setid(res.article_id)
     setshowSetting(true)
   }
 
@@ -498,7 +505,7 @@ function Home() {
 
           <Row className="my-2 p-2" style={{ height: '10vw' }}>
             {categories.map(({ label, icon, backgroundColor, color }) => (
-              <Col xs={1}>
+              <Col key={label} xs={1}>
                 <div
                   className="m-auto"
                   style={{
@@ -578,11 +585,15 @@ function Home() {
                                 >
                                   <Book
                                     setting={{
-                                      title: 'Title',
+                                      title:
+                                        setting.title ||
+                                        setting.topic ||
+                                        '未命名',
                                       id: article_id,
                                       created_on,
                                       updated_on,
-                                      content: 'Content',
+                                      content:
+                                        setting.Article.Text || 'Content',
                                       handleEdit: () => {
                                         navigate(`/book/${article_id}`)
                                       },
@@ -692,11 +703,15 @@ function Home() {
                                 >
                                   <Book
                                     setting={{
-                                      title: 'Title',
+                                      title:
+                                        setting.title ||
+                                        setting.topic ||
+                                        '未命名',
                                       id: article_id,
                                       created_on,
                                       updated_on,
-                                      content: 'Content',
+                                      content:
+                                        setting.Article.Text || 'Content',
                                       handleEdit: () => {
                                         navigate(`/book/${article_id}`)
                                       },
@@ -842,6 +857,7 @@ function Home() {
         setting={{
           show: showSetting,
           handleClose: () => setshowSetting(false),
+          article_id: id,
         }}
       />
     </Container>
