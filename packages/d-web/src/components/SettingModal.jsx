@@ -8,6 +8,7 @@ import {
   Form,
   Button,
   Image,
+  Spinner,
 } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -469,7 +470,9 @@ function SettingModal({ setting }) {
     },
   ]
 
+  const [loading, setloading] = useState(false)
   const nextStep = async () => {
+    setloading(true)
     const res = await apiServices.data({
       path: `article/${article_id}`,
       method: 'put',
@@ -478,6 +481,7 @@ function SettingModal({ setting }) {
         step,
       },
     })
+    setloading(false)
     setdatas(res.setting)
   }
 
@@ -532,7 +536,14 @@ function SettingModal({ setting }) {
                   maxHeight: '90%',
                 }}
               >
-                {steps[step.now].form}
+                {loading ? (
+                  <div className="h-100 w-100 d-flex justify-content-center">
+                    <Spinner size="sm" className="my-auto" />
+                    <span className="my-auto">&ensp;資料載入中</span>
+                  </div>
+                ) : (
+                  steps[step.now].form
+                )}
               </Row>
               <Row>
                 {step.now ? (
