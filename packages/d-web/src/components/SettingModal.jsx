@@ -538,6 +538,7 @@ function SettingModal({ setting }) {
               <Row>
                 <Col xs={2} className="ms-auto">
                   <Button
+                    variant="wom"
                     onClick={() => {
                       nextStep()
                       setstep({
