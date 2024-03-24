@@ -1,5 +1,5 @@
 const pg = require('./pgService')
-const schedule = require('node-schedule')
+// const schedule = require('node-schedule')
 const apiService = require('./apiService')
 const { upload } = require('./minio')
 const sdk = require('api')('@leonardoai/v1.0#54226lnmh2s7d')
@@ -113,11 +113,11 @@ const reducer = async () => {
     })
 }
 
-const imageJob = schedule.scheduleJob('*/1 * * * *', async () => {
-    reducer()
-})
+// const imageJob = schedule.scheduleJob('*/1 * * * *', async () => {
+//     reducer()
+// })
   
 module.exports = {
     generate,
-    imageJob,
+    // imageJob,
 }
