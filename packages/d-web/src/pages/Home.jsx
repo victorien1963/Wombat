@@ -2,7 +2,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useContext, useRef } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import moment from 'moment'
@@ -30,7 +30,7 @@ import {
   faCircleExclamation,
   // faCheckSquare,
   faSearch,
-  faFileArrowUp,
+  // faFileArrowUp,
   faCloudArrowDown,
   faMusic,
   faGhost,
@@ -48,7 +48,7 @@ import {
 import {
   AuthContext,
   ToastContext,
-  DraftContext,
+  // DraftContext,
 } from '../components/ContextProvider'
 import apiServices from '../services/apiServices'
 import file from '../services/file'
@@ -108,7 +108,6 @@ function Book({ setting }) {
           >
             <FontAwesomeIcon
               icon={faEdit}
-              onClick={handleEdit}
               style={{
                 cursor: 'pointer',
               }}
@@ -171,8 +170,6 @@ function Book({ setting }) {
 
 function Warn({ setting }) {
   const { size = 'md', show = false, handleClose } = setting
-  const { drafts } = useContext(DraftContext)
-  const target = drafts ? drafts.find((d) => d.draft_id === show) : null
 
   return (
     <Modal
@@ -200,10 +197,10 @@ function Warn({ setting }) {
               />
               <Form.Label className="w-100 fs-5 fw-bold text-center pb-4">
                 確定要刪除
-                {show && target
+                {/* {show && target
                   ? target.setting.name ||
                     `專案${target.setting.id || target.draft_id}`
-                  : '專案'}
+                  : '專案'} */}
                 嗎？
               </Form.Label>
             </Form.Group>
@@ -263,14 +260,25 @@ function Home() {
     })
   }
 
-  const {
-    drafts,
-    // setDraftId,
-    // setDraft,
-    setDrafts,
-    handleDraftAdd,
-    handleDraftDelete,
-  } = useContext(DraftContext)
+  const [articles, setarticles] = useState([])
+  const getArticles = async () => {
+    const res = await apiServices.data({
+      path: '/article',
+      method: 'get',
+    })
+    setarticles(res)
+  }
+  useEffect(() => {
+    getArticles()
+  }, [])
+
+  const handleArticleDelete = async (value) => {
+    await apiServices.data({
+      path: `/article/${value}`,
+      method: 'delete',
+    })
+    setarticles(articles.filter(({ article_id }) => article_id !== value))
+  }
 
   // const [editing, setEditing] = useState('')
   // const [focus, setFocus] = useState(false)
@@ -294,18 +302,6 @@ function Home() {
 
   const [showWarn, setshowWarn] = useState(false)
   const [loading, setloading] = useState(false)
-
-  const ref = useRef(null)
-  const handleCsvUpload = () => {
-    if (!ref.current) return
-    file.readFile(
-      ref.current.files[0],
-      ['module1', 'module2', 'module3', 'module4'],
-      (res) => {
-        handleDraftAdd(res)
-      }
-    )
-  }
 
   const categories = [
     {
@@ -396,6 +392,15 @@ function Home() {
 
   const [showSetting, setshowSetting] = useState(false)
 
+  const handleArticleAdd = async () => {
+    const res = await apiServices.data({
+      path: '/article',
+      method: 'post',
+    })
+    setarticles([res, ...articles])
+    setshowSetting(true)
+  }
+
   return (
     <Container
       className="bg-dots-light h-100 w-100 d-flex flex-column position-relative"
@@ -442,8 +447,8 @@ function Home() {
                 </Button>
               </InputGroup>
             </Col>
-            <Col xs={4} className="d-flex">
-              <Button
+            <Col xs={2} className="d-flex">
+              {/* <Button
                 className="w-100 ms-auto me-2"
                 onClick={() => ref.current.click()}
                 variant="outline-wom"
@@ -473,10 +478,10 @@ function Home() {
                   handleCsvUpload(e)
                   e.target.value = ''
                 }}
-              />
+              /> */}
               <Button
                 className="w-100 ms-auto"
-                onClick={() => setshowSetting(true)}
+                onClick={handleArticleAdd}
                 variant="outline-wom"
               >
                 新建專案&ensp;
@@ -515,20 +520,20 @@ function Home() {
               </Col>
             ))}
           </Row>
-
           <div
+            className="overflow-scroll"
             style={{
-              height: '40vh',
+              height: '80vh',
             }}
           >
             {/* 1 */}
             <Row className="px-3 fs-5 fw-bold text-wom">最近的模板</Row>
             <DragDropContext
               onDragEnd={(e) => {
-                const result = Array.from(drafts)
+                const result = Array.from(articles)
                 const [removed] = result.splice(e.source.index, 1)
                 result.splice(e.destination.index, 0, removed)
-                setDrafts(result)
+                setarticles(result)
               }}
             >
               <Droppable droppableId="droppable" direction="horizonal">
@@ -537,26 +542,22 @@ function Home() {
                     {...dropProvided.droppableProps}
                     ref={dropProvided.innerRef}
                     style={getListStyle(dropSnapshot.isDraggingOver)}
-                    className="w-100 h-100 d-flex overflow-scroll"
+                    className="w-100 h-60 d-flex overflow-scroll"
                   >
-                    {drafts ? (
-                      drafts
+                    {articles ? (
+                      articles
                         .filter(({ setting }) => {
-                          const { name, remark } = setting
-                          return (
-                            !search ||
-                            (name && name.includes(search)) ||
-                            (remark && remark.includes(search))
-                          )
+                          const { name } = setting
+                          return !search || (name && name.includes(search))
                         })
                         .map(
                           (
-                            { draft_id, setting, created_on, updated_on },
+                            { article_id, setting, created_on, updated_on },
                             i
                           ) => (
                             <Draggable
-                              key={`${draft_id}`}
-                              draggableId={`${draft_id}`}
+                              key={`${article_id}`}
+                              draggableId={`${article_id}`}
                               index={i}
                             >
                               {(dragProvided, dragSnapshot) => (
@@ -578,15 +579,15 @@ function Home() {
                                   <Book
                                     setting={{
                                       title: 'Title',
-                                      id: draft_id,
+                                      id: article_id,
                                       created_on,
                                       updated_on,
                                       content: 'Content',
                                       handleEdit: () => {
-                                        navigate(`/book/${draft_id}`)
+                                        navigate(`/book/${article_id}`)
                                       },
                                       handleDelete: (e) => {
-                                        setshowWarn(draft_id)
+                                        setshowWarn(article_id)
                                         e.stopPropagation()
                                       },
                                       handleDownload: async (e) => {
@@ -643,42 +644,39 @@ function Home() {
             </Row>
             <DragDropContext
               onDragEnd={(e) => {
-                const result = Array.from(drafts)
+                const result = Array.from(articles)
                 const [removed] = result.splice(e.source.index, 1)
                 result.splice(e.destination.index, 0, removed)
-                setDrafts(result)
+                setarticles(result)
               }}
             >
-              <Droppable droppableId="droppable" direction="vertical">
+              <Droppable droppableId="droppable" direction="horizonal">
                 {(dropProvided, dropSnapshot) => (
                   <div
                     {...dropProvided.droppableProps}
                     ref={dropProvided.innerRef}
                     style={getListStyle(dropSnapshot.isDraggingOver)}
-                    className="w-100 h-auto"
+                    className="w-100 h-auto d-flex"
                   >
-                    {drafts ? (
-                      drafts
+                    {articles ? (
+                      articles
                         .filter(({ setting }) => {
-                          const { name, remark } = setting
-                          return (
-                            !search ||
-                            (name && name.includes(search)) ||
-                            (remark && remark.includes(search))
-                          )
+                          const { name } = setting
+                          return !search || (name && name.includes(search))
                         })
                         .map(
                           (
-                            { draft_id, setting, created_on, updated_on },
+                            { article_id, setting, created_on, updated_on },
                             i
                           ) => (
                             <Draggable
-                              key={`${draft_id}`}
-                              draggableId={`${draft_id}`}
+                              key={`${article_id}`}
+                              draggableId={`${article_id}`}
                               index={i}
                             >
                               {(dragProvided, dragSnapshot) => (
                                 <div
+                                  className="me-3"
                                   ref={dragProvided.innerRef}
                                   {...dragProvided.draggableProps}
                                   {...dragProvided.dragHandleProps}
@@ -695,15 +693,15 @@ function Home() {
                                   <Book
                                     setting={{
                                       title: 'Title',
-                                      id: draft_id,
+                                      id: article_id,
                                       created_on,
                                       updated_on,
                                       content: 'Content',
                                       handleEdit: () => {
-                                        navigate(`/book/${draft_id}`)
+                                        navigate(`/book/${article_id}`)
                                       },
                                       handleDelete: (e) => {
-                                        setshowWarn(draft_id)
+                                        setshowWarn(article_id)
                                         e.stopPropagation()
                                       },
                                       handleDownload: async (e) => {
@@ -835,7 +833,7 @@ function Home() {
         setting={{
           show: showWarn,
           handleClose: (value) => {
-            if (value) handleDraftDelete(value)
+            if (value) handleArticleDelete(value)
             setshowWarn(false)
           },
         }}
