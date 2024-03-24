@@ -11,6 +11,7 @@ import {
 } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { logoFull } from '../asset'
+import apiServices from '../services/apiServices'
 // import { AuthContext } from './ContextProvider'
 
 function SettingModal({ setting }) {
@@ -58,21 +59,21 @@ function SettingModal({ setting }) {
     setting: {},
     headings: [
       [
-        'Introduction',
+        'Introduction 1',
         'First Section',
         'Second Section',
         'Final Section',
         'Ending',
       ],
       [
-        'Introduction',
+        'Introduction 2',
         'First Section',
         'Second Section',
         'Final Section',
         'Ending',
       ],
       [
-        'Introduction',
+        'Introduction 3',
         'First Section',
         'Second Section',
         'Final Section',
@@ -211,8 +212,14 @@ function SettingModal({ setting }) {
                 style={{
                   height: '15%',
                 }}
+                onClick={() => handleDataChange('Pkeyword', [label])}
+                active={datas.Pkeyword[0] === label}
               >
-                <Form.Check className="my-auto me-2" type="radio" />
+                <Form.Check
+                  className="my-auto me-2"
+                  type="radio"
+                  checked={datas.Pkeyword[0] === label}
+                />
                 <span className="my-auto">{label}</span>
               </ListGroupItem>
             ))}
@@ -257,8 +264,14 @@ function SettingModal({ setting }) {
                 style={{
                   height: '15%',
                 }}
+                onClick={() => handleDataChange('title', label)}
+                active={datas.title === label}
               >
-                <Form.Check className="my-auto me-2" type="radio" />
+                <Form.Check
+                  className="my-auto me-2"
+                  type="radio"
+                  checked={datas.title === label}
+                />
                 <span className="my-auto">{label}</span>
               </ListGroupItem>
             ))}
@@ -302,8 +315,20 @@ function SettingModal({ setting }) {
                 style={{
                   height: '13%',
                 }}
+                onClick={() =>
+                  handleDataChange(
+                    'Skeyword',
+                    datas.Skeyword.includes(label)
+                      ? datas.Skeyword.filter((s) => s !== label)
+                      : [...datas.Skeyword, label]
+                  )
+                }
+                active={datas.Skeyword.includes(label)}
               >
-                <Form.Check className="my-auto me-2" />
+                <Form.Check
+                  className="my-auto me-2"
+                  checked={datas.Skeyword.includes(label)}
+                />
                 <span className="my-auto">{label}</span>
               </ListGroupItem>
             ))}
@@ -348,9 +373,15 @@ function SettingModal({ setting }) {
               <ListGroupItem
                 action
                 className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
+                onClick={() => handleDataChange('heading', hs)}
+                active={datas.heading.every((h, i) => hs[i] === h)}
               >
                 <div className="me-2">
-                  <Form.Check className="my-auto" type="radio" />
+                  <Form.Check
+                    className="my-auto"
+                    type="radio"
+                    checked={datas.heading.every((h, i) => hs[i] === h)}
+                  />
                 </div>
                 <Col>
                   {hs.map((h, i) => (
@@ -394,7 +425,7 @@ function SettingModal({ setting }) {
                 placeholder="Add Your Own Heading"
               />
             </ListGroupItem>
-            {datas.heading.map((label) => (
+            {datas.heading.map((label, i) => (
               <ListGroupItem
                 action
                 className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
@@ -402,7 +433,18 @@ function SettingModal({ setting }) {
                   height: '20%',
                 }}
               >
-                <Form.Control className="my-auto border-0" value={label} />
+                <Form.Control
+                  className="my-auto border-0"
+                  value={label}
+                  onChange={(e) => {
+                    handleDataChange(
+                      'heading',
+                      datas.heading.map((h, j) =>
+                        j === i ? e.target.value : h
+                      )
+                    )
+                  }}
+                />
               </ListGroupItem>
             ))}
           </ListGroup>
@@ -428,6 +470,18 @@ function SettingModal({ setting }) {
       ),
     },
   ]
+
+  const nextStep = async () => {
+    const res = await apiServices.data({
+      path: '/article',
+      method: 'put',
+      data: {
+        datas,
+        step,
+      },
+    })
+    console.log(res)
+  }
 
   return (
     <Modal
@@ -484,12 +538,13 @@ function SettingModal({ setting }) {
               <Row>
                 <Col xs={2} className="ms-auto">
                   <Button
-                    onClick={() =>
+                    onClick={() => {
+                      nextStep()
                       setstep({
                         now: step.now + 1,
                         max: Math.max(step.now + 1, step.max),
                       })
-                    }
+                    }}
                   >
                     Continue
                   </Button>

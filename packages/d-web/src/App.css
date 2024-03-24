@@ -444,7 +444,8 @@
 
 .stepList > .list-group-item.active {
   background-color: white !important;
-  color: grey;
+  color: grey !important;
+  border-color: #0d6efd !important;
 }
 
 @keyframes App-logo-spin {
