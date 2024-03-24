@@ -24,6 +24,7 @@ import SuggestUserStory from './SuggestUserStory'
 // components
 import LoadingButton from './LoadingButton'
 import Loading from './Loading'
+import SettingModal from './SettingModal'
 
 export {
   GPTHelper,
@@ -41,4 +42,5 @@ export {
   SuggestUserStory,
   LoadingButton,
   Loading,
+  SettingModal,
 }

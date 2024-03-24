@@ -1,13 +1,14 @@
 /* eslint-disable prefer-destructuring */
-import React, { useContext, useMemo, useRef } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, DropdownButton } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faReply } from '@fortawesome/free-solid-svg-icons'
-import { AuthContext, DraftContext } from './ContextProvider'
+import { faEdit, faReply } from '@fortawesome/free-solid-svg-icons'
+import { AuthContext } from './ContextProvider'
 import Avatar from './Avatar'
 import MenuCard from './MeunCard'
-import fileFuncs from '../services/file'
+import SettingModal from './SettingModal'
+// import fileFuncs from '../services/file'
 
 function SideNavBar() {
   const location = useLocation()
@@ -15,51 +16,48 @@ function SideNavBar() {
   const { auth, setAuth } = useContext(AuthContext)
 
   const isInDraft = useMemo(
-    () =>
-      ['/Module1', '/Module2', '/Module3', '/Module4'].includes(
-        location.pathname
-      ),
+    () => location.pathname.includes('book'),
     [location]
   )
-  const locationNames = {
-    '/Module1': 'module1',
-    '/Module2': 'module2',
-    '/Module3': 'module4',
-    '/Module4': 'module3',
-  }
+  // const locationNames = {
+  //   '/Module1': 'module1',
+  //   '/Module2': 'module2',
+  //   '/Module3': 'module4',
+  //   '/Module4': 'module3',
+  // }
 
-  const ref = useRef(null)
+  // const ref = useRef(null)
 
-  const { module1, module2, module3, module4, draftId, setDraft, setDraftId } =
-    useContext(DraftContext)
-  const handleCsvUpload = () => {
-    if (!ref.current) return
-    setDraft(
-      {
-        [locationNames[location.pathname]]: {
-          generating: true,
-          step: '上傳檔案中',
-        },
-      },
-      draftId
-    )
-    fileFuncs.readFile(
-      ref.current.files[0],
-      [locationNames[location.pathname]],
-      (res) => {
-        setDraft(
-          {
-            [locationNames[location.pathname]]: {
-              ...res[locationNames[location.pathname]],
-              generating: false,
-              step: '',
-            },
-          },
-          draftId
-        )
-      }
-    )
-  }
+  // const { draftId, setDraft } = useContext(DraftContext)
+  // const handleCsvUpload = () => {
+  //   if (!ref.current) return
+  //   setDraft(
+  //     {
+  //       [locationNames[location.pathname]]: {
+  //         generating: true,
+  //         step: '上傳檔案中',
+  //       },
+  //     },
+  //     draftId
+  //   )
+  //   fileFuncs.readFile(
+  //     ref.current.files[0],
+  //     [locationNames[location.pathname]],
+  //     (res) => {
+  //       setDraft(
+  //         {
+  //           [locationNames[location.pathname]]: {
+  //             ...res[locationNames[location.pathname]],
+  //             generating: false,
+  //             step: '',
+  //           },
+  //         },
+  //         draftId
+  //       )
+  //     }
+  //   )
+  // }
+  const [showSetting, setshowSetting] = useState(false)
 
   return (
     <div
@@ -91,7 +89,7 @@ function SideNavBar() {
       </div>
       {isInDraft && (
         <>
-          {[
+          {/* {[
             { label: 'PESTEL', link: '/Module1' },
             { label: '競品分析', link: '/Module2' },
             { label: '顧客旅程', link: '/Module3' },
@@ -107,60 +105,31 @@ function SideNavBar() {
             >
               {label}
             </Button>
-          ))}
+          ))} */}
           <Button
-            onClick={() => setDraftId('')}
-            className="w-75 mx-auto my-2"
+            onClick={() => setshowSetting(true)}
+            className="mx-auto my-2 text-nowrap"
+            style={{
+              width: '85%',
+            }}
+            variant="outline-wom"
+            size="sm"
+          >
+            <FontAwesomeIcon icon={faEdit} />
+            &ensp;編輯設定
+          </Button>
+          <Button
+            onClick={() => navigate('/')}
+            className="mx-auto my-2 text-nowrap"
+            style={{
+              width: '85%',
+            }}
             variant="outline-wom"
             size="sm"
           >
             <FontAwesomeIcon icon={faReply} />
             &ensp;專案列表
           </Button>
-          <Button
-            onClick={() => ref.current.click()}
-            className="w-75 mx-auto mb-2 mt-auto"
-            variant="outline-wom"
-            size="sm"
-          >
-            上傳檔案
-          </Button>
-          <input
-            ref={ref}
-            style={{
-              visibility: 'hidden',
-              width: '0',
-              height: '0',
-            }}
-            type="file"
-            id="xlsx"
-            name="xlsx"
-            accept=".xlsx"
-            onChange={(e) => {
-              handleCsvUpload(e)
-              e.target.value = ''
-            }}
-          />
-          <Button
-            onClick={() =>
-              fileFuncs.makeFile(
-                {
-                  module1,
-                  module2,
-                  module3,
-                  module4,
-                },
-                [locationNames[location.pathname]],
-                (downloadFunc) => downloadFunc()
-              )
-            }
-            className="w-75 mx-auto my-2"
-            variant="outline-wom"
-            size="sm"
-          >
-            匯出檔案
-          </Button>
-          {/* <hr className="hrClass-dashed my-3" /> */}
         </>
       )}
       <Button
@@ -171,12 +140,18 @@ function SideNavBar() {
           })
           window.location.replace('/')
         }}
-        className={`w-75 mx-auto ${isInDraft ? '' : 'mt-auto'} my-2`}
+        className="w-75 mx-auto mt-auto"
         variant="outline-wom"
         size="sm"
       >
         登出
       </Button>
+      <SettingModal
+        setting={{
+          show: showSetting,
+          handleClose: () => setshowSetting(false),
+        }}
+      />
     </div>
   )
 }

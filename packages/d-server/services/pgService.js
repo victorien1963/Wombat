@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt")
 const cn = {
   host: process.env.PG_HOST,
   port: 5432,
-  database: 'daivinci',
+  database: 'wombat',
   user: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   max: 30
@@ -41,6 +41,7 @@ const checkAll = async () => {
     await db.none('CREATE TABLE IF NOT EXISTS drafts (draft_id serial PRIMARY KEY, setting JSONB NOT NULL, user_id serial NOT NULL, created_on TIMESTAMP NOT NULL, updated_on TIMESTAMP NOT NULL, FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE cascade)')
     await db.none('CREATE TABLE IF NOT EXISTS gpt_logs (gpt_log_id serial PRIMARY KEY, setting JSONB NOT NULL, user_id serial NOT NULL, created_on TIMESTAMP NOT NULL, updated_on TIMESTAMP NOT NULL, FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE cascade)')
     await db.none('CREATE TABLE IF NOT EXISTS image_jobs (image_job_id serial PRIMARY KEY, platform VARCHAR ( 50 ) NOT NULL, status VARCHAR ( 50 ) NOT NULL, setting JSONB NOT NULL, created_on TIMESTAMP NOT NULL, updated_on TIMESTAMP NOT NULL)')
+    await db.none('CREATE TABLE IF NOT EXISTS articles (article_id serial PRIMARY KEY, setting JSONB NOT NULL, user_id serial NOT NULL, created_on TIMESTAMP NOT NULL, updated_on TIMESTAMP NOT NULL, FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE cascade)')    
 
     await db.one('SELECT setval(\'users_user_id_seq\', (SELECT MAX(user_id) FROM users)+1)')
     console.log('All Table Checked')
@@ -53,11 +54,11 @@ const initData = async () => {
     console.log('Initing data')
     const hashed = await hash(process.env.ADMIN_PASSWORD)
     try {
-      await initialCheck('SELECT * FROM users WHERE user_id = $1', ['1'], 'INSERT INTO users(user_id, name, email, password, setting, created_on) VALUES($1, $2, $3, $4, $5, current_timestamp) ON CONFLICT DO NOTHING', ['1', 'dAIVinci', process.env.ADMIN_EMAIL, hashed, { admin: true }])
-      await initialCheck('SELECT * FROM users WHERE user_id = $1', ['2'], 'INSERT INTO users(user_id, name, email, password, setting, created_on) VALUES($1, $2, $3, $4, $5, current_timestamp) ON CONFLICT DO NOTHING', ['2', 'dAIVinci02', `daivinci02@wavenet.com.tw`, hashed, { admin: true }])
-      await initialCheck('SELECT * FROM users WHERE user_id = $1', ['3'], 'INSERT INTO users(user_id, name, email, password, setting, created_on) VALUES($1, $2, $3, $4, $5, current_timestamp) ON CONFLICT DO NOTHING', ['3', 'dAIVinci03', `daivinci03@wavenet.com.tw`, hashed, { admin: true }])
-      await initialCheck('SELECT * FROM users WHERE user_id = $1', ['4'], 'INSERT INTO users(user_id, name, email, password, setting, created_on) VALUES($1, $2, $3, $4, $5, current_timestamp) ON CONFLICT DO NOTHING', ['4', 'dAIVinci04', `daivinci04@wavenet.com.tw`, hashed, { admin: true }])
-      await initialCheck('SELECT * FROM users WHERE user_id = $1', ['5'], 'INSERT INTO users(user_id, name, email, password, setting, created_on) VALUES($1, $2, $3, $4, $5, current_timestamp) ON CONFLICT DO NOTHING', ['5', 'dAIVinci05', `daivinci05@wavenet.com.tw`, hashed, { admin: true }])
+      await initialCheck('SELECT * FROM users WHERE user_id = $1', ['1'], 'INSERT INTO users(user_id, name, email, password, setting, created_on) VALUES($1, $2, $3, $4, $5, current_timestamp) ON CONFLICT DO NOTHING', ['1', 'Wombat', process.env.ADMIN_EMAIL, hashed, { admin: true }])
+      await initialCheck('SELECT * FROM users WHERE user_id = $1', ['2'], 'INSERT INTO users(user_id, name, email, password, setting, created_on) VALUES($1, $2, $3, $4, $5, current_timestamp) ON CONFLICT DO NOTHING', ['2', 'Wombat02', `Wombat02@wavenet.com.tw`, hashed, { admin: true }])
+      await initialCheck('SELECT * FROM users WHERE user_id = $1', ['3'], 'INSERT INTO users(user_id, name, email, password, setting, created_on) VALUES($1, $2, $3, $4, $5, current_timestamp) ON CONFLICT DO NOTHING', ['3', 'Wombat03', `Wombat03@wavenet.com.tw`, hashed, { admin: true }])
+      await initialCheck('SELECT * FROM users WHERE user_id = $1', ['4'], 'INSERT INTO users(user_id, name, email, password, setting, created_on) VALUES($1, $2, $3, $4, $5, current_timestamp) ON CONFLICT DO NOTHING', ['4', 'Wombat04', `Wombat04@wavenet.com.tw`, hashed, { admin: true }])
+      await initialCheck('SELECT * FROM users WHERE user_id = $1', ['5'], 'INSERT INTO users(user_id, name, email, password, setting, created_on) VALUES($1, $2, $3, $4, $5, current_timestamp) ON CONFLICT DO NOTHING', ['5', 'Wombat05', `Wombat05@wavenet.com.tw`, hashed, { admin: true }])
     } catch (e) {
       console.log('admin user already exists.')
       console.log(e)
