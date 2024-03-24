@@ -160,15 +160,16 @@ function SettingModal({ setting }) {
           >
             <Col>
               <Form.Label>Location</Form.Label>
-              <Form.Select />
+              <Form.Select disabled />
             </Col>
             <Col>
               <Form.Label>Language</Form.Label>
-              <Form.Select />
+              <Form.Select disabled />
             </Col>
           </Row>
         </>
       ),
+      complete: datas.topic,
     },
     {
       title: 'Select Primary Keyword',
@@ -222,6 +223,7 @@ function SettingModal({ setting }) {
           </ListGroup>
         </>
       ),
+      complete: datas.Pkeyword.length,
     },
     {
       title: 'Select a Title',
@@ -276,6 +278,7 @@ function SettingModal({ setting }) {
           </ListGroup>
         </>
       ),
+      complete: datas.title,
     },
     {
       title: 'Select Secondary Keyword',
@@ -335,6 +338,7 @@ function SettingModal({ setting }) {
           </ListGroup>
         </>
       ),
+      complete: datas.Skeyword.length,
     },
     // {
     //   title: 'Additional Settings',
@@ -453,6 +457,7 @@ function SettingModal({ setting }) {
           </ListGroup>
         </>
       ),
+      complete: true,
     },
     {
       title: 'Generate Article',
@@ -467,6 +472,7 @@ function SettingModal({ setting }) {
           <Row>{datas.Article.Text}</Row>
         </>
       ),
+      complete: true,
     },
   ]
 
@@ -514,7 +520,7 @@ function SettingModal({ setting }) {
                   key={index}
                   action
                   active={index === step.now}
-                  //   disabled={index > step.max}
+                  disabled={index > step.max}
                   onClick={() =>
                     setstep({
                       ...step,
@@ -582,6 +588,7 @@ function SettingModal({ setting }) {
                         })
                       }
                     }}
+                    disabled={!steps[step.now].complete}
                   >
                     {step.now === 5 ? 'Start Edit' : 'Continue'}
                   </Button>

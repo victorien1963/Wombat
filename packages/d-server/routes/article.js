@@ -94,7 +94,7 @@ router.post('/', async (req, res) => {
         ],
         Article: {
           thumbnail: '',
-          content: [],
+          Text: '',
           status: 'pending',
         },
       }])
