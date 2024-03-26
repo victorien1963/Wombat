@@ -7,21 +7,21 @@ const { getChatResponse: gcr } = require('../services/chatgpt')
 // const { upload, download } = require('../services/minio')
 
 router.get('/', async (req, res) => {
-  if (!req.user) res.send({ error: 'user not found' })
+  if (!req.user) return res.send({ error: 'user not found' })
   const { user_id } = req.user
   const articles = await pg.exec('any', 'SELECT * FROM articles', [])
   return res.send(articles)
 })
 
 router.get('/:article_id', async (req, res) => {
-  if (!req.user) res.send({ error: 'user not found' })
+  if (!req.user) return res.send({ error: 'user not found' })
   const { user_id } = req.user
   const articles = await pg.exec('oneOrNone', 'SELECT * FROM articles WHERE article_id = $1', [req.params.article_id])
   return res.send(articles)
 })
 
 router.post('/', async (req, res) => {
-    if (!req.user) res.send({ error: 'user not found' })
+    if (!req.user) return res.send({ error: 'user not found' })
     const { user_id } = req.user
     const article = await pg.exec('one', 'INSERT INTO articles(user_id, setting, created_on, updated_on) values($1, $2, current_timestamp, current_timestamp) RETURNING *', [user_id, {
         topic: '',
@@ -102,7 +102,7 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/:article_id', async (req, res) => {
-    if (!req.user) res.send({ error: 'user not found' })
+    if (!req.user) return res.send({ error: 'user not found' })
     const { user_id } = req.user
     const { datas, step } = req.body
     const article = await pg.exec('SELECT * FROM articles WHERE article_id = $1', [req.params.article_id])
