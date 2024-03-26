@@ -68,7 +68,7 @@ function Book({ setting }) {
   } = setting
   return (
     <Card
-      className="w-100 h-100 fw-bold"
+      className="w-100 h-100"
       style={{
         color: 'rgb(33 5 5)',
         backgroundColor: 'rgb(246 246 246)',
@@ -77,7 +77,10 @@ function Book({ setting }) {
     >
       <Card.Body className="d-flex flex-column h-100 py-2">
         <Row>
-          <p className="text-center mb-0 App-oneLineEllipsis" title={title}>
+          <p
+            className="text-center mb-0 App-oneLineEllipsis fw-bold"
+            title={title}
+          >
             {title}
           </p>
         </Row>
