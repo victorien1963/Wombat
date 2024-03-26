@@ -159,8 +159,8 @@
 .bg-dots-light {
   background-image: url('./asset/images/bg-dots-light.png');
   background-repeat: no-repeat;
-  background-position: 75%;
-  background-size: 181%;
+  background-position: 50%;
+  background-size: 280%;
 }
 
 .loader-dot {

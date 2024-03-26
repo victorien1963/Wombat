@@ -463,13 +463,17 @@ function SettingModal({ setting }) {
       title: 'Generate Article',
       form: (
         <>
-          <Row>
+          <Row style={{ zIndex: '2' }} className="mb-3">
             <h3>{datas.title}</h3>
           </Row>
-          <Row>
-            <Image className="w-50 mx-auto" src={logoFull} />
+          <Row style={{ zIndex: '1' }} className="mx-auto">
+            <Image
+              className="position-absolute w-50"
+              style={{ opacity: '.15' }}
+              src={logoFull}
+            />
           </Row>
-          <Row>{datas.Article.Text}</Row>
+          <Row style={{ zIndex: '2' }}>{datas.Article.Text}</Row>
         </>
       ),
       complete: true,
@@ -534,7 +538,7 @@ function SettingModal({ setting }) {
             </ListGroup>
           </Col>
           <Col xs={9} className="d-flex h-100">
-            <div className="my-auto w-100 h-100 py-5">
+            <div className="my-auto w-100 h-100 pb-5 pt-3">
               <Row
                 className="overflow-scroll"
                 style={{
@@ -555,7 +559,7 @@ function SettingModal({ setting }) {
                 {step.now ? (
                   <Col xs={2} className="ms-auto d-flex">
                     <Button
-                      className="ms-auto"
+                      className="d-flex w-100 justify-content-center"
                       variant="secondary"
                       onClick={() => {
                         nextStep()
@@ -571,8 +575,9 @@ function SettingModal({ setting }) {
                 ) : (
                   <Col className="ms-auto" />
                 )}
-                <Col xs={2} className="ms-2">
+                <Col xs={2} className="ms-0 d-flex">
                   <Button
+                    className="d-flex w-100 justify-content-center"
                     variant="wom"
                     onClick={() => {
                       if (step.now === 5) {

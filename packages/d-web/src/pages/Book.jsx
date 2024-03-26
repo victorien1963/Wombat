@@ -97,19 +97,19 @@ function Book() {
 
   return (
     <div className="w-100 h-100 d-flex flex-column overflow-scroll">
-      <Row>
+      <Row style={{ zIndex: '2' }} className="py-4">
         <h3>{datas.title}</h3>
       </Row>
-      <Row className="h-50">
+      <Row style={{ zIndex: '1' }} className="mx-auto">
         <Image
-          className="h-100 mx-auto"
-          style={{
-            width: 'auto',
-          }}
+          className="position-absolute h-80 mx-auto"
+          style={{ opacity: '.15', width: 'auto', left: '20%' }}
           src={logoFull}
         />
       </Row>
-      <Row>{datas.Article.Text}</Row>
+      <Row style={{ zIndex: '2' }} className="text-start px-4">
+        {datas.Article.Text}
+      </Row>
     </div>
   )
 }
