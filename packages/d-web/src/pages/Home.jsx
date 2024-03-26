@@ -77,7 +77,9 @@ function Book({ setting }) {
     >
       <Card.Body className="d-flex flex-column h-100 py-2">
         <Row>
-          <p className="text-center mb-0">{title}</p>
+          <p className="text-center mb-0 App-oneLineEllipsis" title={title}>
+            {title}
+          </p>
         </Row>
         <hr className="my-1" />
         <Row>
@@ -92,7 +94,7 @@ function Book({ setting }) {
             height: '68%',
           }}
         >
-          <p className="m-auto">{content}</p>
+          <p className="m-auto oneline text-start">{content}</p>
         </Row>
         <hr className="my-1" />
         <Row
