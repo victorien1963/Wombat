@@ -61,6 +61,7 @@ import { logoFull } from '../asset'
 function Book({ setting }) {
   const {
     title = 'title',
+    user_name,
     id = '1423231412',
     created_on = '19990701',
     content = 'content',
@@ -90,8 +91,10 @@ function Book({ setting }) {
         </Row>
         <hr className="my-1" />
         <Row>
-          <Col className="text-start">username</Col>
-          <Col className="text-ceenter">{id}</Col>
+          <Col className="text-start">{user_name}</Col>
+          <Col className="text-ceenter">{`${moment(created_on).format(
+            'MMDDhhss'
+          )}${id}`}</Col>
           <Col className="text-end">
             {moment(created_on).format('yyyy/MM/DD')}
           </Col>
@@ -111,48 +114,33 @@ function Book({ setting }) {
             height: '30px',
           }}
         >
-          <Button
-            className="h-100 btn-hover-wom my-auto d-flex"
-            style={{
-              width: '40px',
-            }}
-            onClick={handleEdit}
-            title="編 輯"
-          >
-            <FontAwesomeIcon
-              icon={faEdit}
-              style={{
-                cursor: 'pointer',
-              }}
-              className="m-auto fs-5 h-100 w-100"
-            />
-          </Button>
-          <Button
-            variant="h-100 btn-hover-wom my-auto d-flex"
-            style={{
-              width: '40px',
-            }}
-            title="套 用"
-            // onClick={}
-          >
-            <FontAwesomeIcon icon={faCopy} />
-          </Button>
-          {handleCopy && (
+          {!handleCopy ? (
             <Button
               className="h-100 btn-hover-wom my-auto d-flex"
-              onClick={handleCopy}
               style={{
                 width: '40px',
               }}
-              title="套用"
+              onClick={handleEdit}
+              title="編 輯"
             >
               <FontAwesomeIcon
-                icon={faCopy}
+                icon={faEdit}
                 style={{
                   cursor: 'pointer',
                 }}
                 className="m-auto fs-5 h-100 w-100"
               />
+            </Button>
+          ) : (
+            <Button
+              variant="h-100 btn-hover-wom my-auto d-flex"
+              style={{
+                width: '40px',
+              }}
+              title="套 用"
+              onClick={handleCopy}
+            >
+              <FontAwesomeIcon icon={faCopy} />
             </Button>
           )}
           {/* <Button
@@ -171,22 +159,24 @@ function Book({ setting }) {
               className="m-auto fs-5 h-100 w-100"
             />
           </Button> */}
-          <Button
-            className="h-100 btn-hover-wom my-auto d-flex"
-            onClick={handleDelete}
-            style={{
-              width: '40px',
-            }}
-            title="刪 除"
-          >
-            <FontAwesomeIcon
-              icon={faTrashAlt}
+          {!handleCopy && (
+            <Button
+              className="h-100 btn-hover-wom my-auto d-flex"
+              onClick={handleDelete}
               style={{
-                cursor: 'pointer',
+                width: '40px',
               }}
-              className="m-auto fs-5 h-100 w-100"
-            />
-          </Button>
+              title="刪 除"
+            >
+              <FontAwesomeIcon
+                icon={faTrashAlt}
+                style={{
+                  cursor: 'pointer',
+                }}
+                className="m-auto fs-5 h-100 w-100"
+              />
+            </Button>
+          )}
           <Button
             className="h-100 btn-hover-wom my-auto d-flex"
             // onClick={() => {}}
@@ -502,6 +492,8 @@ function Home() {
     )
   }
 
+  const [copyTarget, setcopyTarget] = useState(null)
+
   return (
     <Container
       className="bg-dots-light h-100 w-100 d-flex flex-column position-relative"
@@ -684,7 +676,8 @@ function Home() {
                                           setting.title ||
                                           setting.topic ||
                                           '未命名',
-                                        id: user_name,
+                                        user_name,
+                                        id: article_id,
                                         created_on,
                                         updated_on,
                                         content:
@@ -808,7 +801,8 @@ function Home() {
                                           setting.title ||
                                           setting.topic ||
                                           '未命名',
-                                        id: user_name,
+                                        user_name,
+                                        id: article_id,
                                         created_on,
                                         updated_on,
                                         content:
@@ -821,8 +815,10 @@ function Home() {
                                           e.stopPropagation()
                                         },
                                         handleDownload: () => {},
-                                        handleCopy: async () => {
-                                          handleArticleAdd(setting)
+                                        handleCopy: () => {
+                                          setid(article_id)
+                                          setshowSetting(true)
+                                          setcopyTarget(setting)
                                         },
                                       }}
                                     />
@@ -1244,7 +1240,15 @@ function Home() {
       <SettingModal
         setting={{
           show: showSetting,
-          handleClose: () => setshowSetting(false),
+          handleClose: () => {
+            setshowSetting(false)
+            setcopyTarget(null)
+          },
+          copyTarget,
+          handleCopy: () => {
+            setshowSetting(false)
+            handleArticleAdd(copyTarget)
+          },
           article_id: id,
         }}
       />

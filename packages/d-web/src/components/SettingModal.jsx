@@ -20,7 +20,7 @@ function SettingModal({ setting }) {
   //   const { auth } = useContext(AuthContext)
   const location = useLocation()
   const navigate = useNavigate()
-  const { show, handleClose, article_id } = setting
+  const { show, handleClose, copyTarget, handleCopy, article_id } = setting
 
   const [datas, setdatas] = useState({
     topic: '',
@@ -97,12 +97,20 @@ function SettingModal({ setting }) {
       status: 'pending',
     },
   })
+
+  const initStep = {
+    now: 0,
+    max: 0,
+  }
+  const [step, setstep] = useState(initStep)
+
   const getArticle = async () => {
     const res = await apiServices.data({
       path: `/article/${article_id}`,
       method: 'get',
     })
     setdatas(res.setting)
+    setstep(res.setting.step || initStep)
   }
   useEffect(() => {
     if (article_id) getArticle()
@@ -114,10 +122,6 @@ function SettingModal({ setting }) {
       [key]: value,
     })
 
-  const [step, setstep] = useState({
-    now: 0,
-    max: 0,
-  })
   const steps = [
     {
       title: 'Enter a Topic',
@@ -518,7 +522,10 @@ function SettingModal({ setting }) {
       method: 'put',
       data: {
         datas,
-        step,
+        step: {
+          now: step.now + 1,
+          max: Math.max(step.now + 1, step.max),
+        },
       },
     })
     setloading(false)
@@ -566,13 +573,16 @@ function SettingModal({ setting }) {
                 </ListGroupItem>
               ))}
             </ListGroup>
-            <Button
-              variant="outline-wom"
-              className="d-flex w-100 justify-content-center my-auto"
-              title="Apply & copy this template to your project."
-            >
-              Apply this template
-            </Button>
+            {copyTarget && (
+              <Button
+                variant="outline-wom"
+                className="d-flex w-100 justify-content-center my-auto"
+                title="Apply & copy this template to your project."
+                onClick={handleCopy}
+              >
+                Apply this template
+              </Button>
+            )}
           </Col>
           <Col xs={9} className="d-flex h-100">
             <div className="my-auto w-100 h-100 pt-3">

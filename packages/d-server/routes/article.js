@@ -127,7 +127,8 @@ router.put('/:article_id', async (req, res) => {
           const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
             ...setting,
             ...datas,
-            Pkeywords: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() }))
+            Pkeywords: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() })),
+            step,
           }, req.params.article_id])
           console.log(updated)
           return res.send(updated)
@@ -149,7 +150,8 @@ router.put('/:article_id', async (req, res) => {
           const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
             ...setting,
             ...datas,
-            titles: titles.map((k) => ({ label: k.replaceAll('.', '').trim() }))
+            titles: titles.map((k) => ({ label: k.replaceAll('.', '').trim() })),
+            step,
           }, req.params.article_id])
           console.log(updated)
           return res.send(updated)
@@ -181,7 +183,8 @@ router.put('/:article_id', async (req, res) => {
           const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
             ...setting,
             ...datas,
-            Skeywords: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() }))
+            Skeywords: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() })),
+            step,
           }, req.params.article_id])
           console.log(updated)
           return res.send(updated)
@@ -209,6 +212,7 @@ router.put('/:article_id', async (req, res) => {
             ...setting,
             ...datas,
             heading,
+            step,
             // headings: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() }))
           }, req.params.article_id])
           console.log(updated)
@@ -220,6 +224,7 @@ router.put('/:article_id', async (req, res) => {
           ...setting,
           ...datas,
           prompt: `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。`,
+          step,
           // headings: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() }))
         }, req.params.article_id])
         return res.send(updated)
@@ -236,6 +241,7 @@ router.put('/:article_id', async (req, res) => {
               thumbnail: '',
               Text: chat,
             },
+            step,
             // headings: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() }))
           }, req.params.article_id])
           console.log(updated)
