@@ -72,7 +72,7 @@ function Book({ setting }) {
   } = setting
   return (
     <Card
-      className="w-100 h-100 fw-bold"
+      className="w-100 h-100"
       style={{
         color: 'rgb(33 5 5)',
         backgroundColor: 'rgb(246 246 246)',
@@ -81,13 +81,19 @@ function Book({ setting }) {
     >
       <Card.Body className="d-flex flex-column h-100 py-2">
         <Row>
-          <p className="text-center mb-0">{title}</p>
+          <p
+            className="text-center mb-0 App-oneLineEllipsis fw-bold"
+            title={title}
+          >
+            {title}
+          </p>
         </Row>
         <hr className="my-1" />
         <Row>
-          <Col className="text-start">{id}</Col>
+          <Col className="text-start">username</Col>
+          <Col className="text-ceenter">{id}</Col>
           <Col className="text-end">
-            {moment(created_on).format('yyyy-MM-DD')}
+            {moment(created_on).format('yyyy/MM/DD')}
           </Col>
         </Row>
         <Row
@@ -96,7 +102,7 @@ function Book({ setting }) {
             height: '68%',
           }}
         >
-          <p className="m-auto">{content}</p>
+          <p className="m-auto oneline text-start">{content}</p>
         </Row>
         <hr className="my-1" />
         <Row
@@ -122,20 +128,14 @@ function Book({ setting }) {
             />
           </Button>
           <Button
-            className="h-100 btn-hover-wom my-auto d-flex"
-            onClick={handleDelete}
+            variant="h-100 btn-hover-wom my-auto d-flex"
             style={{
               width: '40px',
             }}
-            title="刪 除"
+            title="套 用"
+            // onClick={}
           >
-            <FontAwesomeIcon
-              icon={faTrashAlt}
-              style={{
-                cursor: 'pointer',
-              }}
-              className="m-auto fs-5 h-100 w-100"
-            />
+            <FontAwesomeIcon icon={faCopy} />
           </Button>
           {handleCopy && (
             <Button
@@ -171,6 +171,22 @@ function Book({ setting }) {
               className="m-auto fs-5 h-100 w-100"
             />
           </Button> */}
+          <Button
+            className="h-100 btn-hover-wom my-auto d-flex"
+            onClick={handleDelete}
+            style={{
+              width: '40px',
+            }}
+            title="刪 除"
+          >
+            <FontAwesomeIcon
+              icon={faTrashAlt}
+              style={{
+                cursor: 'pointer',
+              }}
+              className="m-auto fs-5 h-100 w-100"
+            />
+          </Button>
           <Button
             className="h-100 btn-hover-wom my-auto d-flex"
             // onClick={() => {}}

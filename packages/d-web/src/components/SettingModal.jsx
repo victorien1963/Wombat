@@ -548,7 +548,7 @@ function SettingModal({ setting }) {
       >
         <Row className="w-100">
           <Col xs={3}>
-            <ListGroup className="h-100 w-100 rounded-radius stepList">
+            <ListGroup className="h-90 w-100 rounded-radius stepList">
               {steps.map(({ title }, index) => (
                 <ListGroupItem
                   key={index}
@@ -566,9 +566,16 @@ function SettingModal({ setting }) {
                 </ListGroupItem>
               ))}
             </ListGroup>
+            <Button
+              variant="outline-wom"
+              className="d-flex w-100 justify-content-center my-auto"
+              title="Apply & copy this template to your project."
+            >
+              Apply this template
+            </Button>
           </Col>
           <Col xs={9} className="d-flex h-100">
-            <div className="my-auto w-100 h-100 pb-5 pt-3">
+            <div className="my-auto w-100 h-100 pt-3">
               <Row
                 className="overflow-scroll"
                 style={{
@@ -624,7 +631,7 @@ function SettingModal({ setting }) {
                     }}
                     disabled={!steps[step.now].complete}
                   >
-                    {step.now === 6 ? 'Start Edit' : 'Continue'}
+                    {step.now === 6 ? 'Save' : 'Continue'}
                   </Button>
                 </Col>
               </Row>
