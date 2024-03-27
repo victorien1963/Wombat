@@ -86,9 +86,10 @@ function Book({ setting }) {
         </Row>
         <hr className="my-1" />
         <Row>
-          <Col className="text-start">{id}</Col>
+          <Col className="text-start">username</Col>
+          <Col className="text-ceenter">{id}</Col>
           <Col className="text-end">
-            {moment(created_on).format('yyyy-MM-DD')}
+            {moment(created_on).format('yyyy/MM/DD')}
           </Col>
         </Row>
         <Row
