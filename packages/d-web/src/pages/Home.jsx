@@ -44,6 +44,7 @@ import {
   faMeteor,
   faUtensils,
   faUserSecret,
+  faCopy,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   AuthContext,
@@ -124,20 +125,14 @@ function Book({ setting }) {
             />
           </Button>
           <Button
-            className="h-100 btn-hover-wom my-auto d-flex"
-            onClick={handleDelete}
+            variant="h-100 btn-hover-wom my-auto d-flex"
             style={{
               width: '40px',
             }}
-            title="刪 除"
+            title="套 用"
+            // onClick={}
           >
-            <FontAwesomeIcon
-              icon={faTrashAlt}
-              style={{
-                cursor: 'pointer',
-              }}
-              className="m-auto fs-5 h-100 w-100"
-            />
+            <FontAwesomeIcon icon={faCopy} />
           </Button>
           <Button
             className="h-100 btn-hover-wom my-auto d-flex"
@@ -149,6 +144,22 @@ function Book({ setting }) {
           >
             <FontAwesomeIcon
               icon={faCloudArrowDown}
+              style={{
+                cursor: 'pointer',
+              }}
+              className="m-auto fs-5 h-100 w-100"
+            />
+          </Button>
+          <Button
+            className="h-100 btn-hover-wom my-auto d-flex"
+            onClick={handleDelete}
+            style={{
+              width: '40px',
+            }}
+            title="刪 除"
+          >
+            <FontAwesomeIcon
+              icon={faTrashAlt}
               style={{
                 cursor: 'pointer',
               }}
