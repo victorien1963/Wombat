@@ -31,7 +31,7 @@ import {
   // faCheckSquare,
   faSearch,
   // faFileArrowUp,
-  faCloudArrowDown,
+  // faCloudArrowDown,
   faMusic,
   faGhost,
   faHeart,
@@ -44,6 +44,9 @@ import {
   faMeteor,
   faUtensils,
   faUserSecret,
+  faCheckSquare,
+  faReply,
+  faCopy,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   AuthContext,
@@ -63,7 +66,8 @@ function Book({ setting }) {
     content = 'content',
     handleEdit = () => {},
     handleDelete = () => {},
-    handleDownload = () => {},
+    // handleDownload = () => {},
+    handleCopy,
     // handleMove = () => {},
   } = setting
   return (
@@ -133,7 +137,25 @@ function Book({ setting }) {
               className="m-auto fs-5 h-100 w-100"
             />
           </Button>
-          <Button
+          {handleCopy && (
+            <Button
+              className="h-100 btn-hover-wom my-auto d-flex"
+              onClick={handleCopy}
+              style={{
+                width: '40px',
+              }}
+              title="套用"
+            >
+              <FontAwesomeIcon
+                icon={faCopy}
+                style={{
+                  cursor: 'pointer',
+                }}
+                className="m-auto fs-5 h-100 w-100"
+              />
+            </Button>
+          )}
+          {/* <Button
             className="h-100 btn-hover-wom my-auto d-flex"
             onClick={handleDownload}
             style={{
@@ -148,7 +170,7 @@ function Book({ setting }) {
               }}
               className="m-auto fs-5 h-100 w-100"
             />
-          </Button>
+          </Button> */}
           <Button
             className="h-100 btn-hover-wom my-auto d-flex"
             // onClick={() => {}}
@@ -202,7 +224,7 @@ function Warn({ setting }) {
                 確定要刪除
                 {/* {show && target
                   ? target.setting.name ||
-                    `專案${target.setting.id || target.draft_id}`
+                    `專案${target.setting.id || target.project_id}`
                   : '專案'} */}
                 嗎？
               </Form.Label>
@@ -226,6 +248,9 @@ function Home() {
   const { auth, setAuth } = useContext(AuthContext)
   const { setToast } = useContext(ToastContext)
   const navigate = useNavigate()
+
+  const [projectId, setProjectId] = useState('')
+  const [editing, setEditing] = useState('')
 
   const [reveal, setReveal] = useState(false)
   const fields = [
@@ -263,6 +288,28 @@ function Home() {
     })
   }
 
+  const [projects, setprojects] = useState([])
+  const getProjects = async () => {
+    const res = await apiServices.data({
+      path: '/project',
+      method: 'get',
+    })
+    setprojects(res)
+  }
+  useEffect(() => {
+    getProjects()
+  }, [])
+  const handleEdit = async () => {
+    console.log(projects.find(({ project_id }) => project_id === editing))
+    const updated = await apiServices.data({
+      path: `/project/${editing}`,
+      method: 'put',
+      data: projects.find(({ project_id }) => project_id === editing),
+    })
+    setprojects(projects.map((p) => (p.project_id === editing ? updated : p)))
+    setEditing('')
+  }
+
   const [articles, setarticles] = useState([])
   const getArticles = async () => {
     const res = await apiServices.data({
@@ -281,6 +328,14 @@ function Home() {
       method: 'delete',
     })
     setarticles(articles.filter(({ article_id }) => article_id !== value))
+  }
+
+  const handleProjectDelete = async (value) => {
+    await apiServices.data({
+      path: `/project/${value}`,
+      method: 'delete',
+    })
+    setprojects(projects.filter(({ project_id }) => project_id !== value))
   }
 
   // const [editing, setEditing] = useState('')
@@ -396,14 +451,39 @@ function Home() {
   const [showSetting, setshowSetting] = useState(false)
   const [id, setid] = useState('')
 
-  const handleArticleAdd = async () => {
+  const handleArticleAdd = async (setting = {}) => {
     const res = await apiServices.data({
-      path: '/article',
+      path: `/article/${projectId}`,
       method: 'post',
+      data: setting,
     })
     setarticles([res, ...articles])
     setid(res.article_id)
     setshowSetting(true)
+  }
+
+  const handleProjectAdd = async () => {
+    const res = await apiServices.data({
+      path: '/project',
+      method: 'post',
+    })
+    setprojects([res, ...projects])
+  }
+
+  const handleProjectChange = (e) => {
+    setprojects(
+      projects.map((p) =>
+        p.project_id === editing
+          ? {
+              ...p,
+              setting: {
+                ...p.setting,
+                [e.target.name]: e.target.value,
+              },
+            }
+          : p
+      )
+    )
   }
 
   return (
@@ -421,353 +501,642 @@ function Home() {
         }}
       />
       {auth.authed ? (
-        <>
-          <Row className="py-3">
-            <Col>
-              <h5 className="text-nowrap text-wom">專案列表</h5>
-            </Col>
-          </Row>
-          <Row>
-            <Col className="d-flex pe-0">
-              <InputGroup>
-                <Form.Control
-                  placeholder="請輸入關鍵字以搜尋..."
-                  aria-label="Recipient's username"
-                  aria-describedby="basic-addon2"
-                  value={tempSearch}
-                  onChange={(event) => setTempSearch(event.target.value)}
-                  // onFocus={() => setFocus(true)}
-                  // onBlur={() => setFocus(false)}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter' && !event.nativeEvent.isComposing)
-                      setSearch(tempSearch)
-                  }}
-                />
-                <Button
-                  variant="outline-wom"
-                  id="button-addon2"
-                  title="搜 尋"
-                  onClick={() => setSearch(tempSearch)}
-                >
-                  <FontAwesomeIcon icon={faSearch} />
-                </Button>
-              </InputGroup>
-            </Col>
-            <Col xs={2} className="d-flex">
-              {/* <Button
-                className="w-100 ms-auto me-2"
-                onClick={() => ref.current.click()}
-                variant="outline-wom"
-              >
-                上傳專案&ensp;
-                <FontAwesomeIcon
-                  icon={faFileArrowUp}
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                  className="ms-auto my-auto fs-6"
-                  title="上傳專案"
-                />
-              </Button>
-              <input
-                ref={ref}
-                style={{
-                  visibility: 'hidden',
-                  width: '0',
-                  height: '0',
-                }}
-                type="file"
-                id="xlsx"
-                name="xlsx"
-                accept=".xlsx"
-                onChange={(e) => {
-                  handleCsvUpload(e)
-                  e.target.value = ''
-                }}
-              /> */}
-              <Button
-                className="w-100 ms-auto"
-                onClick={handleArticleAdd}
-                variant="outline-wom"
-              >
-                新建專案&ensp;
-                <FontAwesomeIcon
-                  icon={faCirclePlus}
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                  className="ms-auto my-auto fs-6"
-                  title="新增專案"
-                />
-              </Button>
-            </Col>
-          </Row>
-
-          <Row className="my-2 p-2" style={{ height: '10vw' }}>
-            {categories.map(({ label, icon, backgroundColor, color }) => (
-              <Col key={label} xs={1}>
-                <div
-                  className="m-auto"
-                  style={{
-                    display: 'flex',
-                    borderRadius: '50%',
-                    backgroundColor,
-                    height: '4vw',
-                    width: '4vw',
-                  }}
-                >
-                  <FontAwesomeIcon
-                    style={{ color }}
-                    className="m-auto fs-4"
-                    icon={icon}
-                  />
-                </div>
-                <h6 className="m-auto py-1">{label}</h6>
+        projectId ? (
+          <>
+            <Row className="py-3">
+              <Col>
+                <h5 className="text-nowrap text-wom">模組列表</h5>
               </Col>
-            ))}
-          </Row>
-          <div
-            style={{
-              height: '80vh',
-              overflowY: 'auto',
-              overflowX: 'hidden',
-            }}
-          >
-            {/* 1 */}
-            <Row className="px-3 fs-5 fw-bold text-wom">最近的模板</Row>
-            <DragDropContext
-              onDragEnd={(e) => {
-                const result = Array.from(articles)
-                const [removed] = result.splice(e.source.index, 1)
-                result.splice(e.destination.index, 0, removed)
-                setarticles(result)
-              }}
-            >
-              <Droppable droppableId="droppable" direction="horizonal">
-                {(dropProvided, dropSnapshot) => (
-                  <div
-                    {...dropProvided.droppableProps}
-                    ref={dropProvided.innerRef}
-                    style={getListStyle(dropSnapshot.isDraggingOver)}
-                    className="w-100 h-60 d-flex overflow-scroll"
-                  >
-                    {articles ? (
-                      articles
-                        .filter(({ setting }) => {
-                          const { name } = setting
-                          return !search || (name && name.includes(search))
-                        })
-                        .map(
-                          (
-                            { article_id, setting, created_on, updated_on },
-                            i
-                          ) => (
-                            <Draggable
-                              key={`${article_id}`}
-                              draggableId={`${article_id}`}
-                              index={i}
-                            >
-                              {(dragProvided, dragSnapshot) => (
-                                <div
-                                  className="me-3"
-                                  ref={dragProvided.innerRef}
-                                  {...dragProvided.draggableProps}
-                                  {...dragProvided.dragHandleProps}
-                                  style={{
-                                    ...getItemStyle(
-                                      dragSnapshot.isDragging,
-                                      dragProvided.draggableProps.style
-                                    ),
-                                    minWidth: '32%',
-                                    width: '32%',
-                                    height: '40vh',
-                                  }}
-                                >
-                                  <Book
-                                    setting={{
-                                      title:
-                                        setting.title ||
-                                        setting.topic ||
-                                        '未命名',
-                                      id: article_id,
-                                      created_on,
-                                      updated_on,
-                                      content:
-                                        setting.Article.Text || 'Content',
-                                      handleEdit: () => {
-                                        navigate(`/book/${article_id}`)
-                                      },
-                                      handleDelete: (e) => {
-                                        setshowWarn(article_id)
-                                        e.stopPropagation()
-                                      },
-                                      handleDownload: async (e) => {
-                                        e.stopPropagation()
-                                        setloading(true)
-                                        await file.makeFile(
-                                          setting,
-                                          [
-                                            'module1',
-                                            'module2',
-                                            'module3',
-                                            'module4',
-                                          ],
-                                          async (downloadFunc) => {
-                                            const delay = (ms) =>
-                                              new Promise((resolve) =>
-                                                setTimeout(resolve, ms)
-                                              )
-                                            await delay(5000)
-
-                                            setloading((prevState) => {
-                                              if (prevState) downloadFunc()
-                                              return false
-                                            })
-                                          }
-                                        )
-                                      },
-                                    }}
-                                  />
-                                </div>
-                              )}
-                            </Draggable>
-                          )
-                        )
-                    ) : (
-                      <Row>
-                        <Col>專案名</Col>
-                        <Col>狀態</Col>
-                        <Col>建立日期</Col>
-                        <Col>更新時間</Col>
-                        <Col>備註</Col>
-                        <Col>操作</Col>
-                      </Row>
-                    )}
-                    {dropProvided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-
-            {/* 2 */}
-            <Row className="px-3 pt-3 fs-5 fw-bold text-wom">
-              你可能會喜歡...
             </Row>
-            <DragDropContext
-              onDragEnd={(e) => {
-                const result = Array.from(articles)
-                const [removed] = result.splice(e.source.index, 1)
-                result.splice(e.destination.index, 0, removed)
-                setarticles(result)
+            <Row>
+              <Col className="d-flex pe-0">
+                <InputGroup>
+                  <Form.Control
+                    placeholder="請輸入關鍵字以搜尋..."
+                    aria-label="Recipient's username"
+                    aria-describedby="basic-addon2"
+                    value={tempSearch}
+                    onChange={(event) => setTempSearch(event.target.value)}
+                    // onFocus={() => setFocus(true)}
+                    // onBlur={() => setFocus(false)}
+                    onKeyDown={(event) => {
+                      if (
+                        event.key === 'Enter' &&
+                        !event.nativeEvent.isComposing
+                      )
+                        setSearch(tempSearch)
+                    }}
+                  />
+                  <Button
+                    variant="outline-wom"
+                    id="button-addon2"
+                    title="搜 尋"
+                    onClick={() => setSearch(tempSearch)}
+                  >
+                    <FontAwesomeIcon icon={faSearch} />
+                  </Button>
+                </InputGroup>
+              </Col>
+              <Col xs={3} className="d-flex">
+                <Button
+                  className="w-100 ms-auto me-2"
+                  onClick={() => setProjectId('')}
+                  variant="outline-wom"
+                >
+                  回列表&ensp;
+                  <FontAwesomeIcon
+                    icon={faReply}
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    className="ms-auto my-auto fs-6"
+                    title="回列表"
+                  />
+                </Button>
+                <Button
+                  className="w-100 ms-auto"
+                  onClick={handleArticleAdd}
+                  variant="outline-wom"
+                >
+                  新建模組&ensp;
+                  <FontAwesomeIcon
+                    icon={faCirclePlus}
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    className="ms-auto my-auto fs-6"
+                    title="新增模組"
+                  />
+                </Button>
+              </Col>
+            </Row>
+
+            <Row className="my-2 p-2" style={{ height: '10vw' }}>
+              {categories.map(({ label, icon, backgroundColor, color }) => (
+                <Col key={label} xs={1}>
+                  <div
+                    className="m-auto"
+                    style={{
+                      display: 'flex',
+                      borderRadius: '50%',
+                      backgroundColor,
+                      height: '4vw',
+                      width: '4vw',
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      style={{ color }}
+                      className="m-auto fs-4"
+                      icon={icon}
+                    />
+                  </div>
+                  <h6 className="m-auto py-1">{label}</h6>
+                </Col>
+              ))}
+            </Row>
+            <div
+              style={{
+                height: '80vh',
+                overflowY: 'auto',
+                overflowX: 'hidden',
               }}
             >
-              <Droppable droppableId="droppable" direction="horizonal">
-                {(dropProvided, dropSnapshot) => (
-                  <div
-                    {...dropProvided.droppableProps}
-                    ref={dropProvided.innerRef}
-                    style={getListStyle(dropSnapshot.isDraggingOver)}
-                    className="w-100 h-60 d-flex overflow-scroll"
-                  >
-                    {articles ? (
-                      articles
-                        .filter(({ setting }) => {
-                          const { name } = setting
-                          return !search || (name && name.includes(search))
-                        })
-                        .map(
-                          (
-                            { article_id, setting, created_on, updated_on },
-                            i
-                          ) => (
-                            <Draggable
-                              key={`${article_id}`}
-                              draggableId={`${article_id}`}
-                              index={i}
-                            >
-                              {(dragProvided, dragSnapshot) => (
-                                <div
-                                  className="me-3"
-                                  ref={dragProvided.innerRef}
-                                  {...dragProvided.draggableProps}
-                                  {...dragProvided.dragHandleProps}
-                                  style={{
-                                    ...getItemStyle(
-                                      dragSnapshot.isDragging,
-                                      dragProvided.draggableProps.style
-                                    ),
-                                    minWidth: '32%',
-                                    width: '32%',
-                                    height: '40vh',
-                                  }}
-                                >
-                                  <Book
-                                    setting={{
-                                      title:
-                                        setting.title ||
-                                        setting.topic ||
-                                        '未命名',
-                                      id: article_id,
-                                      created_on,
-                                      updated_on,
-                                      content:
-                                        setting.Article.Text || 'Content',
-                                      handleEdit: () => {
-                                        navigate(`/book/${article_id}`)
-                                      },
-                                      handleDelete: (e) => {
-                                        setshowWarn(article_id)
-                                        e.stopPropagation()
-                                      },
-                                      handleDownload: async (e) => {
-                                        e.stopPropagation()
-                                        setloading(true)
-                                        await file.makeFile(
-                                          setting,
-                                          [
-                                            'module1',
-                                            'module2',
-                                            'module3',
-                                            'module4',
-                                          ],
-                                          async (downloadFunc) => {
-                                            const delay = (ms) =>
-                                              new Promise((resolve) =>
-                                                setTimeout(resolve, ms)
-                                              )
-                                            await delay(5000)
-
-                                            setloading((prevState) => {
-                                              if (prevState) downloadFunc()
-                                              return false
-                                            })
-                                          }
-                                        )
-                                      },
+              {/* 1 */}
+              <Row className="px-3 fs-5 fw-bold text-wom">最近的模板</Row>
+              <DragDropContext
+                onDragEnd={(e) => {
+                  const result = Array.from(articles)
+                  const [removed] = result.splice(e.source.index, 1)
+                  result.splice(e.destination.index, 0, removed)
+                  setarticles(result)
+                }}
+              >
+                <Droppable droppableId="droppable" direction="horizonal">
+                  {(dropProvided, dropSnapshot) => (
+                    <div
+                      {...dropProvided.droppableProps}
+                      ref={dropProvided.innerRef}
+                      style={getListStyle(dropSnapshot.isDraggingOver)}
+                      className="w-100 h-60 d-flex overflow-scroll"
+                    >
+                      {articles ? (
+                        articles
+                          .filter(({ setting }) => {
+                            const { name, project_id } = setting
+                            if (
+                              parseInt(project_id, 10) !==
+                              parseInt(projectId, 10)
+                            )
+                              return false
+                            return !search || (name && name.includes(search))
+                          })
+                          .map(
+                            (
+                              {
+                                article_id,
+                                user_name,
+                                setting,
+                                created_on,
+                                updated_on,
+                              },
+                              i
+                            ) => (
+                              <Draggable
+                                key={`${article_id}`}
+                                draggableId={`${article_id}`}
+                                index={i}
+                              >
+                                {(dragProvided, dragSnapshot) => (
+                                  <div
+                                    className="me-3"
+                                    ref={dragProvided.innerRef}
+                                    {...dragProvided.draggableProps}
+                                    {...dragProvided.dragHandleProps}
+                                    style={{
+                                      ...getItemStyle(
+                                        dragSnapshot.isDragging,
+                                        dragProvided.draggableProps.style
+                                      ),
+                                      minWidth: '32%',
+                                      width: '32%',
+                                      height: '40vh',
                                     }}
-                                  />
-                                </div>
-                              )}
-                            </Draggable>
+                                  >
+                                    <Book
+                                      setting={{
+                                        title:
+                                          setting.title ||
+                                          setting.topic ||
+                                          '未命名',
+                                        id: user_name,
+                                        created_on,
+                                        updated_on,
+                                        content:
+                                          setting.Article.Text || 'Content',
+                                        handleEdit: () => {
+                                          navigate(`/book/${article_id}`)
+                                        },
+                                        handleDelete: (e) => {
+                                          setshowWarn(article_id)
+                                          e.stopPropagation()
+                                        },
+                                        handleDownload: async (e) => {
+                                          e.stopPropagation()
+                                          setloading(true)
+                                          await file.makeFile(
+                                            setting,
+                                            [
+                                              'module1',
+                                              'module2',
+                                              'module3',
+                                              'module4',
+                                            ],
+                                            async (downloadFunc) => {
+                                              const delay = (ms) =>
+                                                new Promise((resolve) =>
+                                                  setTimeout(resolve, ms)
+                                                )
+                                              await delay(5000)
+
+                                              setloading((prevState) => {
+                                                if (prevState) downloadFunc()
+                                                return false
+                                              })
+                                            }
+                                          )
+                                        },
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                              </Draggable>
+                            )
                           )
-                        )
-                    ) : (
-                      <Row>
-                        <Col>專案名</Col>
-                        <Col>狀態</Col>
-                        <Col>建立日期</Col>
-                        <Col>更新時間</Col>
-                        <Col>備註</Col>
-                        <Col>操作</Col>
-                      </Row>
-                    )}
-                    {dropProvided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </div>
-        </>
+                      ) : (
+                        <Row>
+                          <Col>專案名</Col>
+                          <Col>狀態</Col>
+                          <Col>建立日期</Col>
+                          <Col>更新時間</Col>
+                          <Col>備註</Col>
+                          <Col>操作</Col>
+                        </Row>
+                      )}
+                      {dropProvided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+
+              {/* 2 */}
+              <Row className="px-3 pt-3 fs-5 fw-bold text-wom">
+                你可能會喜歡...
+              </Row>
+              <DragDropContext
+                onDragEnd={(e) => {
+                  const result = Array.from(articles)
+                  const [removed] = result.splice(e.source.index, 1)
+                  result.splice(e.destination.index, 0, removed)
+                  setarticles(result)
+                }}
+              >
+                <Droppable droppableId="droppable" direction="horizonal">
+                  {(dropProvided, dropSnapshot) => (
+                    <div
+                      {...dropProvided.droppableProps}
+                      ref={dropProvided.innerRef}
+                      style={getListStyle(dropSnapshot.isDraggingOver)}
+                      className="w-100 h-60 d-flex overflow-scroll"
+                    >
+                      {articles ? (
+                        articles
+                          .filter(({ setting }) => {
+                            const { name } = setting
+                            return !search || (name && name.includes(search))
+                          })
+                          .map(
+                            (
+                              {
+                                article_id,
+                                user_name,
+                                setting,
+                                created_on,
+                                updated_on,
+                              },
+                              i
+                            ) => (
+                              <Draggable
+                                key={`${article_id}`}
+                                draggableId={`${article_id}`}
+                                index={i}
+                              >
+                                {(dragProvided, dragSnapshot) => (
+                                  <div
+                                    className="me-3"
+                                    ref={dragProvided.innerRef}
+                                    {...dragProvided.draggableProps}
+                                    {...dragProvided.dragHandleProps}
+                                    style={{
+                                      ...getItemStyle(
+                                        dragSnapshot.isDragging,
+                                        dragProvided.draggableProps.style
+                                      ),
+                                      minWidth: '32%',
+                                      width: '32%',
+                                      height: '40vh',
+                                    }}
+                                  >
+                                    <Book
+                                      setting={{
+                                        title:
+                                          setting.title ||
+                                          setting.topic ||
+                                          '未命名',
+                                        id: user_name,
+                                        created_on,
+                                        updated_on,
+                                        content:
+                                          setting.Article.Text || 'Content',
+                                        handleEdit: () => {
+                                          navigate(`/book/${article_id}`)
+                                        },
+                                        handleDelete: (e) => {
+                                          setshowWarn(article_id)
+                                          e.stopPropagation()
+                                        },
+                                        handleDownload: () => {},
+                                        handleCopy: async () => {
+                                          handleArticleAdd(setting)
+                                        },
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                              </Draggable>
+                            )
+                          )
+                      ) : (
+                        <Row>
+                          <Col>專案名</Col>
+                          <Col>狀態</Col>
+                          <Col>建立日期</Col>
+                          <Col>更新時間</Col>
+                          <Col>備註</Col>
+                          <Col>操作</Col>
+                        </Row>
+                      )}
+                      {dropProvided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </div>
+          </>
+        ) : (
+          <>
+            <Row className="py-3">
+              <Col>
+                <h5 className="text-nowrap text-wom">專案列表</h5>
+              </Col>
+            </Row>
+            <Row>
+              <Col className="d-flex pe-0">
+                <InputGroup>
+                  <Form.Control
+                    placeholder="請輸入關鍵字以搜尋..."
+                    aria-label="Recipient's username"
+                    aria-describedby="basic-addon2"
+                    value={tempSearch}
+                    onChange={(event) => setTempSearch(event.target.value)}
+                    // onFocus={() => setFocus(true)}
+                    // onBlur={() => setFocus(false)}
+                    onKeyDown={(event) => {
+                      if (
+                        event.key === 'Enter' &&
+                        !event.nativeEvent.isComposing
+                      )
+                        setSearch(tempSearch)
+                    }}
+                  />
+                  <Button
+                    variant="outline-wom"
+                    id="button-addon2"
+                    title="搜 尋"
+                    onClick={() => setSearch(tempSearch)}
+                  >
+                    <FontAwesomeIcon icon={faSearch} />
+                  </Button>
+                </InputGroup>
+              </Col>
+              <Col xs={3} className="d-flex">
+                <Button
+                  className="w-100 ms-auto"
+                  onClick={handleProjectAdd}
+                  variant="outline-wom"
+                >
+                  新建專案&ensp;
+                  <FontAwesomeIcon
+                    icon={faCirclePlus}
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    className="ms-auto my-auto fs-6"
+                    title="新增專案"
+                  />
+                </Button>
+              </Col>
+            </Row>
+            <div
+              style={{
+                height: '80vh',
+                overflowY: 'auto',
+                overflowX: 'hidden',
+              }}
+            >
+              <DragDropContext
+                onDragEnd={(e) => {
+                  const result = Array.from(articles)
+                  const [removed] = result.splice(e.source.index, 1)
+                  result.splice(e.destination.index, 0, removed)
+                  setarticles(result)
+                }}
+              >
+                <Droppable droppableId="droppable" direction="vertical">
+                  {(dropProvided, dropSnapshot) => (
+                    <div
+                      {...dropProvided.droppableProps}
+                      ref={dropProvided.innerRef}
+                      style={getListStyle(dropSnapshot.isDraggingOver)}
+                      className="w-100 h-100 d-flex flex-column overflow-scroll"
+                    >
+                      {projects ? (
+                        projects
+                          .filter(({ setting }) => {
+                            const { name } = setting
+                            return !search || (name && name.includes(search))
+                          })
+                          .map(
+                            (
+                              { project_id, setting, created_on, updated_on },
+                              i
+                            ) => (
+                              <Draggable
+                                key={`${project_id}`}
+                                draggableId={`${project_id}`}
+                                index={i}
+                              >
+                                {(dragProvided, dragSnapshot) => (
+                                  <div
+                                    className="w-100 my-2"
+                                    ref={dragProvided.innerRef}
+                                    {...dragProvided.draggableProps}
+                                    {...dragProvided.dragHandleProps}
+                                    style={{
+                                      ...getItemStyle(
+                                        dragSnapshot.isDragging,
+                                        dragProvided.draggableProps.style
+                                      ),
+                                      height: '100px',
+                                      // minWidth: '32%',
+                                      // width: '32%',
+                                      // height: '40vh',
+                                    }}
+                                  >
+                                    <Row
+                                      key={project_id}
+                                      className="w-100 h-100 mx-0 p-0 text-dai fw-bold rounded my-1 py-2 text-center"
+                                      onClick={() => setProjectId(project_id)}
+                                      style={{
+                                        border:
+                                          '1px solid rgb(35, 61, 99, 0.7)',
+                                        backgroundColor: 'rgb(35, 61, 99, 0.1)',
+                                      }}
+                                    >
+                                      {/* <Col xs={1} className="d-flex">
+                                        <Form.Control
+                                          className="my-auto h-75 py-0 fw-regular fs-7 text-dai text-center"
+                                          style={{
+                                            backgroundColor: 'transparent',
+                                            borderColor: 'transparent',
+                                            boxShadow:
+                                              editing === project_id
+                                                ? '0 0 0 0.2rem inset rgb(202, 198, 230)'
+                                                : '',
+                                            color: '#0a004e',
+                                            fontWeight: '700',
+                                          }}
+                                          onClick={(e) => {
+                                            if (
+                                              editing &&
+                                              editing !== project_id
+                                            ) {
+                                              setEditing(project_id)
+                                            }
+                                            e.stopPropagation()
+                                          }}
+                                          // defaultValue={setting.id || project_id}
+                                          // value={setting.name || ''}
+                                          onChange={() => {}}
+                                        />
+                                      </Col> */}
+                                      <Col
+                                        xs={4}
+                                        className="d-flex h-100 flex-column"
+                                      >
+                                        <Form.Control
+                                          name="name"
+                                          className="my-auto h-75 py-0 fw-regular fs-7 text-dai text-center"
+                                          style={{
+                                            backgroundColor: 'transparent',
+                                            borderColor: 'transparent',
+                                            boxShadow:
+                                              editing === project_id
+                                                ? '0 0 0 0.2rem inset rgb(202, 198, 230)'
+                                                : '',
+                                            color: '#0a004e',
+                                            fontWeight: '700',
+                                          }}
+                                          onClick={(e) => {
+                                            if (editing !== project_id) {
+                                              setEditing(project_id)
+                                            }
+                                            e.stopPropagation()
+                                          }}
+                                          defaultValue={
+                                            setting.name ||
+                                            `專案${setting.id || project_id}`
+                                          }
+                                          // value={setting.name || ''}
+                                          onChange={handleProjectChange}
+                                        />
+                                      </Col>
+                                      <Col xs={3} className="d-flex">
+                                        <Form.Control
+                                          name="remark"
+                                          className="my-auto h-75 py-0 fw-regular fs-7 text-dai text-center"
+                                          style={{
+                                            backgroundColor: 'transparent',
+                                            borderColor: 'transparent',
+                                            boxShadow:
+                                              editing === project_id
+                                                ? '0 0 0 0.2rem inset rgb(202, 198, 230)'
+                                                : '',
+                                            color: '#0a004e',
+                                            fontWeight: '700',
+                                          }}
+                                          placeholder={
+                                            editing === project_id
+                                              ? '編輯備註...'
+                                              : ''
+                                          }
+                                          defaultValue={setting.remark || ''}
+                                          // value={setting.name || ''}
+                                          onClick={(e) => {
+                                            if (editing !== project_id) {
+                                              setEditing(project_id)
+                                            }
+                                            e.stopPropagation()
+                                          }}
+                                          onChange={handleProjectChange}
+                                        />
+                                      </Col>
+                                      <Col className="d-flex">
+                                        <p className="m-auto">
+                                          {moment(created_on)
+                                            .tz('Asia/Taipei')
+                                            .format('yyyy-MM-DD HH:mm')}
+                                        </p>
+                                      </Col>
+                                      <Col className="d-flex">
+                                        <p className="m-auto">
+                                          {moment(updated_on)
+                                            .tz('Asia/Taipei')
+                                            .format('yyyy-MM-DD HH:mm')}
+                                        </p>
+                                      </Col>
+                                      <Col
+                                        xs={2}
+                                        className="d-flex justify-content-center"
+                                      >
+                                        <Button
+                                          className="w-25 h-50 btn-hover-wom my-auto"
+                                          onClick={(e) => {
+                                            if (
+                                              editing &&
+                                              project_id === editing
+                                            ) {
+                                              handleEdit()
+                                            } else {
+                                              setEditing(project_id)
+                                            }
+                                            e.stopPropagation()
+                                          }}
+                                          title="編 輯"
+                                        >
+                                          <FontAwesomeIcon
+                                            icon={
+                                              editing === project_id
+                                                ? faCheckSquare
+                                                : faEdit
+                                            }
+                                            style={{
+                                              cursor: 'pointer',
+                                            }}
+                                            className="m-auto fs-5"
+                                          />
+                                        </Button>
+                                        <Button
+                                          className="w-25 h-50 btn-hover-wom my-auto"
+                                          onClick={(e) => {
+                                            setshowWarn(project_id)
+                                            e.stopPropagation()
+                                          }}
+                                          title="刪 除"
+                                        >
+                                          <FontAwesomeIcon
+                                            icon={faTrashAlt}
+                                            style={{
+                                              cursor: 'pointer',
+                                            }}
+                                            className="my-auto fs-5"
+                                          />
+                                        </Button>
+                                        <FontAwesomeIcon
+                                          icon={faBars}
+                                          style={
+                                            {
+                                              // cursor: 'grabbing',
+                                            }
+                                          }
+                                          className="w-25 my-auto fs-5 text-dai-light"
+                                          // onClick={() => handleDraftDelete(project_id)}
+                                          title="排 序"
+                                        />
+                                      </Col>
+                                    </Row>
+                                  </div>
+                                )}
+                              </Draggable>
+                            )
+                          )
+                      ) : (
+                        <Row>
+                          <Col>專案名</Col>
+                          <Col>狀態</Col>
+                          <Col>建立日期</Col>
+                          <Col>更新時間</Col>
+                          <Col>備註</Col>
+                          <Col>操作</Col>
+                        </Row>
+                      )}
+                      {dropProvided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </div>
+          </>
+        )
       ) : (
         <>
           <div className="d-flex" style={{ height: '65%' }}>
@@ -848,7 +1217,10 @@ function Home() {
         setting={{
           show: showWarn,
           handleClose: (value) => {
-            if (value) handleArticleDelete(value)
+            if (value) {
+              if (projectId) handleArticleDelete(value)
+              else handleProjectDelete(value)
+            }
             setshowWarn(false)
           },
         }}

@@ -9,7 +9,7 @@ const { getChatResponse: gcr } = require('../services/chatgpt')
 router.get('/', async (req, res) => {
   if (!req.user) return res.send({ error: 'user not found' })
   const { user_id } = req.user
-  const articles = await pg.exec('any', 'SELECT * FROM articles', [])
+  const articles = await pg.exec('any', 'SELECT *,(SELECT name AS user_name FROM users u WHERE u.user_id = a.user_id) FROM articles a', [])
   return res.send(articles)
 })
 
@@ -20,7 +20,7 @@ router.get('/:article_id', async (req, res) => {
   return res.send(articles)
 })
 
-router.post('/', async (req, res) => {
+router.post('/:project_id', async (req, res) => {
     if (!req.user) return res.send({ error: 'user not found' })
     const { user_id } = req.user
     const article = await pg.exec('one', 'INSERT INTO articles(user_id, setting, created_on, updated_on) values($1, $2, current_timestamp, current_timestamp) RETURNING *', [user_id, {
@@ -97,6 +97,8 @@ router.post('/', async (req, res) => {
           Text: '',
           status: 'pending',
         },
+        project_id: req.params.project_id,
+        ...req.body,
       }])
     return res.send(article)
 })
@@ -214,8 +216,17 @@ router.put('/:article_id', async (req, res) => {
         }, 500, 1)
       },
       async () => {
+        const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
+          ...setting,
+          ...datas,
+          prompt: `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。`,
+          // headings: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() }))
+        }, req.params.article_id])
+        return res.send(updated)
+      },
+      async () => {
         gcr([
-          { role: 'user', content: `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。` }
+          { role: 'user', content: datas.prompt || `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。` }
         ], () => {}, async (chat) => {
           console.log(chat)
           const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{

@@ -460,6 +460,36 @@ function SettingModal({ setting }) {
       complete: true,
     },
     {
+      title: 'Confirm Prompt',
+      form: (
+        <>
+          <Row>
+            <h3>Confirm and Customize Your Prompt</h3>
+          </Row>
+          <Row className="my-0">
+            <h6>
+              Put the final touches on your Prompt. Arrange the Prompt that best
+              fits your narrative and add any word you need.
+            </h6>
+          </Row>
+          <Row
+            className="mx-auto"
+            style={{
+              height: '80%',
+            }}
+          >
+            <Form.Control
+              as="textarea"
+              rows={10}
+              value={datas.prompt}
+              onChange={(e) => handleDataChange('prompt', e.target.value)}
+            />
+          </Row>
+        </>
+      ),
+      complete: true,
+    },
+    {
       title: 'Generate Article',
       form: (
         <>
@@ -562,7 +592,6 @@ function SettingModal({ setting }) {
                       className="d-flex w-100 justify-content-center"
                       variant="secondary"
                       onClick={() => {
-                        nextStep()
                         setstep({
                           now: step.now - 1,
                           max: step.max,
@@ -580,7 +609,7 @@ function SettingModal({ setting }) {
                     className="d-flex w-100 justify-content-center"
                     variant="wom"
                     onClick={() => {
-                      if (step.now === 5) {
+                      if (step.now === 6) {
                         if (!location.pathname.includes('/book')) {
                           navigate(`/book/${article_id}`)
                         }
@@ -595,7 +624,7 @@ function SettingModal({ setting }) {
                     }}
                     disabled={!steps[step.now].complete}
                   >
-                    {step.now === 5 ? 'Start Edit' : 'Continue'}
+                    {step.now === 6 ? 'Start Edit' : 'Continue'}
                   </Button>
                 </Col>
               </Row>

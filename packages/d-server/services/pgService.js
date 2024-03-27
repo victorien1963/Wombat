@@ -41,7 +41,8 @@ const checkAll = async () => {
     await db.none('CREATE TABLE IF NOT EXISTS drafts (draft_id serial PRIMARY KEY, setting JSONB NOT NULL, user_id serial NOT NULL, created_on TIMESTAMP NOT NULL, updated_on TIMESTAMP NOT NULL, FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE cascade)')
     await db.none('CREATE TABLE IF NOT EXISTS gpt_logs (gpt_log_id serial PRIMARY KEY, setting JSONB NOT NULL, user_id serial NOT NULL, created_on TIMESTAMP NOT NULL, updated_on TIMESTAMP NOT NULL, FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE cascade)')
     await db.none('CREATE TABLE IF NOT EXISTS image_jobs (image_job_id serial PRIMARY KEY, platform VARCHAR ( 50 ) NOT NULL, status VARCHAR ( 50 ) NOT NULL, setting JSONB NOT NULL, created_on TIMESTAMP NOT NULL, updated_on TIMESTAMP NOT NULL)')
-    await db.none('CREATE TABLE IF NOT EXISTS articles (article_id serial PRIMARY KEY, setting JSONB NOT NULL, user_id serial NOT NULL, created_on TIMESTAMP NOT NULL, updated_on TIMESTAMP NOT NULL, FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE cascade)')    
+    await db.none('CREATE TABLE IF NOT EXISTS projects (project_id serial PRIMARY KEY, setting JSONB NOT NULL, user_id serial NOT NULL, created_on TIMESTAMP NOT NULL, updated_on TIMESTAMP NOT NULL, FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE cascade)')
+    await db.none('CREATE TABLE IF NOT EXISTS articles (article_id serial PRIMARY KEY, setting JSONB NOT NULL, user_id serial NOT NULL, created_on TIMESTAMP NOT NULL, updated_on TIMESTAMP NOT NULL, FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE cascade)')
 
     await db.one('SELECT setval(\'users_user_id_seq\', (SELECT MAX(user_id) FROM users)+1)')
     console.log('All Table Checked')
