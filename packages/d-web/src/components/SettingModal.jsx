@@ -595,7 +595,7 @@ function SettingModal({ setting }) {
                     }}
                     disabled={!steps[step.now].complete}
                   >
-                    {step.now === 5 ? 'Start Edit' : 'Continue'}
+                    {step.now === 5 ? 'Save' : 'Continue'}
                   </Button>
                 </Col>
               </Row>
