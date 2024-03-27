@@ -16,6 +16,7 @@ const app = express()
 const authRouter = require('./routes/auth')
 const draftRouter = require('./routes/draft')
 const gptLogRouter = require('./routes/gptLog')
+const projectRouter = require('./routes/project')
 const articleRouter = require('./routes/article')
 
 // view engine setup
@@ -47,6 +48,7 @@ async function getUser(req, res, next) {
 app.use('/auth', authRouter)
 app.use('/draft', getUser, draftRouter)
 app.use('/gptLog', getUser, gptLogRouter)
+app.use('/project', getUser, projectRouter)
 app.use('/article', getUser, articleRouter)
 app.get('/me', getUser, async (req, res) => {
   return res.send({
