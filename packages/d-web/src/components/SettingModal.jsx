@@ -545,7 +545,7 @@ function SettingModal({ setting }) {
             </Button>
           </Col>
           <Col xs={9} className="d-flex h-100">
-            <div className="my-auto w-100 h-100 pb-5 pt-3">
+            <div className="my-auto w-100 h-100 pt-3">
               <Row
                 className="overflow-scroll"
                 style={{
