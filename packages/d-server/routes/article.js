@@ -242,6 +242,7 @@ router.put('/:article_id', async (req, res) => {
             Article: {
               thumbnail: '',
               Text: chat,
+              status: 'done',
             },
             step,
             // headings: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() }))
