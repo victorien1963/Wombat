@@ -100,6 +100,7 @@ router.post('/:project_id', async (req, res) => {
         project_id: req.params.project_id,
         ...req.body,
       }])
+    console.log(article)
     return res.send(article)
 })
 
@@ -219,6 +220,9 @@ router.put('/:article_id', async (req, res) => {
           return res.send(updated)
         }, 500, 1)
       },
+      () => {
+        res.send('')
+      },
       async () => {
         const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
           ...setting,
@@ -227,6 +231,7 @@ router.put('/:article_id', async (req, res) => {
           step,
           // headings: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() }))
         }, req.params.article_id])
+        console.log(updated)
         return res.send(updated)
       },
       async () => {
@@ -250,137 +255,10 @@ router.put('/:article_id', async (req, res) => {
       },
     ]
 
+    console.log(step)
+    console.log(gptFuncs[parseInt(step.now, 10)])
     if (!gptFuncs[step.now]) return res.send(article)
     gptFuncs[step.now]()
-    // switch (step.now) {
-    //   case 1:
-    //     break
-    //     case 1:
-    //       break
-    //       case 1:
-    //         break
-    //         case 1:
-    //           break
-    //           case 1:
-    //             break
-    //             case 1:
-    //               break
-    //               case 1:
-    //                 break
-    //                 case 1:
-    //                   break
-    //                   case 1:
-    //                     break
-    // }
-
-
-    // switch(action) {
-    //     case 'pk':
-    //         setting = {
-    //             ...article.setting,
-    //             Pkeywords: [
-    //                 {
-    //                   label: 'keyword1',
-    //                 },
-    //                 {
-    //                   label: 'keyword2',
-    //                 },
-    //                 {
-    //                   label: 'keyword3',
-    //                 },
-    //             ],
-    //         }
-    //         break
-    //     case 'headings':
-    //         setting = {
-    //             ...article.setting,
-    //             titles: [
-    //                 {
-    //                   label: 'title1',
-    //                 },
-    //                 {
-    //                   label: 'title2',
-    //                 },
-    //                 {
-    //                   label: 'title3',
-    //                 },
-    //               ],
-    //         }
-    //         break
-    //     case 'sk':
-    //         setting = {
-    //             ...article.setting,
-    //             Skeywords: [
-    //                 {
-    //                   label: 'keyword1',
-    //                 },
-    //                 {
-    //                   label: 'keyword2',
-    //                 },
-    //                 {
-    //                   label: 'keyword3',
-    //                 },
-    //               ],
-    //         }
-    //         break
-    //     case 'headings':
-    //         setting = {
-    //             ...article.setting,
-    //             headings: [
-    //                 [
-    //                   'Introduction 1',
-    //                   'First Section',
-    //                   'Second Section',
-    //                   'Final Section',
-    //                   'Ending',
-    //                 ],
-    //                 [
-    //                   'Introduction 2',
-    //                   'First Section',
-    //                   'Second Section',
-    //                   'Final Section',
-    //                   'Ending',
-    //                 ],
-    //                 [
-    //                   'Introduction 3',
-    //                   'First Section',
-    //                   'Second Section',
-    //                   'Final Section',
-    //                   'Ending',
-    //                 ],
-    //               ],
-    //         }
-    //         break
-    //     case 'article':
-    //         setting = {
-    //             ...article.setting,
-    //             Article: {
-    //                 thumbnail: '',
-    //                 content: [{
-    //                     Section: 'Introduction',
-    //                     Text: 'This is Introduction'
-    //                 },{
-    //                     Section: 'First Section',
-    //                     Text: 'This is First Section'
-    //                 },{
-    //                     Section: 'Second Section',
-    //                     Text: 'This is Second Section'
-    //                 },{
-    //                     Section: 'Final Section',
-    //                     Text: 'This is Final Section'
-    //                 },{
-    //                     Section: 'Ending',
-    //                     Text: 'This is Ending'
-    //                 }],
-    //                 status: 'done',
-    //               },
-    //         }
-    //         break
-    //     default:
-    //         break
-    // }
-    // article = await pg.exec('UPDATE articles SET setting = $1 WHERE article_id = $2', [setting, req.params.article_id])
-    // return res.send(article)
 })
 
 router.delete('/:article_id', async (req, res) => {
