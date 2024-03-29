@@ -220,9 +220,6 @@ router.put('/:article_id', async (req, res) => {
           return res.send(updated)
         }, 500, 1)
       },
-      () => {
-        res.send('')
-      },
       async () => {
         const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
           ...setting,
@@ -255,10 +252,8 @@ router.put('/:article_id', async (req, res) => {
       },
     ]
 
-    console.log(step)
-    console.log(gptFuncs[parseInt(step.now, 10)])
-    if (!gptFuncs[step.now]) return res.send(article)
-    gptFuncs[step.now]()
+    if (!gptFuncs[step.now - 1]) return res.send(article)
+    gptFuncs[step.now - 1]()
 })
 
 router.delete('/:article_id', async (req, res) => {
