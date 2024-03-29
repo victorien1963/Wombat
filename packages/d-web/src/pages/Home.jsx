@@ -54,7 +54,6 @@ import {
   // DraftContext,
 } from '../components/ContextProvider'
 import apiServices from '../services/apiServices'
-import file from '../services/file'
 import { LoadingButton, Loading, SettingModal } from '../components'
 import { logoFull } from '../asset'
 
@@ -67,9 +66,11 @@ function Book({ setting }) {
     content = 'content',
     handleEdit = () => {},
     handleDelete = () => {},
+    handleOpen = () => {},
     // handleDownload = () => {},
     handleCopy,
     // handleMove = () => {},
+    status,
   } = setting
   return (
     <Card
@@ -79,6 +80,7 @@ function Book({ setting }) {
         backgroundColor: 'rgb(246 246 246)',
         border: '1px solid rgba(35, 61, 99, 0.7)',
       }}
+      onClick={handleOpen}
     >
       <Card.Body className="d-flex flex-column h-100 py-2">
         <Row>
@@ -121,10 +123,11 @@ function Book({ setting }) {
                 width: '40px',
               }}
               onClick={handleEdit}
-              title="編 輯"
+              title={status === 'pending' ? '此模板尚未完成' : '檢視'}
+              disabled={status === 'pending'}
             >
               <FontAwesomeIcon
-                icon={faEdit}
+                icon={status === 'pending' ? faEyeSlash : faEye}
                 style={{
                   cursor: 'pointer',
                 }}
@@ -682,37 +685,19 @@ function Home() {
                                         updated_on,
                                         content:
                                           setting.Article.Text || 'Content',
-                                        handleEdit: () => {
+                                        status: setting.Article.status,
+                                        handleEdit: (e) => {
+                                          e.stopPropagation()
                                           navigate(`/book/${article_id}`)
                                         },
                                         handleDelete: (e) => {
                                           setshowWarn(article_id)
                                           e.stopPropagation()
                                         },
-                                        handleDownload: async (e) => {
-                                          e.stopPropagation()
-                                          setloading(true)
-                                          await file.makeFile(
-                                            setting,
-                                            [
-                                              'module1',
-                                              'module2',
-                                              'module3',
-                                              'module4',
-                                            ],
-                                            async (downloadFunc) => {
-                                              const delay = (ms) =>
-                                                new Promise((resolve) =>
-                                                  setTimeout(resolve, ms)
-                                                )
-                                              await delay(5000)
-
-                                              setloading((prevState) => {
-                                                if (prevState) downloadFunc()
-                                                return false
-                                              })
-                                            }
-                                          )
+                                        handleOpen: () => {
+                                          setid(article_id)
+                                          setshowSetting(true)
+                                          setcopyTarget(setting)
                                         },
                                       }}
                                     />
@@ -807,18 +792,22 @@ function Home() {
                                         updated_on,
                                         content:
                                           setting.Article.Text || 'Content',
-                                        handleEdit: () => {
+                                        handleEdit: (e) => {
+                                          e.stopPropagation()
                                           navigate(`/book/${article_id}`)
                                         },
                                         handleDelete: (e) => {
                                           setshowWarn(article_id)
                                           e.stopPropagation()
                                         },
-                                        handleDownload: () => {},
-                                        handleCopy: () => {
+                                        handleOpen: () => {
                                           setid(article_id)
                                           setshowSetting(true)
                                           setcopyTarget(setting)
+                                        },
+                                        handleCopy: (e) => {
+                                          e.stopPropagation()
+                                          handleArticleAdd(setting)
                                         },
                                       }}
                                     />
