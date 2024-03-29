@@ -563,7 +563,7 @@ function Home() {
                 </Button>
                 <Button
                   className="w-100 ms-auto"
-                  onClick={handleArticleAdd}
+                  onClick={() => handleArticleAdd()}
                   variant="outline-wom"
                 >
                   新建模組&ensp;
