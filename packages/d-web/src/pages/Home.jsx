@@ -47,6 +47,7 @@ import {
   faCheckSquare,
   faReply,
   faCopy,
+  faCloudArrowDown,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   AuthContext,
@@ -146,9 +147,11 @@ function Book({ setting }) {
               <FontAwesomeIcon icon={faCopy} />
             </Button>
           )}
-          {/* <Button
+          <Button
             className="h-100 btn-hover-wom my-auto d-flex"
-            onClick={handleDownload}
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
             style={{
               width: '40px',
             }}
@@ -161,7 +164,7 @@ function Book({ setting }) {
               }}
               className="m-auto fs-5 h-100 w-100"
             />
-          </Button> */}
+          </Button>
           {!handleCopy && (
             <Button
               className="h-100 btn-hover-wom my-auto d-flex"
