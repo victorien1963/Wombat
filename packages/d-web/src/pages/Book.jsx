@@ -86,7 +86,7 @@ function Book() {
   })
   const getArticle = async () => {
     const res = await apiServices.data({
-      path: `/article/${article_id}`,
+      path: `article/${article_id}`,
       method: 'get',
     })
     setdatas(res.setting)

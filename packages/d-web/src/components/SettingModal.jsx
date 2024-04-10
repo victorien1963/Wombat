@@ -11,14 +11,15 @@ import {
   Spinner,
 } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCirclePlus } from '@fortawesome/free-solid-svg-icons'
 import { logoFull } from '../asset'
 import apiServices from '../services/apiServices'
 // import { AuthContext } from './ContextProvider'
 
 function SettingModal({ setting }) {
   //   const { auth } = useContext(AuthContext)
-  const location = useLocation()
   const navigate = useNavigate()
   const { show, handleClose, copyTarget, handleCopy, article_id } = setting
 
@@ -122,6 +123,8 @@ function SettingModal({ setting }) {
       [key]: value,
     })
 
+  const [tempText, settempText] = useState('')
+
   const steps = [
     {
       title: 'Enter a Topic',
@@ -191,17 +194,31 @@ function SettingModal({ setting }) {
           <Row />
           <ListGroup className="h-100 w-100 stepList">
             <ListGroupItem
-              action
               className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
               style={{
-                height: '15%',
+                height: '10%',
               }}
             >
-              <Form.Check className="my-auto me-2" type="radio" />
               <Form.Control
                 size="sm"
                 className="h-75 my-auto border-0"
                 placeholder="Add Your Own Keyword"
+                value={tempText}
+                onChange={(e) => settempText(e.target.value)}
+              />
+              <FontAwesomeIcon
+                onClick={() => {
+                  handleDataChange('Pkeywords', [
+                    { label: tempText },
+                    ...datas.Pkeywords,
+                  ])
+                  settempText('')
+                }}
+                icon={faCirclePlus}
+                className="h-50 my-auto mx-3"
+                style={{
+                  cursor: 'pointer',
+                }}
               />
             </ListGroupItem>
             {datas.Pkeywords.map(({ label }) => (
@@ -246,17 +263,31 @@ function SettingModal({ setting }) {
           <Row />
           <ListGroup className="h-100 w-100 stepList">
             <ListGroupItem
-              action
               className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
               style={{
-                height: '15%',
+                height: '10%',
               }}
             >
-              <Form.Check className="my-auto me-2" type="radio" />
               <Form.Control
                 size="sm"
                 className="h-75 my-auto border-0"
-                placeholder="Add Your Own Title"
+                placeholder="Add Your Own Keyword"
+                value={tempText}
+                onChange={(e) => settempText(e.target.value)}
+              />
+              <FontAwesomeIcon
+                onClick={() => {
+                  handleDataChange('titles', [
+                    { label: tempText },
+                    ...datas.titles,
+                  ])
+                  settempText('')
+                }}
+                icon={faCirclePlus}
+                className="h-50 my-auto mx-3"
+                style={{
+                  cursor: 'pointer',
+                }}
               />
             </ListGroupItem>
             {datas.titles.map(({ label }) => (
@@ -300,17 +331,31 @@ function SettingModal({ setting }) {
           <Row />
           <ListGroup className="h-100 w-100 stepList">
             <ListGroupItem
-              action
               className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
               style={{
-                height: '13%',
+                height: '10%',
               }}
             >
-              <Form.Check className="my-auto me-2" type="radio" />
               <Form.Control
                 size="sm"
                 className="h-75 my-auto border-0"
-                placeholder="Add Your Own Secondary Keywords Here"
+                placeholder="Add Your Own Keyword"
+                value={tempText}
+                onChange={(e) => settempText(e.target.value)}
+              />
+              <FontAwesomeIcon
+                onClick={() => {
+                  handleDataChange('Skeywords', [
+                    { label: tempText },
+                    ...datas.Skeywords,
+                  ])
+                  settempText('')
+                }}
+                icon={faCirclePlus}
+                className="h-50 my-auto mx-3"
+                style={{
+                  cursor: 'pointer',
+                }}
               />
             </ListGroupItem>
             {datas.Skeywords.map(({ label }) => (
@@ -423,16 +468,28 @@ function SettingModal({ setting }) {
           <Row />
           <ListGroup className="h-100 w-100 stepList">
             <ListGroupItem
-              action
               className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
               style={{
-                height: '20%',
+                height: '10%',
               }}
             >
               <Form.Control
                 size="sm"
                 className="h-75 my-auto border-0"
-                placeholder="Add Your Own Heading"
+                placeholder="Add Your Own Keyword"
+                value={tempText}
+                onChange={(e) => settempText(e.target.value)}
+              />
+              <FontAwesomeIcon
+                onClick={() => {
+                  handleDataChange('heading', [tempText, ...datas.heading])
+                  settempText('')
+                }}
+                icon={faCirclePlus}
+                className="h-50 my-auto mx-3"
+                style={{
+                  cursor: 'pointer',
+                }}
               />
             </ListGroupItem>
             {datas.heading.map((label, i) => (
@@ -496,19 +553,40 @@ function SettingModal({ setting }) {
     {
       title: 'Generate Article',
       form: (
-        <>
+        <div className="h-100 w-100 d-flex flex-column">
           <Row style={{ zIndex: '2' }} className="mb-3">
-            <h3>{datas.title}</h3>
+            <Form.Control
+              className="fw-bold p-0 ps-2 border-0 fs-3"
+              value={datas.title}
+              onChange={(e) => {
+                handleDataChange('title', e.target.value)
+              }}
+            />
           </Row>
-          <Row style={{ zIndex: '1' }} className="mx-auto">
+          <Row style={{ zIndex: '1' }} className="w-100 d-flex">
             <Image
-              className="position-absolute w-50"
+              className="position-absolute w-50 mx-auto"
               style={{ opacity: '.15' }}
               src={logoFull}
             />
           </Row>
-          <Row style={{ zIndex: '2' }}>{datas.Article.Text}</Row>
-        </>
+          <Row className="flex-fill py-3" style={{ zIndex: '2' }}>
+            <Form.Control
+              className="border-0"
+              style={{
+                backgroundColor: 'transparent',
+              }}
+              as="textarea"
+              value={datas.Article.Text}
+              onChange={(e) =>
+                handleDataChange('Article', {
+                  ...datas.Article,
+                  Text: e.target.value,
+                })
+              }
+            />
+          </Row>
+        </div>
       ),
       complete: true,
     },
@@ -517,19 +595,37 @@ function SettingModal({ setting }) {
   const [loading, setloading] = useState(false)
   const nextStep = async () => {
     setloading(true)
-    const res = await apiServices.data({
-      path: `article/${article_id}`,
-      method: 'put',
-      data: {
-        datas,
-        step: {
-          now: step.now + 1,
-          max: Math.max(step.now + 1, step.max),
+    if (step.now === 6) {
+      const res = await apiServices.data({
+        path: `article/${article_id}`,
+        method: 'put',
+        data: {
+          datas,
+          step: {
+            ...step,
+            now: 7,
+          },
         },
-      },
-    })
-    setloading(false)
-    setdatas(res.setting)
+      })
+      setloading(false)
+      setdatas(res.setting)
+      navigate(`/book/${datas.project_id}/${article_id}`)
+      handleClose()
+    } else {
+      const res = await apiServices.data({
+        path: `article/${article_id}`,
+        method: 'put',
+        data: {
+          datas,
+          step: {
+            now: step.now + 1,
+            max: Math.max(step.now + 1, step.max),
+          },
+        },
+      })
+      setloading(false)
+      setdatas(res.setting)
+    }
   }
 
   return (
@@ -626,13 +722,8 @@ function SettingModal({ setting }) {
                     className="d-flex w-100 justify-content-center"
                     variant="wom"
                     onClick={() => {
-                      if (step.now === 6) {
-                        if (!location.pathname.includes('/book')) {
-                          navigate(`/book/${article_id}`)
-                        }
-                        handleClose()
-                      } else {
-                        nextStep()
+                      nextStep()
+                      if (step.now !== 6) {
                         setstep({
                           now: step.now + 1,
                           max: Math.max(step.now + 1, step.max),
