@@ -4,10 +4,10 @@ import './App.css'
 import {
   Home,
   Register,
-  Module1,
-  Module2,
-  Module3,
-  Module4,
+  // Module1,
+  // Module2,
+  // Module3,
+  // Module4,
   Book,
 } from './pages'
 import { AppWrapper, ContextProvider } from './components'
@@ -23,11 +23,12 @@ function App() {
             <Routes className="px-0">
               <Route path="/" element={<Home />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/book/:article_id" element={<Book />} />
-              <Route path="/module1" element={<Module1 />} />
+              <Route path="/book/:project_id/:article_id" element={<Book />} />
+              {/* <Route path="/module1" element={<Module1 />} />
               <Route path="/module2" element={<Module2 />} />
               <Route path="/module3" element={<Module4 />} />
-              <Route path="/module4" element={<Module3 />} />
+              <Route path="/module4" element={<Module3 />} /> */}
+              <Route path="/:project_id" element={<Home />} />
               <Route path="/*" element={<Home />} />
             </Routes>
           </AppWrapper>

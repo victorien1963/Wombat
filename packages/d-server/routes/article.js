@@ -9,7 +9,7 @@ const { getChatResponse: gcr } = require('../services/chatgpt')
 router.get('/', async (req, res) => {
   if (!req.user) return res.send({ error: 'user not found' })
   const { user_id } = req.user
-  const articles = await pg.exec('any', 'SELECT *,(SELECT name AS user_name FROM users u WHERE u.user_id = a.user_id) FROM articles a', [])
+  const articles = await pg.exec('any', 'SELECT *,(SELECT name AS user_name FROM users u WHERE u.user_id = a.user_id) FROM articles a ORDER BY created_on DESC', [])
   return res.send(articles)
 })
 
@@ -116,7 +116,6 @@ router.put('/:article_id', async (req, res) => {
         gcr([
           { role: 'user', content: `你是一個劇本作家，請以${datas.topic}為主題，列出5個最符合該主題的Prime Keyword，以「1.」「2.」「3.」「4.」「5.」作為項目符號` }
         ], () => {}, async (chat) => {
-          console.log(chat)
           const keywords = [
             chat.substring(chat.indexOf('1.') + 2, chat.indexOf('2.')),
             chat.substring(chat.indexOf('2.') + 2, chat.indexOf('3.')),
@@ -124,14 +123,12 @@ router.put('/:article_id', async (req, res) => {
             chat.substring(chat.indexOf('4.') + 2, chat.indexOf('5.')),
             chat.substring(chat.indexOf('5.') + 2),
           ]
-          console.log(keywords)
           const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
             ...setting,
             ...datas,
             Pkeywords: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() })),
             step,
           }, req.params.article_id])
-          console.log(updated)
           return res.send(updated)
         }, 500, 1)
       },
@@ -139,7 +136,6 @@ router.put('/:article_id', async (req, res) => {
         gcr([
           { role: 'user', content: `你是一個劇本作家，請以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，列出五個合適的標題，以「1.」「2.」「3.」「4.」「5.」作為項目符號` }
         ], () => {}, async (chat) => {
-          console.log(chat)
           const titles = [
             chat.substring(chat.indexOf('1.') + 2, chat.indexOf('2.')),
             chat.substring(chat.indexOf('2.') + 2, chat.indexOf('3.')),
@@ -147,14 +143,12 @@ router.put('/:article_id', async (req, res) => {
             chat.substring(chat.indexOf('4.') + 2, chat.indexOf('5.')),
             chat.substring(chat.indexOf('5.') + 2),
           ]
-          console.log(titles)
           const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
             ...setting,
             ...datas,
             titles: titles.map((k) => ({ label: k.replaceAll('.', '').trim() })),
             step,
           }, req.params.article_id])
-          console.log(updated)
           return res.send(updated)
         }, 500, 1)
       },
@@ -162,7 +156,6 @@ router.put('/:article_id', async (req, res) => {
         gcr([
           { role: 'user', content: `你是一個劇本作家，請以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，列出15個合適的的Secondary Keyword，以「1.」「2.」「3.」「4.」「5.」作為項目符號` }
         ], () => {}, async (chat) => {
-          console.log(chat)
           const keywords = [
             chat.substring(chat.indexOf('1.') + 2, chat.indexOf('2.')),
             chat.substring(chat.indexOf('2.') + 2, chat.indexOf('3.')),
@@ -180,14 +173,12 @@ router.put('/:article_id', async (req, res) => {
             chat.substring(chat.indexOf('14.') + 2, chat.indexOf('15.')),
             chat.substring(chat.indexOf('15.') + 2),
           ]
-          console.log(keywords)
           const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
             ...setting,
             ...datas,
             Skeywords: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() })),
             step,
           }, req.params.article_id])
-          console.log(updated)
           return res.send(updated)
         }, 500, 1)
       },
@@ -200,7 +191,6 @@ router.put('/:article_id', async (req, res) => {
           4. Final Section,
           5. Ending，以「1.」「2.」「3.」「4.」「5.」作為項目符號` }
         ], () => {}, async (chat) => {
-          console.log(chat)
           const heading = [
             chat.substring(chat.indexOf('1.') + 2, chat.indexOf('2.')),
             chat.substring(chat.indexOf('2.') + 2, chat.indexOf('3.')),
@@ -208,7 +198,6 @@ router.put('/:article_id', async (req, res) => {
             chat.substring(chat.indexOf('4.') + 2, chat.indexOf('5.')),
             chat.substring(chat.indexOf('5.') + 2),
           ]
-          console.log(heading)
           const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
             ...setting,
             ...datas,
@@ -216,7 +205,6 @@ router.put('/:article_id', async (req, res) => {
             step,
             // headings: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() }))
           }, req.params.article_id])
-          console.log(updated)
           return res.send(updated)
         }, 500, 1)
       },
@@ -228,14 +216,12 @@ router.put('/:article_id', async (req, res) => {
           step,
           // headings: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() }))
         }, req.params.article_id])
-        console.log(updated)
         return res.send(updated)
       },
       async () => {
         gcr([
           { role: 'user', content: datas.prompt || `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。` }
         ], () => {}, async (chat) => {
-          console.log(chat)
           const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
             ...setting,
             ...datas,
@@ -247,13 +233,18 @@ router.put('/:article_id', async (req, res) => {
             step,
             // headings: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() }))
           }, req.params.article_id])
-          console.log(updated)
           return res.send(updated)
         }, 2000, 1)
       },
     ]
 
-    if (!gptFuncs[step.now - 1]) return res.send(article)
+    if (!gptFuncs[step.now - 1]) {
+      const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
+        ...setting,
+        ...datas,
+      }, req.params.article_id])
+      return res.send(updated)
+    }
     gptFuncs[step.now - 1]()
 })
 
