@@ -22,7 +22,7 @@ function SideNavBar() {
 
   const article_id = useMemo(() => {
     if (location.pathname.includes('/book/'))
-      return location.pathname.split('/book/')[1]
+      return location.pathname.split('/')[3]
     return ''
   }, [location])
 
@@ -126,7 +126,9 @@ function SideNavBar() {
             &ensp;編輯設定
           </Button>
           <Button
-            onClick={() => navigate('/')}
+            onClick={() =>
+              navigate(`/${location.pathname.split('/')[2] || ''}`)
+            }
             className="mx-auto my-2 text-nowrap"
             style={{
               width: '85%',
@@ -135,7 +137,7 @@ function SideNavBar() {
             size="sm"
           >
             <FontAwesomeIcon icon={faReply} />
-            &ensp;專案列表
+            &ensp;返回列表
           </Button>
         </>
       )}

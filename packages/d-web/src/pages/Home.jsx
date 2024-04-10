@@ -3,7 +3,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useContext, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import 'moment-timezone'
@@ -261,8 +261,13 @@ function Home() {
   const { setToast } = useContext(ToastContext)
   const navigate = useNavigate()
 
+  const params = useParams()
+
   const [projectId, setProjectId] = useState('')
   const [editing, setEditing] = useState('')
+  useEffect(() => {
+    setProjectId(params.project_id)
+  }, [params.project_id])
 
   const [reveal, setReveal] = useState(false)
   const fields = [
@@ -691,7 +696,9 @@ function Home() {
                                         status: setting.Article.status,
                                         handleEdit: (e) => {
                                           e.stopPropagation()
-                                          navigate(`/book/${article_id}`)
+                                          navigate(
+                                            `/book/${projectId}/${article_id}`
+                                          )
                                         },
                                         handleDelete: (e) => {
                                           setshowWarn(article_id)
@@ -797,7 +804,9 @@ function Home() {
                                           setting.Article.Text || 'Content',
                                         handleEdit: (e) => {
                                           e.stopPropagation()
-                                          navigate(`/book/${article_id}`)
+                                          navigate(
+                                            `/book/${projectId}/${article_id}`
+                                          )
                                         },
                                         handleDelete: (e) => {
                                           setshowWarn(article_id)
