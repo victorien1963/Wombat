@@ -763,7 +763,22 @@ function SettingModal({ setting }) {
             </Col>
           </Row>
         ) : (
-          <Row className="w-100">
+          <Row className="w-100 position-relative">
+            {loading && (
+              <div
+                className="position-absolute w-100 h-100 d-flex"
+                style={{
+                  backgroundColor: '#fff',
+                  opacity: '0.8',
+                  zIndex: '9999',
+                }}
+              >
+                <div className="h-100 w-100 d-flex justify-content-center">
+                  <Spinner size="sm" className="my-auto" />
+                  <span className="my-auto">&ensp;資料載入中</span>
+                </div>
+              </div>
+            )}
             <Col xs={5}>
               <Row
                 className="p-3"
@@ -776,6 +791,7 @@ function SettingModal({ setting }) {
                   <Form.Control
                     value={datas.topic}
                     onChange={(e) => handleDataChange('topic', e.target.value)}
+                    placeholder="Describe the script you want to generate"
                   />
                   <Button
                     variant="outline-wom"
@@ -816,6 +832,7 @@ function SettingModal({ setting }) {
                   rows={10}
                   value={datas.prompt}
                   onChange={(e) => handleDataChange('prompt', e.target.value)}
+                  placeholder="Start by entering your prompt to generate article."
                 />
                 <div className="d-flex w-100 mt-2 px-0">
                   <Button
