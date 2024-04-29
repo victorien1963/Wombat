@@ -9,6 +9,9 @@ import {
   Button,
   Image,
   Spinner,
+  Tabs,
+  Tab,
+  InputGroup,
 } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
@@ -22,6 +25,8 @@ function SettingModal({ setting }) {
   //   const { auth } = useContext(AuthContext)
   const navigate = useNavigate()
   const { show, handleClose, copyTarget, handleCopy, article_id } = setting
+
+  const [mode, setmode] = useState(0)
 
   const [datas, setdatas] = useState({
     topic: '',
@@ -636,11 +641,28 @@ function SettingModal({ setting }) {
       onHide={() => handleClose(false)}
     >
       <Modal.Header
-        className="AccFormModal justify-content-center text-center pt-4"
+        className="justify-content-center text-center pt-4 mb-0 pb-0"
         closeButton
       >
-        <Modal.Title>
-          <h4>新建專案</h4>
+        <Modal.Title className="w-100 my-0 py-0">
+          <Row className="pb-0 w-100 my-0">
+            {/* <Col xs={2}>
+              <h4>新建專案</h4>
+            </Col> */}
+            <Col xs={8}>
+              <Tabs
+                defaultActiveKey={0}
+                className="border-0"
+                onSelect={(k) => {
+                  console.log(k)
+                  setmode(parseInt(k, 10))
+                }}
+              >
+                <Tab title="快速建立" eventKey={0} />
+                <Tab title="詳細設定" eventKey={1} />
+              </Tabs>
+            </Col>
+          </Row>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body
@@ -649,96 +671,235 @@ function SettingModal({ setting }) {
           height: '80vh',
         }}
       >
-        <Row className="w-100">
-          <Col xs={3}>
-            <ListGroup className="h-90 w-100 rounded-radius stepList">
-              {steps.map(({ title }, index) => (
-                <ListGroupItem
-                  key={index}
-                  action
-                  active={index === step.now}
-                  disabled={index > step.max}
-                  onClick={() =>
-                    setstep({
-                      ...step,
-                      now: index,
-                    })
-                  }
+        {mode ? (
+          <Row className="w-100">
+            <Col xs={3}>
+              <ListGroup className="h-90 w-100 rounded-radius stepList">
+                {steps.map(({ title }, index) => (
+                  <ListGroupItem
+                    key={index}
+                    action
+                    active={index === step.now}
+                    disabled={index > step.max}
+                    onClick={() =>
+                      setstep({
+                        ...step,
+                        now: index,
+                      })
+                    }
+                  >
+                    •&ensp;{title}
+                  </ListGroupItem>
+                ))}
+              </ListGroup>
+              {copyTarget && (
+                <Button
+                  variant="outline-wom"
+                  className="d-flex w-100 justify-content-center my-auto"
+                  title="Apply & copy this template to your project."
+                  onClick={handleCopy}
                 >
-                  •&ensp;{title}
-                </ListGroupItem>
-              ))}
-            </ListGroup>
-            {copyTarget && (
-              <Button
-                variant="outline-wom"
-                className="d-flex w-100 justify-content-center my-auto"
-                title="Apply & copy this template to your project."
-                onClick={handleCopy}
-              >
-                Apply this template
-              </Button>
-            )}
-          </Col>
-          <Col xs={9} className="d-flex h-100">
-            <div className="my-auto w-100 h-100 pt-3">
-              <Row
-                className="overflow-scroll"
-                style={{
-                  height: '90%',
-                  maxHeight: '90%',
-                }}
-              >
-                {loading ? (
-                  <div className="h-100 w-100 d-flex justify-content-center">
-                    <Spinner size="sm" className="my-auto" />
-                    <span className="my-auto">&ensp;資料載入中</span>
-                  </div>
-                ) : (
-                  steps[step.now].form
-                )}
-              </Row>
-              <Row>
-                {step.now ? (
-                  <Col xs={2} className="ms-auto d-flex">
+                  Apply this template
+                </Button>
+              )}
+            </Col>
+            <Col xs={9} className="d-flex h-100">
+              <div className="my-auto w-100 h-100 pt-3">
+                <Row
+                  className="overflow-scroll"
+                  style={{
+                    height: '90%',
+                    maxHeight: '90%',
+                  }}
+                >
+                  {loading ? (
+                    <div className="h-100 w-100 d-flex justify-content-center">
+                      <Spinner size="sm" className="my-auto" />
+                      <span className="my-auto">&ensp;資料載入中</span>
+                    </div>
+                  ) : (
+                    steps[step.now].form
+                  )}
+                </Row>
+                <Row>
+                  {step.now ? (
+                    <Col xs={2} className="ms-auto d-flex">
+                      <Button
+                        className="d-flex w-100 justify-content-center"
+                        variant="secondary"
+                        onClick={() => {
+                          setstep({
+                            now: step.now - 1,
+                            max: step.max,
+                          })
+                        }}
+                      >
+                        Back
+                      </Button>
+                    </Col>
+                  ) : (
+                    <Col className="ms-auto" />
+                  )}
+                  <Col xs={2} className="ms-0 d-flex">
                     <Button
                       className="d-flex w-100 justify-content-center"
-                      variant="secondary"
+                      variant="wom"
                       onClick={() => {
-                        setstep({
-                          now: step.now - 1,
-                          max: step.max,
-                        })
+                        nextStep()
+                        if (step.now !== 6) {
+                          setstep({
+                            now: step.now + 1,
+                            max: Math.max(step.now + 1, step.max),
+                          })
+                        }
                       }}
+                      disabled={!steps[step.now].complete}
                     >
-                      Back
+                      {step.now === 6 ? 'Save' : 'Continue'}
                     </Button>
                   </Col>
-                ) : (
-                  <Col className="ms-auto" />
-                )}
-                <Col xs={2} className="ms-0 d-flex">
+                </Row>
+              </div>
+            </Col>
+          </Row>
+        ) : (
+          <Row className="w-100 position-relative">
+            {loading && (
+              <div
+                className="position-absolute w-100 h-100 d-flex"
+                style={{
+                  backgroundColor: '#fff',
+                  opacity: '0.8',
+                  zIndex: '9999',
+                }}
+              >
+                <div className="h-100 w-100 d-flex justify-content-center">
+                  <Spinner size="sm" className="my-auto" />
+                  <span className="my-auto">&ensp;資料載入中</span>
+                </div>
+              </div>
+            )}
+            <Col xs={5}>
+              <Row
+                className="p-3"
+                style={{
+                  height: '15%',
+                }}
+              >
+                <Form.Label>Topic</Form.Label>
+                <InputGroup className="px-0 py-1 searchBar">
+                  <Form.Control
+                    value={datas.topic}
+                    onChange={(e) => handleDataChange('topic', e.target.value)}
+                    placeholder="Describe the script you want to generate"
+                  />
                   <Button
-                    className="d-flex w-100 justify-content-center"
-                    variant="wom"
-                    onClick={() => {
-                      nextStep()
-                      if (step.now !== 6) {
-                        setstep({
-                          now: step.now + 1,
-                          max: Math.max(step.now + 1, step.max),
-                        })
-                      }
+                    variant="outline-wom"
+                    id="button-addon2"
+                    title="搜 尋"
+                    onClick={async () => {
+                      setloading(true)
+                      const res = await apiServices.data({
+                        path: `article/simple/${article_id}`,
+                        method: 'put',
+                        data: {
+                          datas,
+                          action: 'prompt',
+                        },
+                      })
+                      setloading(false)
+                      setdatas(res.setting)
+                      setstep({
+                        now: 5,
+                        max: 5,
+                      })
                     }}
-                    disabled={!steps[step.now].complete}
                   >
-                    {step.now === 6 ? 'Save' : 'Continue'}
+                    Generate
                   </Button>
-                </Col>
+                </InputGroup>
               </Row>
-            </div>
-          </Col>
-        </Row>
+              <Row
+                className="p-3 d-flex flex-column"
+                style={{
+                  height: '85%',
+                }}
+              >
+                <Form.Label>Prompt</Form.Label>
+                <Form.Control
+                  className="flex-fill"
+                  as="textarea"
+                  rows={10}
+                  value={datas.prompt}
+                  onChange={(e) => handleDataChange('prompt', e.target.value)}
+                  placeholder="Start by entering your prompt to generate article."
+                />
+                <div className="d-flex w-100 mt-2 px-0">
+                  <Button
+                    variant="outline-wom ms-auto"
+                    id="button-addon2"
+                    title="Generate Article"
+                    onClick={async () => {
+                      setloading(true)
+                      const res = await apiServices.data({
+                        path: `article/simple/${article_id}`,
+                        method: 'put',
+                        data: {
+                          datas,
+                          action: 'article',
+                        },
+                      })
+                      setloading(false)
+                      setdatas(res.setting)
+                      setstep({
+                        now: 6,
+                        max: 6,
+                      })
+                    }}
+                  >
+                    Generate Article
+                  </Button>
+                </div>
+              </Row>
+            </Col>
+            <Col xs={7} className="d-flex h-100">
+              <div className="h-100 w-100 d-flex flex-column">
+                <Row style={{ zIndex: '2' }} className="mb-3">
+                  <Form.Control
+                    className="fw-bold p-0 ps-2 border-0 fs-3"
+                    value={datas.title}
+                    onChange={(e) => {
+                      handleDataChange('title', e.target.value)
+                    }}
+                  />
+                </Row>
+                <Row style={{ zIndex: '1' }} className="w-100 d-flex">
+                  <Image
+                    className="position-absolute w-50 mx-auto"
+                    style={{ opacity: '.15' }}
+                    src={logoFull}
+                  />
+                </Row>
+                <Row className="flex-fill py-3" style={{ zIndex: '2' }}>
+                  <Form.Control
+                    className="border-0"
+                    style={{
+                      backgroundColor: 'transparent',
+                    }}
+                    as="textarea"
+                    value={datas.Article.Text}
+                    onChange={(e) =>
+                      handleDataChange('Article', {
+                        ...datas.Article,
+                        Text: e.target.value,
+                      })
+                    }
+                  />
+                </Row>
+              </div>
+            </Col>
+          </Row>
+        )}
       </Modal.Body>
     </Modal>
   )
