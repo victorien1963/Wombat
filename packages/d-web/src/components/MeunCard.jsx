@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
-import { Card, Button } from 'react-bootstrap'
+// import { Link } from 'react-router-dom'
+import { Card } from 'react-bootstrap'
 import Avatar from './Avatar'
 import { AuthContext } from './ContextProvider'
 
@@ -20,18 +20,11 @@ function MenuCard() {
         <Card.Title>{auth.name || 'VIP'}</Card.Title>
         <Card.Title>{auth.email}</Card.Title>
       </Card.Body>
-      <Card.Footer className="d-flex justify-content-around">
+      {/* <Card.Footer className="d-flex justify-content-around">
         <Link to="/info" className="align-item-start">
           <Button variant="outline-wom">修 改 密 碼</Button>
         </Link>
-        {/* <Button
-          variant="lucaLight"
-          className="align-item-end"
-          onClick={handleLogOut}
-        >
-          登 出
-        </Button> */}
-      </Card.Footer>
+      </Card.Footer> */}
     </Card>
   )
 }

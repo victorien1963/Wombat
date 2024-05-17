@@ -23,7 +23,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faEye,
   faEyeSlash,
-  faEdit,
   faTrashAlt,
   faCirclePlus,
   faBars,
@@ -48,6 +47,7 @@ import {
   faReply,
   faCopy,
   faCloudArrowDown,
+  faCircleChevronRight,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   AuthContext,
@@ -819,7 +819,10 @@ function Home() {
                                         },
                                         handleCopy: (e) => {
                                           e.stopPropagation()
-                                          handleArticleAdd(setting)
+                                          handleArticleAdd({
+                                            ...setting,
+                                            title: `複製 - ${setting.title}`,
+                                          })
                                         },
                                       }}
                                     />
@@ -908,10 +911,10 @@ function Home() {
             >
               <DragDropContext
                 onDragEnd={(e) => {
-                  const result = Array.from(articles)
+                  const result = Array.from(projects)
                   const [removed] = result.splice(e.source.index, 1)
                   result.splice(e.destination.index, 0, removed)
-                  setarticles(result)
+                  setprojects(result)
                 }}
               >
                 <Droppable droppableId="droppable" direction="vertical">
@@ -993,7 +996,7 @@ function Home() {
                                         />
                                       </Col> */}
                                       <Col
-                                        xs={4}
+                                        xs={2}
                                         className="d-flex h-100 flex-column"
                                       >
                                         <Form.Control
@@ -1016,6 +1019,10 @@ function Home() {
                                             e.stopPropagation()
                                           }}
                                           defaultValue={
+                                            setting.name ||
+                                            `專案${setting.id || project_id}`
+                                          }
+                                          title={
                                             setting.name ||
                                             `專案${setting.id || project_id}`
                                           }
@@ -1042,6 +1049,9 @@ function Home() {
                                               ? '編輯備註...'
                                               : ''
                                           }
+                                          title={
+                                            setting.remark || '編輯備註...'
+                                          }
                                           defaultValue={setting.remark || ''}
                                           // value={setting.name || ''}
                                           onClick={(e) => {
@@ -1055,16 +1065,18 @@ function Home() {
                                       </Col>
                                       <Col className="d-flex">
                                         <p className="m-auto">
+                                          建立日期：
                                           {moment(created_on)
                                             .tz('Asia/Taipei')
-                                            .format('yyyy-MM-DD HH:mm')}
+                                            .format('yyyy-MM-DD')}
                                         </p>
                                       </Col>
                                       <Col className="d-flex">
                                         <p className="m-auto">
+                                          最後更新日期：
                                           {moment(updated_on)
                                             .tz('Asia/Taipei')
-                                            .format('yyyy-MM-DD HH:mm')}
+                                            .format('yyyy-MM-DD')}
                                         </p>
                                       </Col>
                                       <Col
@@ -1084,13 +1096,13 @@ function Home() {
                                             }
                                             e.stopPropagation()
                                           }}
-                                          title="編 輯"
+                                          title="進入專案"
                                         >
                                           <FontAwesomeIcon
                                             icon={
                                               editing === project_id
                                                 ? faCheckSquare
-                                                : faEdit
+                                                : faCircleChevronRight
                                             }
                                             style={{
                                               cursor: 'pointer',
@@ -1248,7 +1260,10 @@ function Home() {
           copyTarget,
           handleCopy: () => {
             setshowSetting(false)
-            handleArticleAdd(copyTarget)
+            handleArticleAdd({
+              ...copyTarget,
+              title: `複製 - ${copyTarget.title}`,
+            })
           },
           article_id: id,
         }}
