@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react'
 import {
   Modal,
@@ -17,6 +18,7 @@ import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { logoFull } from '../asset'
 import apiServices from '../services/apiServices'
 // import { AuthContext } from './ContextProvider'
@@ -129,6 +131,21 @@ function SettingModal({ setting }) {
     })
 
   const [tempText, settempText] = useState('')
+  const grid = 0
+  const getItemStyle = (isDragging, draggableStyle) => ({
+    userSelect: 'none',
+    padding: grid * 2,
+    margin: `0 0 ${grid}px 0`,
+    cursor: isDragging ? 'grab' : 'pointer',
+    width: isDragging ? '50%' : '100%',
+    ...draggableStyle,
+  })
+
+  const getListStyle = (isDraggingOver) => ({
+    background: isDraggingOver ? 'transparent' : 'transparent',
+    padding: grid,
+    width: '100%',
+  })
 
   const steps = [
     {
@@ -497,29 +514,81 @@ function SettingModal({ setting }) {
                 }}
               />
             </ListGroupItem>
-            {datas.heading.map((label, i) => (
-              <ListGroupItem
-                key={i}
-                action
-                className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
-                style={{
-                  height: '20%',
-                }}
+            <DragDropContext
+              onDragEnd={(e) => {
+                if (!e.destination) return
+                const result = Array.from(datas.heading)
+                const [removed] = result.splice(e.source.index, 1)
+                result.splice(e.destination.index, 0, removed)
+                handleDataChange('heading', result)
+              }}
+            >
+              <Droppable
+                className="w-100"
+                droppableId="droppable"
+                direction="vertical"
               >
-                <Form.Control
-                  className="my-auto border-0"
-                  value={label}
-                  onChange={(e) => {
-                    handleDataChange(
-                      'heading',
-                      datas.heading.map((h, j) =>
-                        j === i ? e.target.value : h
-                      )
-                    )
-                  }}
-                />
-              </ListGroupItem>
-            ))}
+                {(dropProvided, dropSnapshot) => (
+                  <div
+                    {...dropProvided.droppableProps}
+                    ref={dropProvided.innerRef}
+                    style={getListStyle(dropSnapshot.isDraggingOver)}
+                    className="w-100 h-100 d-flex flex-column overflow-scroll"
+                  >
+                    {datas.heading.map((label, i) => (
+                      <Draggable
+                        className="w-100"
+                        key={`${label}`}
+                        draggableId={`${label}`}
+                        index={i}
+                      >
+                        {(dragProvided, dragSnapshot) => (
+                          <div
+                            className="d-flex rounded-radius my-1 border rounded-top rounded-bottom px-3"
+                            ref={dragProvided.innerRef}
+                            {...dragProvided.draggableProps}
+                            {...dragProvided.dragHandleProps}
+                            style={{
+                              ...getItemStyle(
+                                dragSnapshot.isDragging,
+                                dragProvided.draggableProps.style
+                              ),
+                              height: '90px',
+                              maxHeight: '90px',
+                              minHeight: '90px',
+                              // minWidth: '32%',
+                              // height: '40vh',
+                            }}
+                          >
+                            {/* <ListGroupItem
+                              key={i}
+                              action
+                              className="h-100 rounded-radius d-flex my-1 border rounded-top rounded-bottom"
+                              style={{
+                                pointerEvents: 'none',
+                              }}
+                            > */}
+                            <Form.Control
+                              className="my-auto border-0"
+                              value={label}
+                              onChange={(e) => {
+                                handleDataChange(
+                                  'heading',
+                                  datas.heading.map((h, j) =>
+                                    j === i ? e.target.value : h
+                                  )
+                                )
+                              }}
+                            />
+                            {/* </ListGroupItem> */}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
           </ListGroup>
         </>
       ),
