@@ -316,16 +316,16 @@ function Home() {
   useEffect(() => {
     getProjects()
   }, [])
-  const handleEdit = async () => {
-    console.log(projects.find(({ project_id }) => project_id === editing))
-    const updated = await apiServices.data({
-      path: `/project/${editing}`,
-      method: 'put',
-      data: projects.find(({ project_id }) => project_id === editing),
-    })
-    setprojects(projects.map((p) => (p.project_id === editing ? updated : p)))
-    setEditing('')
-  }
+  // const handleEdit = async () => {
+  //   console.log(projects.find(({ project_id }) => project_id === editing))
+  //   const updated = await apiServices.data({
+  //     path: `/project/${editing}`,
+  //     method: 'put',
+  //     data: projects.find(({ project_id }) => project_id === editing),
+  //   })
+  //   setprojects(projects.map((p) => (p.project_id === editing ? updated : p)))
+  //   setEditing('')
+  // }
 
   const [articles, setarticles] = useState([])
   const getArticles = async () => {
@@ -821,6 +821,7 @@ function Home() {
                                           e.stopPropagation()
                                           handleArticleAdd({
                                             ...setting,
+                                            project_id: projectId,
                                             title: `複製 - ${setting.title}`,
                                           })
                                         },
@@ -1085,17 +1086,20 @@ function Home() {
                                       >
                                         <Button
                                           className="w-25 h-50 btn-hover-wom my-auto"
-                                          onClick={(e) => {
-                                            if (
-                                              editing &&
-                                              project_id === editing
-                                            ) {
-                                              handleEdit()
-                                            } else {
-                                              setEditing(project_id)
-                                            }
-                                            e.stopPropagation()
-                                          }}
+                                          // onClick={(e) => {
+                                          //   if (
+                                          //     editing &&
+                                          //     project_id === editing
+                                          //   ) {
+                                          //     handleEdit()
+                                          //   } else {
+                                          //     setEditing(project_id)
+                                          //   }
+                                          //   e.stopPropagation()
+                                          // }}
+                                          onClick={() =>
+                                            setProjectId(project_id)
+                                          }
                                           title="進入專案"
                                         >
                                           <FontAwesomeIcon
