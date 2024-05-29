@@ -997,7 +997,7 @@ function Home() {
                                         />
                                       </Col> */}
                                       <Col
-                                        xs={2}
+                                        xs={3}
                                         className="d-flex h-100 flex-column"
                                       >
                                         <Form.Control
@@ -1064,7 +1064,7 @@ function Home() {
                                           onChange={handleProjectChange}
                                         />
                                       </Col>
-                                      <Col className="d-flex">
+                                      <Col xs={2} className="d-flex">
                                         <p className="m-auto">
                                           建立日期：
                                           {moment(created_on)
@@ -1072,9 +1072,9 @@ function Home() {
                                             .format('yyyy-MM-DD')}
                                         </p>
                                       </Col>
-                                      <Col className="d-flex">
+                                      <Col xs={2} className="d-flex">
                                         <p className="m-auto">
-                                          最後更新日期：
+                                          最後更新：
                                           {moment(updated_on)
                                             .tz('Asia/Taipei')
                                             .format('yyyy-MM-DD')}
