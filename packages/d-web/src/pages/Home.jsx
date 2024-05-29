@@ -31,18 +31,18 @@ import {
   faSearch,
   // faFileArrowUp,
   // faCloudArrowDown,
-  faMusic,
-  faGhost,
-  faHeart,
-  faWandMagicSparkles,
-  faFaceLaughSquint,
-  faBrain,
-  faCapsules,
-  faRobot,
-  faPaw,
-  faMeteor,
-  faUtensils,
-  faUserSecret,
+  // faMusic,
+  // faGhost,
+  // faHeart,
+  // faWandMagicSparkles,
+  // faFaceLaughSquint,
+  // faBrain,
+  // faCapsules,
+  // faRobot,
+  // faPaw,
+  // faMeteor,
+  // faUtensils,
+  // faUserSecret,
   faCheckSquare,
   faReply,
   faCopy,
@@ -378,92 +378,92 @@ function Home() {
   const [showWarn, setshowWarn] = useState(false)
   const [loading, setloading] = useState(false)
 
-  const categories = [
-    {
-      label: '音樂',
-      value: '音樂',
-      icon: faMusic,
-      color: '#679fa8',
-      backgroundColor: '#ddd',
-    },
-    {
-      label: '愛情',
-      value: '愛情',
-      icon: faHeart,
-      color: '#e78791',
-      backgroundColor: '#ddd',
-    },
-    {
-      label: '驚悚',
-      value: '驚悚',
-      icon: faGhost,
-      color: '#a98ccd',
-      backgroundColor: '#ddd',
-    },
-    {
-      label: '奇幻',
-      value: '奇幻',
-      icon: faWandMagicSparkles,
-      color: '#d37ed4',
-      backgroundColor: '#ddd',
-    },
-    {
-      label: '寵物',
-      value: '寵物',
-      icon: faPaw,
-      color: '#fbab65',
-      backgroundColor: '#ddd',
-    },
-    {
-      label: '喜劇',
-      value: '喜劇',
-      icon: faFaceLaughSquint,
-      color: '#f4c84b',
-      backgroundColor: '#ddd',
-    },
-    {
-      label: '知識',
-      value: '知識',
-      icon: faBrain,
-      color: '#778af2',
-      backgroundColor: '#ddd',
-    },
-    {
-      label: '犯罪',
-      value: '犯罪',
-      icon: faUserSecret,
-      color: 'grey',
-      backgroundColor: '#ddd',
-    },
-    {
-      label: '美食',
-      value: '美食',
-      icon: faUtensils,
-      color: '#c25f60',
-      backgroundColor: '#ddd',
-    },
-    {
-      label: '醫療',
-      value: '醫療',
-      icon: faCapsules,
-      color: '#68a568',
-      backgroundColor: '#ddd',
-    },
-    {
-      label: '科幻',
-      value: '科幻',
-      icon: faMeteor,
-      color: '#945abe',
-      backgroundColor: '#ddd',
-    },
-    {
-      label: '未來',
-      value: '未來',
-      icon: faRobot,
-      color: '#9a9a9a',
-      backgroundColor: '#ddd',
-    },
-  ]
+  // const categories = [
+  //   {
+  //     label: '音樂',
+  //     value: '音樂',
+  //     icon: faMusic,
+  //     color: '#679fa8',
+  //     backgroundColor: '#ddd',
+  //   },
+  //   {
+  //     label: '愛情',
+  //     value: '愛情',
+  //     icon: faHeart,
+  //     color: '#e78791',
+  //     backgroundColor: '#ddd',
+  //   },
+  //   {
+  //     label: '驚悚',
+  //     value: '驚悚',
+  //     icon: faGhost,
+  //     color: '#a98ccd',
+  //     backgroundColor: '#ddd',
+  //   },
+  //   {
+  //     label: '奇幻',
+  //     value: '奇幻',
+  //     icon: faWandMagicSparkles,
+  //     color: '#d37ed4',
+  //     backgroundColor: '#ddd',
+  //   },
+  //   {
+  //     label: '寵物',
+  //     value: '寵物',
+  //     icon: faPaw,
+  //     color: '#fbab65',
+  //     backgroundColor: '#ddd',
+  //   },
+  //   {
+  //     label: '喜劇',
+  //     value: '喜劇',
+  //     icon: faFaceLaughSquint,
+  //     color: '#f4c84b',
+  //     backgroundColor: '#ddd',
+  //   },
+  //   {
+  //     label: '知識',
+  //     value: '知識',
+  //     icon: faBrain,
+  //     color: '#778af2',
+  //     backgroundColor: '#ddd',
+  //   },
+  //   {
+  //     label: '犯罪',
+  //     value: '犯罪',
+  //     icon: faUserSecret,
+  //     color: 'grey',
+  //     backgroundColor: '#ddd',
+  //   },
+  //   {
+  //     label: '美食',
+  //     value: '美食',
+  //     icon: faUtensils,
+  //     color: '#c25f60',
+  //     backgroundColor: '#ddd',
+  //   },
+  //   {
+  //     label: '醫療',
+  //     value: '醫療',
+  //     icon: faCapsules,
+  //     color: '#68a568',
+  //     backgroundColor: '#ddd',
+  //   },
+  //   {
+  //     label: '科幻',
+  //     value: '科幻',
+  //     icon: faMeteor,
+  //     color: '#945abe',
+  //     backgroundColor: '#ddd',
+  //   },
+  //   {
+  //     label: '未來',
+  //     value: '未來',
+  //     icon: faRobot,
+  //     color: '#9a9a9a',
+  //     backgroundColor: '#ddd',
+  //   },
+  // ]
 
   const [showSetting, setshowSetting] = useState(false)
   const [id, setid] = useState('')
@@ -590,7 +590,7 @@ function Home() {
               </Col>
             </Row>
 
-            <Row className="my-2 p-2" style={{ height: '10vw' }}>
+            {/* <Row className="my-2 p-2" style={{ height: '10vw' }}>
               {categories.map(({ label, icon, backgroundColor, color }) => (
                 <Col key={label} xs={1}>
                   <div
@@ -612,7 +612,7 @@ function Home() {
                   <h6 className="m-auto py-1">{label}</h6>
                 </Col>
               ))}
-            </Row>
+            </Row> */}
             <div
               style={{
                 height: '80vh',
@@ -621,7 +621,7 @@ function Home() {
               }}
             >
               {/* 1 */}
-              <Row className="px-3 fs-5 fw-bold text-wom">最近的模板</Row>
+              <Row className="px-3 pt-3 fs-5 fw-bold text-wom">最近的模板</Row>
               <DragDropContext
                 onDragEnd={(e) => {
                   const result = Array.from(articles)
@@ -997,7 +997,7 @@ function Home() {
                                         />
                                       </Col> */}
                                       <Col
-                                        xs={2}
+                                        xs={3}
                                         className="d-flex h-100 flex-column"
                                       >
                                         <Form.Control
@@ -1047,11 +1047,11 @@ function Home() {
                                           }}
                                           placeholder={
                                             editing === project_id
-                                              ? '編輯備註...'
+                                              ? '編 輯 備 註...'
                                               : ''
                                           }
                                           title={
-                                            setting.remark || '編輯備註...'
+                                            setting.remark || '編 輯 備 註...'
                                           }
                                           defaultValue={setting.remark || ''}
                                           // value={setting.name || ''}
@@ -1064,7 +1064,7 @@ function Home() {
                                           onChange={handleProjectChange}
                                         />
                                       </Col>
-                                      <Col className="d-flex">
+                                      <Col xs={2} className="d-flex">
                                         <p className="m-auto">
                                           建立日期：
                                           {moment(created_on)
@@ -1072,9 +1072,9 @@ function Home() {
                                             .format('yyyy-MM-DD')}
                                         </p>
                                       </Col>
-                                      <Col className="d-flex">
+                                      <Col xs={2} className="d-flex">
                                         <p className="m-auto">
-                                          最後更新日期：
+                                          最後更新：
                                           {moment(updated_on)
                                             .tz('Asia/Taipei')
                                             .format('yyyy-MM-DD')}
@@ -1100,7 +1100,7 @@ function Home() {
                                           onClick={() =>
                                             setProjectId(project_id)
                                           }
-                                          title="進入專案"
+                                          title="進 入 專 案"
                                         >
                                           <FontAwesomeIcon
                                             icon={

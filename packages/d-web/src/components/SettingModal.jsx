@@ -187,14 +187,14 @@ function SettingModal({ setting }) {
               height: '40%',
             }}
           >
-            <Col>
+            {/* <Col>
               <Form.Label>Location</Form.Label>
               <Form.Select disabled />
             </Col>
             <Col>
               <Form.Label>Language</Form.Label>
               <Form.Select disabled />
-            </Col>
+            </Col> */}
           </Row>
         </>
       ),
@@ -488,7 +488,7 @@ function SettingModal({ setting }) {
             </h6>
           </Row>
           <Row />
-          <ListGroup className="h-100 w-100 stepList">
+          <ListGroup className="h-100 w-100 stepList" title="上下拖曳以排序">
             <ListGroupItem
               className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
               style={{
@@ -702,6 +702,37 @@ function SettingModal({ setting }) {
     }
   }
 
+  const saveDatas = async () => {
+    if (step.now === 1) {
+      const res = await apiServices.data({
+        path: `article/${article_id}`,
+        method: 'put',
+        data: {
+          datas,
+          step: {
+            ...step,
+            now: 1,
+          },
+        },
+      })
+      setdatas(res.setting)
+      navigate(`/book/${datas.project_id}/${article_id}`)
+      handleClose()
+    } else {
+      const res = await apiServices.data({
+        path: `article/${article_id}`,
+        method: 'put',
+        data: {
+          datas,
+          step: {
+            now: 1,
+          },
+        },
+      })
+      setdatas(res.setting)
+    }
+  }
+
   return (
     <Modal
       style={{ zIndex: '1501', width: '100vw', height: '100vh' }}
@@ -904,6 +935,16 @@ function SettingModal({ setting }) {
                   placeholder="Start by entering your prompt to generate article."
                 />
                 <div className="d-flex w-100 mt-2 px-0">
+                  {copyTarget && (
+                    <Button
+                      variant="outline-wom"
+                      className="d-flex my-auto ms-auto"
+                      title="Apply & copy this template to your project."
+                      onClick={handleCopy}
+                    >
+                      Apply this template
+                    </Button>
+                  )}
                   <Button
                     variant="outline-wom ms-auto"
                     id="button-addon2"
@@ -928,6 +969,23 @@ function SettingModal({ setting }) {
                   >
                     Generate Article
                   </Button>
+                  <Col xs={2} className="ms-3 d-flex">
+                    <Button
+                      className="d-flex w-100 justify-content-center"
+                      variant="wom"
+                      onClick={() => {
+                        saveDatas()
+                        if (step.now) {
+                          setstep({
+                            now: step.now,
+                          })
+                        }
+                      }}
+                      disabled={!steps[step.now]}
+                    >
+                      Save
+                    </Button>
+                  </Col>
                 </div>
               </Row>
             </Col>
