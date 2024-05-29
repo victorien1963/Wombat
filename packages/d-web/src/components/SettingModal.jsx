@@ -187,14 +187,14 @@ function SettingModal({ setting }) {
               height: '40%',
             }}
           >
-            <Col>
+            {/* <Col>
               <Form.Label>Location</Form.Label>
               <Form.Select disabled />
             </Col>
             <Col>
               <Form.Label>Language</Form.Label>
               <Form.Select disabled />
-            </Col>
+            </Col> */}
           </Row>
         </>
       ),
@@ -488,7 +488,7 @@ function SettingModal({ setting }) {
             </h6>
           </Row>
           <Row />
-          <ListGroup className="h-100 w-100 stepList">
+          <ListGroup className="h-100 w-100 stepList" title="上下拖曳以排序">
             <ListGroupItem
               className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
               style={{
