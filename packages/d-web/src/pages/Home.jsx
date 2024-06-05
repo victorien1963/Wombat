@@ -48,6 +48,8 @@ import {
   faCopy,
   faCloudArrowDown,
   faCircleChevronRight,
+  faCaretRight,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   AuthContext,
@@ -316,16 +318,16 @@ function Home() {
   useEffect(() => {
     getProjects()
   }, [])
-  // const handleEdit = async () => {
-  //   console.log(projects.find(({ project_id }) => project_id === editing))
-  //   const updated = await apiServices.data({
-  //     path: `/project/${editing}`,
-  //     method: 'put',
-  //     data: projects.find(({ project_id }) => project_id === editing),
-  //   })
-  //   setprojects(projects.map((p) => (p.project_id === editing ? updated : p)))
-  //   setEditing('')
-  // }
+  const handleEdit = async () => {
+    console.log(projects.find(({ project_id }) => project_id === editing))
+    const updated = await apiServices.data({
+      path: `/project/${editing}`,
+      method: 'put',
+      data: projects.find(({ project_id }) => project_id === editing),
+    })
+    setprojects(projects.map((p) => (p.project_id === editing ? updated : p)))
+    setEditing('')
+  }
 
   const [articles, setarticles] = useState([])
   const getArticles = async () => {
@@ -504,6 +506,7 @@ function Home() {
   }
 
   const [copyTarget, setcopyTarget] = useState(null)
+  const [selected, setselected] = useState('')
 
   return (
     <Container
@@ -523,17 +526,51 @@ function Home() {
         projectId ? (
           <>
             <Row className="py-3">
-              <Col>
-                <h5 className="text-nowrap text-wom">模組列表</h5>
+              <Col className="d-flex justify-content-center">
+                <div className="text-nowrap text-wom fs-5 fw-bold">
+                  專案
+                  {projectId}
+                </div>
+                <FontAwesomeIcon className="my-auto px-4" icon={faCaretRight} />
+                <div className="text-nowrap text-wom fs-5 fw-bold">
+                  模組列表
+                </div>
               </Col>
             </Row>
             <Row>
-              <Col className="d-flex pe-0">
+              <Col xs={3} className="d-flex justifu-content-end">
+                <Form.Select
+                  className="w-100 h-100"
+                  aria-label="Default select example"
+                  onChange={(e) => setselected(e.target.value)}
+                  value={selected}
+                >
+                  <option value="" className="d-none">
+                    選擇推薦劇本類型...
+                  </option>
+                  {[
+                    '所有類型',
+                    '奇幻',
+                    '科幻',
+                    '科普',
+                    '喜劇',
+                    '愛情',
+                    '寵物',
+                    '醫療',
+                    '未來',
+                  ].map((label, i) => (
+                    <option key={i} value={label}>
+                      {label}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+              <Col className="d-flex px-0">
                 <InputGroup>
                   <Form.Control
                     placeholder="請輸入關鍵字以搜尋..."
-                    aria-label="Recipient's username"
-                    aria-describedby="basic-addon2"
+                    aria-label="Recipient's username3"
+                    aria-describedby="basic-addon3"
                     value={tempSearch}
                     onChange={(event) => setTempSearch(event.target.value)}
                     // onFocus={() => setFocus(true)}
@@ -546,6 +583,13 @@ function Home() {
                         setSearch(tempSearch)
                     }}
                   />
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={(event) => setTempSearch(event.target.value)}
+                  >
+                    清除
+                  </Button>
                   <Button
                     variant="outline-wom"
                     id="button-addon2"
@@ -876,6 +920,13 @@ function Home() {
                     }}
                   />
                   <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={(event) => setTempSearch(event.target.value)}
+                  >
+                    清除
+                  </Button>
+                  <Button
                     variant="outline-wom"
                     id="button-addon2"
                     title="搜 尋"
@@ -953,7 +1004,8 @@ function Home() {
                                         dragSnapshot.isDragging,
                                         dragProvided.draggableProps.style
                                       ),
-                                      height: '100px',
+                                      minHeight: '90px',
+                                      maxHeight: '90px',
                                       // minWidth: '32%',
                                       // width: '32%',
                                       // height: '40vh',
@@ -1086,27 +1138,43 @@ function Home() {
                                       >
                                         <Button
                                           className="w-25 h-50 btn-hover-wom my-auto"
-                                          // onClick={(e) => {
-                                          //   if (
-                                          //     editing &&
-                                          //     project_id === editing
-                                          //   ) {
-                                          //     handleEdit()
-                                          //   } else {
-                                          //     setEditing(project_id)
-                                          //   }
-                                          //   e.stopPropagation()
-                                          // }}
                                           onClick={() =>
                                             setProjectId(project_id)
                                           }
                                           title="進 入 專 案"
                                         >
                                           <FontAwesomeIcon
+                                            icon={faCircleChevronRight}
+                                            style={{
+                                              cursor: 'pointer',
+                                            }}
+                                            className="m-auto fs-5"
+                                          />
+                                        </Button>
+                                        <Button
+                                          className="w-25 h-50 btn-hover-wom my-auto"
+                                          onClick={(e) => {
+                                            if (
+                                              editing &&
+                                              project_id === editing
+                                            ) {
+                                              handleEdit()
+                                            } else {
+                                              setEditing(project_id)
+                                            }
+                                            e.stopPropagation()
+                                          }}
+                                          title={
+                                            editing === project_id
+                                              ? '儲 存 變 更'
+                                              : '編 輯 名 稱 ＆ 備 註'
+                                          }
+                                        >
+                                          <FontAwesomeIcon
                                             icon={
                                               editing === project_id
                                                 ? faCheckSquare
-                                                : faCircleChevronRight
+                                                : faEdit
                                             }
                                             style={{
                                               cursor: 'pointer',

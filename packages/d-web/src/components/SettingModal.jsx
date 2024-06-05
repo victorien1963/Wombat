@@ -17,7 +17,7 @@ import {
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCirclePlus } from '@fortawesome/free-solid-svg-icons'
+import { faCirclePlus, faLightbulb } from '@fortawesome/free-solid-svg-icons'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { logoFull } from '../asset'
 import apiServices from '../services/apiServices'
@@ -187,14 +187,14 @@ function SettingModal({ setting }) {
               height: '40%',
             }}
           >
-            {/* <Col>
-              <Form.Label>Location</Form.Label>
-              <Form.Select disabled />
-            </Col>
-            <Col>
+            <Col xs={6}>
               <Form.Label>Language</Form.Label>
               <Form.Select disabled />
-            </Col> */}
+            </Col>
+            <Col xs={6}>
+              <Form.Label>Category</Form.Label>
+              <Form.Select disabled />
+            </Col>
           </Row>
         </>
       ),
@@ -823,20 +823,32 @@ function SettingModal({ setting }) {
                 </Row>
                 <Row>
                   {step.now ? (
-                    <Col xs={2} className="ms-auto d-flex">
-                      <Button
-                        className="d-flex w-100 justify-content-center"
-                        variant="secondary"
-                        onClick={() => {
-                          setstep({
-                            now: step.now - 1,
-                            max: step.max,
-                          })
-                        }}
+                    <>
+                      <Col
+                        xs={8}
+                        className="my-auto"
+                        title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
+                        style={{ cursor: 'help' }}
                       >
-                        Back
-                      </Button>
-                    </Col>
+                        <FontAwesomeIcon icon={faLightbulb} />
+                        &ensp;
+                        若不滿意生成結果，可再次點擊生成按鈕，或回上一步驟以重新生成。
+                      </Col>
+                      <Col xs={2} className="ms-auto d-flex">
+                        <Button
+                          className="d-flex w-100 justify-content-center"
+                          variant="secondary"
+                          onClick={() => {
+                            setstep({
+                              now: step.now - 1,
+                              max: step.max,
+                            })
+                          }}
+                        >
+                          Back
+                        </Button>
+                      </Col>
+                    </>
                   ) : (
                     <Col className="ms-auto" />
                   )}
@@ -883,15 +895,15 @@ function SettingModal({ setting }) {
               <Row
                 className="p-3"
                 style={{
-                  height: '15%',
+                  height: '13%',
                 }}
               >
-                <Form.Label>Topic</Form.Label>
+                <Form.Label className="mb-0">Topic</Form.Label>
                 <InputGroup className="px-0 py-1 searchBar">
                   <Form.Control
                     value={datas.topic}
                     onChange={(e) => handleDataChange('topic', e.target.value)}
-                    placeholder="Describe the script you want to generate"
+                    placeholder="Describe the script you want to generate..."
                   />
                   <Button
                     variant="outline-wom"
@@ -922,17 +934,28 @@ function SettingModal({ setting }) {
               <Row
                 className="p-3 d-flex flex-column"
                 style={{
-                  height: '85%',
+                  height: '13%',
                 }}
               >
-                <Form.Label>Prompt</Form.Label>
+                <Col xs={12} className="px-0">
+                  <Form.Label className="px-2 mb-0">Category</Form.Label>
+                  <Form.Select disabled />
+                </Col>
+              </Row>
+              <Row
+                className="p-3 d-flex flex-column"
+                style={{
+                  height: '74%',
+                }}
+              >
+                <Form.Label className="mb-0">Prompt</Form.Label>
                 <Form.Control
                   className="flex-fill"
                   as="textarea"
                   rows={10}
                   value={datas.prompt}
                   onChange={(e) => handleDataChange('prompt', e.target.value)}
-                  placeholder="Start by entering your prompt to generate article."
+                  placeholder="Start by entering your prompt to generate article..."
                 />
                 <div className="d-flex w-100 mt-2 px-0">
                   {copyTarget && (
@@ -1007,13 +1030,14 @@ function SettingModal({ setting }) {
                     src={logoFull}
                   />
                 </Row>
-                <Row className="flex-fill py-3" style={{ zIndex: '2' }}>
+                <Row className="pt-1 pb-3" style={{ zIndex: '2' }}>
                   <Form.Control
                     className="border-0"
                     style={{
                       backgroundColor: 'transparent',
                     }}
                     as="textarea"
+                    rows="19"
                     value={datas.Article.Text}
                     onChange={(e) =>
                       handleDataChange('Article', {
@@ -1022,6 +1046,17 @@ function SettingModal({ setting }) {
                       })
                     }
                   />
+                </Row>
+                <Row
+                  className="d-flex"
+                  title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
+                  style={{ cursor: 'help' }}
+                >
+                  <Col xs={12} className="my-auto">
+                    <FontAwesomeIcon icon={faLightbulb} />
+                    &ensp;
+                    若不滿意生成結果，可再次點擊生成按鈕，或回上一步驟以重新生成。
+                  </Col>
                 </Row>
               </div>
             </Col>
