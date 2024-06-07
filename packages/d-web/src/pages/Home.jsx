@@ -2,7 +2,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import moment from 'moment'
@@ -508,6 +508,16 @@ function Home() {
   const [copyTarget, setcopyTarget] = useState(null)
   const [selected, setselected] = useState('')
 
+  const selectedProject = useMemo(
+    () =>
+      projectId && projects
+        ? projects.find(({ project_id }) => project_id === projectId)
+        : {},
+    [projectId, projects]
+  )
+
+  console.log(selectedProject)
+
   return (
     <Container
       className="bg-dots-light h-100 w-100 d-flex flex-column position-relative"
@@ -528,8 +538,11 @@ function Home() {
             <Row className="py-3">
               <Col className="d-flex justify-content-center">
                 <div className="text-nowrap text-wom fs-5 fw-bold">
-                  專案
-                  {projectId}
+                  {/* 專案 */}
+                  {(selectedProject &&
+                    selectedProject.setting &&
+                    selectedProject.setting.name) ||
+                    `專案${projectId}`}
                 </div>
                 <FontAwesomeIcon className="my-auto px-4" icon={faCaretRight} />
                 <div className="text-nowrap text-wom fs-5 fw-bold">
@@ -666,231 +679,281 @@ function Home() {
             >
               {/* 1 */}
               <Row className="px-3 pt-3 fs-5 fw-bold text-wom">最近的模板</Row>
-              <DragDropContext
-                onDragEnd={(e) => {
-                  const result = Array.from(articles)
-                  const [removed] = result.splice(e.source.index, 1)
-                  result.splice(e.destination.index, 0, removed)
-                  setarticles(result)
-                }}
-              >
-                <Droppable droppableId="droppable" direction="horizonal">
-                  {(dropProvided, dropSnapshot) => (
-                    <div
-                      {...dropProvided.droppableProps}
-                      ref={dropProvided.innerRef}
-                      style={getListStyle(dropSnapshot.isDraggingOver)}
-                      className="w-100 h-60 d-flex overflow-scroll"
-                    >
-                      {articles ? (
-                        articles
-                          .filter(({ setting }) => {
-                            const { name, project_id } = setting
-                            if (
-                              parseInt(project_id, 10) !==
-                              parseInt(projectId, 10)
-                            )
-                              return false
-                            return !search || (name && name.includes(search))
-                          })
-                          .map(
-                            (
-                              {
-                                article_id,
-                                user_name,
-                                setting,
-                                created_on,
-                                updated_on,
-                              },
-                              i
-                            ) => (
-                              <Draggable
-                                key={`${article_id}`}
-                                draggableId={`${article_id}`}
-                                index={i}
-                              >
-                                {(dragProvided, dragSnapshot) => (
-                                  <div
-                                    className="me-3"
-                                    ref={dragProvided.innerRef}
-                                    {...dragProvided.draggableProps}
-                                    {...dragProvided.dragHandleProps}
-                                    style={{
-                                      ...getItemStyle(
-                                        dragSnapshot.isDragging,
-                                        dragProvided.draggableProps.style
-                                      ),
-                                      minWidth: '32%',
-                                      width: '32%',
-                                      height: '40vh',
-                                    }}
-                                  >
-                                    <Book
-                                      setting={{
-                                        title:
-                                          setting.title ||
-                                          setting.topic ||
-                                          '未命名',
-                                        user_name,
-                                        id: article_id,
-                                        created_on,
-                                        updated_on,
-                                        content:
-                                          setting.Article.Text || 'Content',
-                                        status: setting.Article.status,
-                                        handleEdit: (e) => {
-                                          e.stopPropagation()
-                                          navigate(
-                                            `/book/${projectId}/${article_id}`
-                                          )
-                                        },
-                                        handleDelete: (e) => {
-                                          setshowWarn(article_id)
-                                          e.stopPropagation()
-                                        },
-                                        handleOpen: () => {
-                                          setid(article_id)
-                                          setshowSetting(true)
-                                          setcopyTarget(setting)
-                                        },
+              {articles &&
+              articles.filter(({ setting }) => {
+                const { name, project_id, category } = setting
+                if (parseInt(project_id, 10) !== parseInt(projectId, 10))
+                  return false
+                const isSearched = !search || (name && name.includes(search))
+                const isCategory =
+                  !selected || selected === '所有類型' || category === selected
+                return isSearched && isCategory
+              }).length ? (
+                <DragDropContext
+                  onDragEnd={(e) => {
+                    const result = Array.from(articles)
+                    const [removed] = result.splice(e.source.index, 1)
+                    result.splice(e.destination.index, 0, removed)
+                    setarticles(result)
+                  }}
+                >
+                  <Droppable droppableId="droppable" direction="horizonal">
+                    {(dropProvided, dropSnapshot) => (
+                      <div
+                        {...dropProvided.droppableProps}
+                        ref={dropProvided.innerRef}
+                        style={getListStyle(dropSnapshot.isDraggingOver)}
+                        className="w-100 h-60 d-flex overflow-scroll"
+                      >
+                        {articles ? (
+                          articles
+                            .filter(({ setting }) => {
+                              const { name, project_id, category } = setting
+                              if (
+                                parseInt(project_id, 10) !==
+                                parseInt(projectId, 10)
+                              )
+                                return false
+                              const isSearched =
+                                !search || (name && name.includes(search))
+                              const isCategory =
+                                !selected ||
+                                selected === '所有類型' ||
+                                category === selected
+                              return isSearched && isCategory
+                            })
+                            .map(
+                              (
+                                {
+                                  article_id,
+                                  user_name,
+                                  setting,
+                                  created_on,
+                                  updated_on,
+                                },
+                                i
+                              ) => (
+                                <Draggable
+                                  key={`${article_id}`}
+                                  draggableId={`${article_id}`}
+                                  index={i}
+                                >
+                                  {(dragProvided, dragSnapshot) => (
+                                    <div
+                                      className="me-3"
+                                      ref={dragProvided.innerRef}
+                                      {...dragProvided.draggableProps}
+                                      {...dragProvided.dragHandleProps}
+                                      style={{
+                                        ...getItemStyle(
+                                          dragSnapshot.isDragging,
+                                          dragProvided.draggableProps.style
+                                        ),
+                                        minWidth: '32%',
+                                        width: '32%',
+                                        height: '40vh',
                                       }}
-                                    />
-                                  </div>
-                                )}
-                              </Draggable>
+                                    >
+                                      <Book
+                                        setting={{
+                                          title:
+                                            setting.title ||
+                                            setting.topic ||
+                                            '未命名',
+                                          user_name,
+                                          id: article_id,
+                                          created_on,
+                                          updated_on,
+                                          content:
+                                            setting.Article.Text || 'Content',
+                                          status: setting.Article.status,
+                                          handleEdit: (e) => {
+                                            e.stopPropagation()
+                                            navigate(
+                                              `/book/${projectId}/${article_id}`
+                                            )
+                                          },
+                                          handleDelete: (e) => {
+                                            setshowWarn(article_id)
+                                            e.stopPropagation()
+                                          },
+                                          handleOpen: () => {
+                                            setid(article_id)
+                                            setshowSetting(true)
+                                            setcopyTarget(setting)
+                                          },
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                                </Draggable>
+                              )
                             )
-                          )
-                      ) : (
-                        <Row>
-                          <Col>專案名</Col>
-                          <Col>狀態</Col>
-                          <Col>建立日期</Col>
-                          <Col>更新時間</Col>
-                          <Col>備註</Col>
-                          <Col>操作</Col>
-                        </Row>
-                      )}
-                      {dropProvided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+                        ) : (
+                          <Row>
+                            <Col>專案名</Col>
+                            <Col>狀態</Col>
+                            <Col>建立日期</Col>
+                            <Col>更新時間</Col>
+                            <Col>備註</Col>
+                            <Col>操作</Col>
+                          </Row>
+                        )}
+                        {dropProvided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              ) : (
+                <div
+                  className="w-100 h-60 d-flex"
+                  style={{
+                    minHeight: '40vh',
+                  }}
+                >
+                  <h4 className="m-auto">尚無資料</h4>
+                </div>
+              )}
 
               {/* 2 */}
               <Row className="px-3 pt-3 fs-5 fw-bold text-wom">
                 你可能會喜歡...
               </Row>
-              <DragDropContext
-                onDragEnd={(e) => {
-                  const result = Array.from(articles)
-                  const [removed] = result.splice(e.source.index, 1)
-                  result.splice(e.destination.index, 0, removed)
-                  setarticles(result)
-                }}
-              >
-                <Droppable droppableId="droppable" direction="horizonal">
-                  {(dropProvided, dropSnapshot) => (
-                    <div
-                      {...dropProvided.droppableProps}
-                      ref={dropProvided.innerRef}
-                      style={getListStyle(dropSnapshot.isDraggingOver)}
-                      className="w-100 h-60 d-flex overflow-scroll"
-                    >
-                      {articles ? (
-                        articles
-                          .filter(({ setting }) => {
-                            const { name } = setting
-                            return !search || (name && name.includes(search))
-                          })
-                          .map(
-                            (
-                              {
-                                article_id,
-                                user_name,
-                                setting,
-                                created_on,
-                                updated_on,
-                              },
-                              i
-                            ) => (
-                              <Draggable
-                                key={`${article_id}`}
-                                draggableId={`${article_id}`}
-                                index={i}
-                              >
-                                {(dragProvided, dragSnapshot) => (
-                                  <div
-                                    className="me-3"
-                                    ref={dragProvided.innerRef}
-                                    {...dragProvided.draggableProps}
-                                    {...dragProvided.dragHandleProps}
-                                    style={{
-                                      ...getItemStyle(
-                                        dragSnapshot.isDragging,
-                                        dragProvided.draggableProps.style
-                                      ),
-                                      minWidth: '32%',
-                                      width: '32%',
-                                      height: '40vh',
-                                    }}
-                                  >
-                                    <Book
-                                      setting={{
-                                        title:
-                                          setting.title ||
-                                          setting.topic ||
-                                          '未命名',
-                                        user_name,
-                                        id: article_id,
-                                        created_on,
-                                        updated_on,
-                                        content:
-                                          setting.Article.Text || 'Content',
-                                        handleEdit: (e) => {
-                                          e.stopPropagation()
-                                          navigate(
-                                            `/book/${projectId}/${article_id}`
-                                          )
-                                        },
-                                        handleDelete: (e) => {
-                                          setshowWarn(article_id)
-                                          e.stopPropagation()
-                                        },
-                                        handleOpen: () => {
-                                          setid(article_id)
-                                          setshowSetting(true)
-                                          setcopyTarget(setting)
-                                        },
-                                        handleCopy: (e) => {
-                                          e.stopPropagation()
-                                          handleArticleAdd({
-                                            ...setting,
-                                            project_id: projectId,
-                                            title: `複製 - ${setting.title}`,
-                                          })
-                                        },
+              {articles &&
+              articles.filter(({ setting }) => {
+                const { name, category } = setting
+                const isSearched = !search || (name && name.includes(search))
+                const isCategory =
+                  !selected || selected === '所有類型' || category === selected
+                return isSearched && isCategory
+              }).length ? (
+                <DragDropContext
+                  onDragEnd={(e) => {
+                    const result = Array.from(articles)
+                    const [removed] = result.splice(e.source.index, 1)
+                    result.splice(e.destination.index, 0, removed)
+                    setarticles(result)
+                  }}
+                >
+                  <Droppable droppableId="droppable" direction="horizonal">
+                    {(dropProvided, dropSnapshot) => (
+                      <div
+                        {...dropProvided.droppableProps}
+                        ref={dropProvided.innerRef}
+                        style={getListStyle(dropSnapshot.isDraggingOver)}
+                        className="w-100 h-60 d-flex overflow-scroll"
+                      >
+                        {articles ? (
+                          articles
+                            .filter(({ setting }) => {
+                              const { name, category } = setting
+                              const isSearched =
+                                !search || (name && name.includes(search))
+                              const isCategory =
+                                !selected ||
+                                selected === '所有類型' ||
+                                category === selected
+                              return isSearched && isCategory
+                            })
+                            .map(
+                              (
+                                {
+                                  article_id,
+                                  user_name,
+                                  setting,
+                                  created_on,
+                                  updated_on,
+                                },
+                                i
+                              ) => (
+                                <Draggable
+                                  key={`${article_id}`}
+                                  draggableId={`${article_id}`}
+                                  index={i}
+                                >
+                                  {(dragProvided, dragSnapshot) => (
+                                    <div
+                                      className="me-3"
+                                      ref={dragProvided.innerRef}
+                                      {...dragProvided.draggableProps}
+                                      {...dragProvided.dragHandleProps}
+                                      style={{
+                                        ...getItemStyle(
+                                          dragSnapshot.isDragging,
+                                          dragProvided.draggableProps.style
+                                        ),
+                                        minWidth: '32%',
+                                        width: '32%',
+                                        height: '40vh',
                                       }}
-                                    />
-                                  </div>
-                                )}
-                              </Draggable>
+                                    >
+                                      <Book
+                                        setting={{
+                                          title:
+                                            setting.title ||
+                                            setting.topic ||
+                                            '未命名',
+                                          user_name,
+                                          id: article_id,
+                                          created_on,
+                                          updated_on,
+                                          content:
+                                            setting.Article.Text || 'Content',
+                                          handleEdit: (e) => {
+                                            e.stopPropagation()
+                                            navigate(
+                                              `/book/${projectId}/${article_id}`
+                                            )
+                                          },
+                                          handleDelete: (e) => {
+                                            setshowWarn(article_id)
+                                            e.stopPropagation()
+                                          },
+                                          handleOpen: () => {
+                                            setid(article_id)
+                                            setshowSetting(true)
+                                            setcopyTarget(setting)
+                                          },
+                                          handleCopy: (e) => {
+                                            e.stopPropagation()
+                                            handleArticleAdd({
+                                              ...setting,
+                                              project_id: projectId,
+                                              title: `複製 - ${setting.title}`,
+                                            })
+                                          },
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                                </Draggable>
+                              )
                             )
-                          )
-                      ) : (
-                        <Row>
-                          <Col>專案名</Col>
-                          <Col>狀態</Col>
-                          <Col>建立日期</Col>
-                          <Col>更新時間</Col>
-                          <Col>備註</Col>
-                          <Col>操作</Col>
-                        </Row>
-                      )}
-                      {dropProvided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+                        ) : (
+                          <Row>
+                            <Col>專案名</Col>
+                            <Col>狀態</Col>
+                            <Col>建立日期</Col>
+                            <Col>更新時間</Col>
+                            <Col>備註</Col>
+                            <Col>操作</Col>
+                          </Row>
+                        )}
+                        {dropProvided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              ) : (
+                <div
+                  className="w-100 h-60 d-flex"
+                  style={{
+                    minHeight: '40vh',
+                  }}
+                >
+                  <h4 className="m-auto">尚無資料</h4>
+                </div>
+              )}
             </div>
           </>
         ) : (

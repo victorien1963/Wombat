@@ -209,7 +209,7 @@ router.put('/simple/:article_id', async (req, res) => {
             // step 5
             const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
               ...datas,
-              prompt: `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。`,
+              prompt: `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。${datas.language ? `請以${datas.language}撰寫全文。` : ''}`,
               step: {
                 now: 5,
                 max: 5,
@@ -223,7 +223,7 @@ router.put('/simple/:article_id', async (req, res) => {
     }, 500, 1)
   } else {
     gcr([
-      { role: 'user', content: datas.prompt || `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。` }
+      { role: 'user', content: datas.prompt || `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。${datas.language ? `請以${datas.language}撰寫全文。` : ''}` }
     ], () => {}, async (chat) => {
       const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
         ...setting,
@@ -352,7 +352,7 @@ router.put('/:article_id', async (req, res) => {
         const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
           ...setting,
           ...datas,
-          prompt: `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。`,
+          prompt: `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。${datas.language ? `請以${datas.language}撰寫全文。` : ''}`,
           step,
           // headings: keywords.map((k) => ({ label: k.replaceAll('.', '').trim() }))
         }, req.params.article_id])
@@ -360,7 +360,7 @@ router.put('/:article_id', async (req, res) => {
       },
       async () => {
         gcr([
-          { role: 'user', content: datas.prompt || `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。` }
+          { role: 'user', content: datas.prompt || `你是一個劇本作家，請依以下的架構：${datas.heading.join(',')}撰寫以${datas.topic}為主題，以${datas.Pkeyword[0]}為Prime Keyword，以${datas.title}為標題的劇本，這份劇本可能會包含以下的Secondary Keyword：${datas.Skeyword.join(',')}，每個段落不小於150字，不多於300字。${datas.language ? `請以${datas.language}撰寫全文。` : ''}` }
         ], () => {}, async (chat) => {
           const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
             ...setting,

@@ -23,6 +23,18 @@ import { logoFull } from '../asset'
 import apiServices from '../services/apiServices'
 // import { AuthContext } from './ContextProvider'
 
+const categories = [
+  '所有類型',
+  '奇幻',
+  '科幻',
+  '科普',
+  '喜劇',
+  '愛情',
+  '寵物',
+  '醫療',
+  '未來',
+]
+
 function SettingModal({ setting }) {
   //   const { auth } = useContext(AuthContext)
   const navigate = useNavigate()
@@ -32,6 +44,8 @@ function SettingModal({ setting }) {
 
   const [datas, setdatas] = useState({
     topic: '',
+    category: '',
+    language: 'English',
     Pkeywords: [
       {
         label: 'keyword1',
@@ -189,11 +203,27 @@ function SettingModal({ setting }) {
           >
             <Col xs={6}>
               <Form.Label>Language</Form.Label>
-              <Form.Select disabled />
+              <Form.Select
+                value={datas.language}
+                onChange={(e) => handleDataChange('language', e.target.value)}
+              >
+                <option value="">Select a language</option>
+                {['English', '中文'].map((l) => (
+                  <option value={l}>{l}</option>
+                ))}
+              </Form.Select>
             </Col>
             <Col xs={6}>
               <Form.Label>Category</Form.Label>
-              <Form.Select disabled />
+              <Form.Select
+                value={datas.category}
+                onChange={(e) => handleDataChange('category', e.target.value)}
+              >
+                <option value="">Select a category</option>
+                {categories.map((category) => (
+                  <option value={category}>{category}</option>
+                ))}
+              </Form.Select>
             </Col>
           </Row>
         </>
@@ -895,7 +925,7 @@ function SettingModal({ setting }) {
               <Row
                 className="p-3"
                 style={{
-                  height: '13%',
+                  height: '11%',
                 }}
               >
                 <Form.Label className="mb-0">Topic</Form.Label>
@@ -934,18 +964,49 @@ function SettingModal({ setting }) {
               <Row
                 className="p-3 d-flex flex-column"
                 style={{
-                  height: '13%',
+                  height: '11%',
                 }}
               >
                 <Col xs={12} className="px-0">
-                  <Form.Label className="px-2 mb-0">Category</Form.Label>
-                  <Form.Select disabled />
+                  <Form.Label className="px-2 mb-0">Language</Form.Label>
+                  <Form.Select
+                    value={datas.language}
+                    onChange={(e) =>
+                      handleDataChange('language', e.target.value)
+                    }
+                  >
+                    <option value="">Select a language</option>
+                    {['English', '中文'].map((l) => (
+                      <option value={l}>{l}</option>
+                    ))}
+                  </Form.Select>
                 </Col>
               </Row>
               <Row
                 className="p-3 d-flex flex-column"
                 style={{
-                  height: '74%',
+                  height: '11%',
+                }}
+              >
+                <Col xs={12} className="px-0">
+                  <Form.Label className="px-2 mb-0">Category</Form.Label>
+                  <Form.Select
+                    value={datas.category}
+                    onChange={(e) =>
+                      handleDataChange('category', e.target.value)
+                    }
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map((category) => (
+                      <option value={category}>{category}</option>
+                    ))}
+                  </Form.Select>
+                </Col>
+              </Row>
+              <Row
+                className="p-3 d-flex flex-column"
+                style={{
+                  height: '61%',
                 }}
               >
                 <Form.Label className="mb-0">Prompt</Form.Label>
