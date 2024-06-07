@@ -2,7 +2,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import moment from 'moment'
@@ -48,6 +48,8 @@ import {
   faCopy,
   faCloudArrowDown,
   faCircleChevronRight,
+  faCaretRight,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   AuthContext,
@@ -316,16 +318,16 @@ function Home() {
   useEffect(() => {
     getProjects()
   }, [])
-  // const handleEdit = async () => {
-  //   console.log(projects.find(({ project_id }) => project_id === editing))
-  //   const updated = await apiServices.data({
-  //     path: `/project/${editing}`,
-  //     method: 'put',
-  //     data: projects.find(({ project_id }) => project_id === editing),
-  //   })
-  //   setprojects(projects.map((p) => (p.project_id === editing ? updated : p)))
-  //   setEditing('')
-  // }
+  const handleEdit = async () => {
+    console.log(projects.find(({ project_id }) => project_id === editing))
+    const updated = await apiServices.data({
+      path: `/project/${editing}`,
+      method: 'put',
+      data: projects.find(({ project_id }) => project_id === editing),
+    })
+    setprojects(projects.map((p) => (p.project_id === editing ? updated : p)))
+    setEditing('')
+  }
 
   const [articles, setarticles] = useState([])
   const getArticles = async () => {
@@ -504,6 +506,17 @@ function Home() {
   }
 
   const [copyTarget, setcopyTarget] = useState(null)
+  const [selected, setselected] = useState('')
+
+  const selectedProject = useMemo(
+    () =>
+      projectId && projects
+        ? projects.find(({ project_id }) => project_id === projectId)
+        : {},
+    [projectId, projects]
+  )
+
+  console.log(selectedProject)
 
   return (
     <Container
@@ -523,17 +536,54 @@ function Home() {
         projectId ? (
           <>
             <Row className="py-3">
-              <Col>
-                <h5 className="text-nowrap text-wom">模組列表</h5>
+              <Col className="d-flex justify-content-center">
+                <div className="text-nowrap text-wom fs-5 fw-bold">
+                  {/* 專案 */}
+                  {(selectedProject &&
+                    selectedProject.setting &&
+                    selectedProject.setting.name) ||
+                    `專案${projectId}`}
+                </div>
+                <FontAwesomeIcon className="my-auto px-4" icon={faCaretRight} />
+                <div className="text-nowrap text-wom fs-5 fw-bold">
+                  模組列表
+                </div>
               </Col>
             </Row>
             <Row>
-              <Col className="d-flex pe-0">
+              <Col xs={3} className="d-flex justifu-content-end">
+                <Form.Select
+                  className="w-100 h-100"
+                  aria-label="Default select example"
+                  onChange={(e) => setselected(e.target.value)}
+                  value={selected}
+                >
+                  <option value="" className="d-none">
+                    選擇推薦劇本類型...
+                  </option>
+                  {[
+                    '所有類型',
+                    '奇幻',
+                    '科幻',
+                    '科普',
+                    '喜劇',
+                    '愛情',
+                    '寵物',
+                    '醫療',
+                    '未來',
+                  ].map((label, i) => (
+                    <option key={i} value={label}>
+                      {label}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+              <Col className="d-flex px-0">
                 <InputGroup>
                   <Form.Control
                     placeholder="請輸入關鍵字以搜尋..."
-                    aria-label="Recipient's username"
-                    aria-describedby="basic-addon2"
+                    aria-label="Recipient's username3"
+                    aria-describedby="basic-addon3"
                     value={tempSearch}
                     onChange={(event) => setTempSearch(event.target.value)}
                     // onFocus={() => setFocus(true)}
@@ -546,6 +596,13 @@ function Home() {
                         setSearch(tempSearch)
                     }}
                   />
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={(event) => setTempSearch(event.target.value)}
+                  >
+                    清除
+                  </Button>
                   <Button
                     variant="outline-wom"
                     id="button-addon2"
@@ -622,231 +679,281 @@ function Home() {
             >
               {/* 1 */}
               <Row className="px-3 pt-3 fs-5 fw-bold text-wom">最近的模板</Row>
-              <DragDropContext
-                onDragEnd={(e) => {
-                  const result = Array.from(articles)
-                  const [removed] = result.splice(e.source.index, 1)
-                  result.splice(e.destination.index, 0, removed)
-                  setarticles(result)
-                }}
-              >
-                <Droppable droppableId="droppable" direction="horizonal">
-                  {(dropProvided, dropSnapshot) => (
-                    <div
-                      {...dropProvided.droppableProps}
-                      ref={dropProvided.innerRef}
-                      style={getListStyle(dropSnapshot.isDraggingOver)}
-                      className="w-100 h-60 d-flex overflow-scroll"
-                    >
-                      {articles ? (
-                        articles
-                          .filter(({ setting }) => {
-                            const { name, project_id } = setting
-                            if (
-                              parseInt(project_id, 10) !==
-                              parseInt(projectId, 10)
-                            )
-                              return false
-                            return !search || (name && name.includes(search))
-                          })
-                          .map(
-                            (
-                              {
-                                article_id,
-                                user_name,
-                                setting,
-                                created_on,
-                                updated_on,
-                              },
-                              i
-                            ) => (
-                              <Draggable
-                                key={`${article_id}`}
-                                draggableId={`${article_id}`}
-                                index={i}
-                              >
-                                {(dragProvided, dragSnapshot) => (
-                                  <div
-                                    className="me-3"
-                                    ref={dragProvided.innerRef}
-                                    {...dragProvided.draggableProps}
-                                    {...dragProvided.dragHandleProps}
-                                    style={{
-                                      ...getItemStyle(
-                                        dragSnapshot.isDragging,
-                                        dragProvided.draggableProps.style
-                                      ),
-                                      minWidth: '32%',
-                                      width: '32%',
-                                      height: '40vh',
-                                    }}
-                                  >
-                                    <Book
-                                      setting={{
-                                        title:
-                                          setting.title ||
-                                          setting.topic ||
-                                          '未命名',
-                                        user_name,
-                                        id: article_id,
-                                        created_on,
-                                        updated_on,
-                                        content:
-                                          setting.Article.Text || 'Content',
-                                        status: setting.Article.status,
-                                        handleEdit: (e) => {
-                                          e.stopPropagation()
-                                          navigate(
-                                            `/book/${projectId}/${article_id}`
-                                          )
-                                        },
-                                        handleDelete: (e) => {
-                                          setshowWarn(article_id)
-                                          e.stopPropagation()
-                                        },
-                                        handleOpen: () => {
-                                          setid(article_id)
-                                          setshowSetting(true)
-                                          setcopyTarget(setting)
-                                        },
+              {articles &&
+              articles.filter(({ setting }) => {
+                const { name, project_id, category } = setting
+                if (parseInt(project_id, 10) !== parseInt(projectId, 10))
+                  return false
+                const isSearched = !search || (name && name.includes(search))
+                const isCategory =
+                  !selected || selected === '所有類型' || category === selected
+                return isSearched && isCategory
+              }).length ? (
+                <DragDropContext
+                  onDragEnd={(e) => {
+                    const result = Array.from(articles)
+                    const [removed] = result.splice(e.source.index, 1)
+                    result.splice(e.destination.index, 0, removed)
+                    setarticles(result)
+                  }}
+                >
+                  <Droppable droppableId="droppable" direction="horizonal">
+                    {(dropProvided, dropSnapshot) => (
+                      <div
+                        {...dropProvided.droppableProps}
+                        ref={dropProvided.innerRef}
+                        style={getListStyle(dropSnapshot.isDraggingOver)}
+                        className="w-100 h-60 d-flex overflow-scroll"
+                      >
+                        {articles ? (
+                          articles
+                            .filter(({ setting }) => {
+                              const { name, project_id, category } = setting
+                              if (
+                                parseInt(project_id, 10) !==
+                                parseInt(projectId, 10)
+                              )
+                                return false
+                              const isSearched =
+                                !search || (name && name.includes(search))
+                              const isCategory =
+                                !selected ||
+                                selected === '所有類型' ||
+                                category === selected
+                              return isSearched && isCategory
+                            })
+                            .map(
+                              (
+                                {
+                                  article_id,
+                                  user_name,
+                                  setting,
+                                  created_on,
+                                  updated_on,
+                                },
+                                i
+                              ) => (
+                                <Draggable
+                                  key={`${article_id}`}
+                                  draggableId={`${article_id}`}
+                                  index={i}
+                                >
+                                  {(dragProvided, dragSnapshot) => (
+                                    <div
+                                      className="me-3"
+                                      ref={dragProvided.innerRef}
+                                      {...dragProvided.draggableProps}
+                                      {...dragProvided.dragHandleProps}
+                                      style={{
+                                        ...getItemStyle(
+                                          dragSnapshot.isDragging,
+                                          dragProvided.draggableProps.style
+                                        ),
+                                        minWidth: '32%',
+                                        width: '32%',
+                                        height: '40vh',
                                       }}
-                                    />
-                                  </div>
-                                )}
-                              </Draggable>
+                                    >
+                                      <Book
+                                        setting={{
+                                          title:
+                                            setting.title ||
+                                            setting.topic ||
+                                            '未命名',
+                                          user_name,
+                                          id: article_id,
+                                          created_on,
+                                          updated_on,
+                                          content:
+                                            setting.Article.Text || 'Content',
+                                          status: setting.Article.status,
+                                          handleEdit: (e) => {
+                                            e.stopPropagation()
+                                            navigate(
+                                              `/book/${projectId}/${article_id}`
+                                            )
+                                          },
+                                          handleDelete: (e) => {
+                                            setshowWarn(article_id)
+                                            e.stopPropagation()
+                                          },
+                                          handleOpen: () => {
+                                            setid(article_id)
+                                            setshowSetting(true)
+                                            setcopyTarget(setting)
+                                          },
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                                </Draggable>
+                              )
                             )
-                          )
-                      ) : (
-                        <Row>
-                          <Col>專案名</Col>
-                          <Col>狀態</Col>
-                          <Col>建立日期</Col>
-                          <Col>更新時間</Col>
-                          <Col>備註</Col>
-                          <Col>操作</Col>
-                        </Row>
-                      )}
-                      {dropProvided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+                        ) : (
+                          <Row>
+                            <Col>專案名</Col>
+                            <Col>狀態</Col>
+                            <Col>建立日期</Col>
+                            <Col>更新時間</Col>
+                            <Col>備註</Col>
+                            <Col>操作</Col>
+                          </Row>
+                        )}
+                        {dropProvided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              ) : (
+                <div
+                  className="w-100 h-60 d-flex"
+                  style={{
+                    minHeight: '40vh',
+                  }}
+                >
+                  <h4 className="m-auto">尚無資料</h4>
+                </div>
+              )}
 
               {/* 2 */}
               <Row className="px-3 pt-3 fs-5 fw-bold text-wom">
                 你可能會喜歡...
               </Row>
-              <DragDropContext
-                onDragEnd={(e) => {
-                  const result = Array.from(articles)
-                  const [removed] = result.splice(e.source.index, 1)
-                  result.splice(e.destination.index, 0, removed)
-                  setarticles(result)
-                }}
-              >
-                <Droppable droppableId="droppable" direction="horizonal">
-                  {(dropProvided, dropSnapshot) => (
-                    <div
-                      {...dropProvided.droppableProps}
-                      ref={dropProvided.innerRef}
-                      style={getListStyle(dropSnapshot.isDraggingOver)}
-                      className="w-100 h-60 d-flex overflow-scroll"
-                    >
-                      {articles ? (
-                        articles
-                          .filter(({ setting }) => {
-                            const { name } = setting
-                            return !search || (name && name.includes(search))
-                          })
-                          .map(
-                            (
-                              {
-                                article_id,
-                                user_name,
-                                setting,
-                                created_on,
-                                updated_on,
-                              },
-                              i
-                            ) => (
-                              <Draggable
-                                key={`${article_id}`}
-                                draggableId={`${article_id}`}
-                                index={i}
-                              >
-                                {(dragProvided, dragSnapshot) => (
-                                  <div
-                                    className="me-3"
-                                    ref={dragProvided.innerRef}
-                                    {...dragProvided.draggableProps}
-                                    {...dragProvided.dragHandleProps}
-                                    style={{
-                                      ...getItemStyle(
-                                        dragSnapshot.isDragging,
-                                        dragProvided.draggableProps.style
-                                      ),
-                                      minWidth: '32%',
-                                      width: '32%',
-                                      height: '40vh',
-                                    }}
-                                  >
-                                    <Book
-                                      setting={{
-                                        title:
-                                          setting.title ||
-                                          setting.topic ||
-                                          '未命名',
-                                        user_name,
-                                        id: article_id,
-                                        created_on,
-                                        updated_on,
-                                        content:
-                                          setting.Article.Text || 'Content',
-                                        handleEdit: (e) => {
-                                          e.stopPropagation()
-                                          navigate(
-                                            `/book/${projectId}/${article_id}`
-                                          )
-                                        },
-                                        handleDelete: (e) => {
-                                          setshowWarn(article_id)
-                                          e.stopPropagation()
-                                        },
-                                        handleOpen: () => {
-                                          setid(article_id)
-                                          setshowSetting(true)
-                                          setcopyTarget(setting)
-                                        },
-                                        handleCopy: (e) => {
-                                          e.stopPropagation()
-                                          handleArticleAdd({
-                                            ...setting,
-                                            project_id: projectId,
-                                            title: `複製 - ${setting.title}`,
-                                          })
-                                        },
+              {articles &&
+              articles.filter(({ setting }) => {
+                const { name, category } = setting
+                const isSearched = !search || (name && name.includes(search))
+                const isCategory =
+                  !selected || selected === '所有類型' || category === selected
+                return isSearched && isCategory
+              }).length ? (
+                <DragDropContext
+                  onDragEnd={(e) => {
+                    const result = Array.from(articles)
+                    const [removed] = result.splice(e.source.index, 1)
+                    result.splice(e.destination.index, 0, removed)
+                    setarticles(result)
+                  }}
+                >
+                  <Droppable droppableId="droppable" direction="horizonal">
+                    {(dropProvided, dropSnapshot) => (
+                      <div
+                        {...dropProvided.droppableProps}
+                        ref={dropProvided.innerRef}
+                        style={getListStyle(dropSnapshot.isDraggingOver)}
+                        className="w-100 h-60 d-flex overflow-scroll"
+                      >
+                        {articles ? (
+                          articles
+                            .filter(({ setting }) => {
+                              const { name, category } = setting
+                              const isSearched =
+                                !search || (name && name.includes(search))
+                              const isCategory =
+                                !selected ||
+                                selected === '所有類型' ||
+                                category === selected
+                              return isSearched && isCategory
+                            })
+                            .map(
+                              (
+                                {
+                                  article_id,
+                                  user_name,
+                                  setting,
+                                  created_on,
+                                  updated_on,
+                                },
+                                i
+                              ) => (
+                                <Draggable
+                                  key={`${article_id}`}
+                                  draggableId={`${article_id}`}
+                                  index={i}
+                                >
+                                  {(dragProvided, dragSnapshot) => (
+                                    <div
+                                      className="me-3"
+                                      ref={dragProvided.innerRef}
+                                      {...dragProvided.draggableProps}
+                                      {...dragProvided.dragHandleProps}
+                                      style={{
+                                        ...getItemStyle(
+                                          dragSnapshot.isDragging,
+                                          dragProvided.draggableProps.style
+                                        ),
+                                        minWidth: '32%',
+                                        width: '32%',
+                                        height: '40vh',
                                       }}
-                                    />
-                                  </div>
-                                )}
-                              </Draggable>
+                                    >
+                                      <Book
+                                        setting={{
+                                          title:
+                                            setting.title ||
+                                            setting.topic ||
+                                            '未命名',
+                                          user_name,
+                                          id: article_id,
+                                          created_on,
+                                          updated_on,
+                                          content:
+                                            setting.Article.Text || 'Content',
+                                          handleEdit: (e) => {
+                                            e.stopPropagation()
+                                            navigate(
+                                              `/book/${projectId}/${article_id}`
+                                            )
+                                          },
+                                          handleDelete: (e) => {
+                                            setshowWarn(article_id)
+                                            e.stopPropagation()
+                                          },
+                                          handleOpen: () => {
+                                            setid(article_id)
+                                            setshowSetting(true)
+                                            setcopyTarget(setting)
+                                          },
+                                          handleCopy: (e) => {
+                                            e.stopPropagation()
+                                            handleArticleAdd({
+                                              ...setting,
+                                              project_id: projectId,
+                                              title: `複製 - ${setting.title}`,
+                                            })
+                                          },
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                                </Draggable>
+                              )
                             )
-                          )
-                      ) : (
-                        <Row>
-                          <Col>專案名</Col>
-                          <Col>狀態</Col>
-                          <Col>建立日期</Col>
-                          <Col>更新時間</Col>
-                          <Col>備註</Col>
-                          <Col>操作</Col>
-                        </Row>
-                      )}
-                      {dropProvided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+                        ) : (
+                          <Row>
+                            <Col>專案名</Col>
+                            <Col>狀態</Col>
+                            <Col>建立日期</Col>
+                            <Col>更新時間</Col>
+                            <Col>備註</Col>
+                            <Col>操作</Col>
+                          </Row>
+                        )}
+                        {dropProvided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              ) : (
+                <div
+                  className="w-100 h-60 d-flex"
+                  style={{
+                    minHeight: '40vh',
+                  }}
+                >
+                  <h4 className="m-auto">尚無資料</h4>
+                </div>
+              )}
             </div>
           </>
         ) : (
@@ -875,6 +982,13 @@ function Home() {
                         setSearch(tempSearch)
                     }}
                   />
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={(event) => setTempSearch(event.target.value)}
+                  >
+                    清除
+                  </Button>
                   <Button
                     variant="outline-wom"
                     id="button-addon2"
@@ -953,7 +1067,8 @@ function Home() {
                                         dragSnapshot.isDragging,
                                         dragProvided.draggableProps.style
                                       ),
-                                      height: '100px',
+                                      minHeight: '90px',
+                                      maxHeight: '90px',
                                       // minWidth: '32%',
                                       // width: '32%',
                                       // height: '40vh',
@@ -1086,27 +1201,43 @@ function Home() {
                                       >
                                         <Button
                                           className="w-25 h-50 btn-hover-wom my-auto"
-                                          // onClick={(e) => {
-                                          //   if (
-                                          //     editing &&
-                                          //     project_id === editing
-                                          //   ) {
-                                          //     handleEdit()
-                                          //   } else {
-                                          //     setEditing(project_id)
-                                          //   }
-                                          //   e.stopPropagation()
-                                          // }}
                                           onClick={() =>
                                             setProjectId(project_id)
                                           }
                                           title="進 入 專 案"
                                         >
                                           <FontAwesomeIcon
+                                            icon={faCircleChevronRight}
+                                            style={{
+                                              cursor: 'pointer',
+                                            }}
+                                            className="m-auto fs-5"
+                                          />
+                                        </Button>
+                                        <Button
+                                          className="w-25 h-50 btn-hover-wom my-auto"
+                                          onClick={(e) => {
+                                            if (
+                                              editing &&
+                                              project_id === editing
+                                            ) {
+                                              handleEdit()
+                                            } else {
+                                              setEditing(project_id)
+                                            }
+                                            e.stopPropagation()
+                                          }}
+                                          title={
+                                            editing === project_id
+                                              ? '儲 存 變 更'
+                                              : '編 輯 名 稱 ＆ 備 註'
+                                          }
+                                        >
+                                          <FontAwesomeIcon
                                             icon={
                                               editing === project_id
                                                 ? faCheckSquare
-                                                : faCircleChevronRight
+                                                : faEdit
                                             }
                                             style={{
                                               cursor: 'pointer',
