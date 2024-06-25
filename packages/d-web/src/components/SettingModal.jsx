@@ -59,16 +59,27 @@ function RSS({ setting }) {
     setdatas,
     handleDataChange,
     article_id,
-    step,
-    steps,
     setstep,
     copyTarget,
     handleCopy,
-    saveDatas,
+    handleStV,
   } = setting
   const [tempText, settempText] = useState('')
   const [tempHeadText, settempHeadText] = useState('')
   console.log(datas)
+
+  useEffect(() => {
+    handleDataChange(
+      'prompt',
+      `You are a scriptwriter. Please write a script based on the theme of '${
+        datas.title
+      }' with ${datas.heading
+        .map((h) => `[${h}]`)
+        .join()} as the outline. The script should be in ${
+        datas.language
+      } and suitable for use on the TextToVideo platform to generate a video.`
+    )
+  }, [datas.heading, datas.title])
 
   return (
     <Row className="w-100 position-relative">
@@ -153,122 +164,6 @@ function RSS({ setting }) {
             </Form.Select>
           </Col>
         </Row>
-        {datas.title && (
-          <>
-            <Row className="p-3 d-flex flex-column">
-              <Form.Control
-                className="fw-bold p-0 ps-2 border-0 fs-4"
-                value={datas.title}
-                onChange={(e) => {
-                  handleDataChange('title', e.target.value)
-                }}
-              />
-            </Row>
-            <Row className="p-3 d-flex flex-column">
-              <Form.Label className="px-2 mb-0">Heading</Form.Label>
-              <ListGroup
-                className="h-100 w-100 stepList"
-                title="上下拖曳以排序"
-              >
-                <ListGroupItem className="rounded-radius d-flex my-1 border rounded-top rounded-bottom">
-                  <Form.Control
-                    size="sm"
-                    className="my-auto border-0"
-                    placeholder="Add Your Own Heading"
-                    value={tempHeadText}
-                    onChange={(e) => settempHeadText(e.target.value)}
-                  />
-                  <FontAwesomeIcon
-                    onClick={() => {
-                      handleDataChange('heading', [tempText, ...datas.heading])
-                      settempHeadText('')
-                    }}
-                    icon={faCirclePlus}
-                    className="my-auto mx-3"
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                  />
-                </ListGroupItem>
-                <DragDropContext
-                  onDragEnd={(e) => {
-                    if (!e.destination) return
-                    const result = Array.from(datas.heading)
-                    const [removed] = result.splice(e.source.index, 1)
-                    result.splice(e.destination.index, 0, removed)
-                    handleDataChange('heading', result)
-                  }}
-                >
-                  <Droppable
-                    className="w-100"
-                    droppableId="droppable"
-                    direction="vertical"
-                  >
-                    {(dropProvided, dropSnapshot) => (
-                      <div
-                        {...dropProvided.droppableProps}
-                        ref={dropProvided.innerRef}
-                        style={getListStyle(dropSnapshot.isDraggingOver)}
-                        className="w-100 h-100 d-flex flex-column overflow-scroll"
-                      >
-                        {datas.heading.map((label, i) => (
-                          <Draggable
-                            className="w-100"
-                            key={`${label}`}
-                            draggableId={`${label}`}
-                            index={i}
-                          >
-                            {(dragProvided, dragSnapshot) => (
-                              <div
-                                className="d-flex rounded-radius my-1 border rounded-top rounded-bottom px-3"
-                                ref={dragProvided.innerRef}
-                                {...dragProvided.draggableProps}
-                                {...dragProvided.dragHandleProps}
-                                style={{
-                                  ...getItemStyle(
-                                    dragSnapshot.isDragging,
-                                    dragProvided.draggableProps.style
-                                  ),
-                                  height: '90px',
-                                  maxHeight: '90px',
-                                  minHeight: '90px',
-                                  // minWidth: '32%',
-                                  // height: '40vh',
-                                }}
-                              >
-                                {/* <ListGroupItem
-                              key={i}
-                              action
-                              className="h-100 rounded-radius d-flex my-1 border rounded-top rounded-bottom"
-                              style={{
-                                pointerEvents: 'none',
-                              }}
-                            > */}
-                                <Form.Control
-                                  className="my-auto border-0"
-                                  value={label}
-                                  onChange={(e) => {
-                                    handleDataChange(
-                                      'heading',
-                                      datas.heading.map((h, j) =>
-                                        j === i ? e.target.value : h
-                                      )
-                                    )
-                                  }}
-                                />
-                                {/* </ListGroupItem> */}
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                      </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
-              </ListGroup>
-            </Row>
-          </>
-        )}
         <Row
           className="p-3 d-flex flex-column"
           style={{
@@ -280,7 +175,14 @@ function RSS({ setting }) {
             className="flex-fill"
             as="textarea"
             rows={10}
-            value={datas.prompt}
+            // value={datas.prompt}
+            value={`You are a scriptwriter. Please write a script based on the theme of '${
+              datas.title
+            }' with ${datas.heading
+              .map((h) => `[${h}]`)
+              .join()} as the outline. The script should be in ${
+              datas.language
+            } and suitable for use on the TextToVideo platform to generate a video.`}
             onChange={(e) => handleDataChange('prompt', e.target.value)}
             placeholder="Start by entering your prompt to generate article..."
           />
@@ -306,7 +208,7 @@ function RSS({ setting }) {
                   method: 'put',
                   data: {
                     datas,
-                    action: 'article',
+                    action: 'rss',
                   },
                 })
                 setloading(false)
@@ -324,14 +226,15 @@ function RSS({ setting }) {
                 className="d-flex w-100 justify-content-center"
                 variant="wom"
                 onClick={() => {
-                  saveDatas()
-                  if (step.now) {
-                    setstep({
-                      now: step.now,
-                    })
-                  }
+                  handleStV()
+                  // saveDatas()
+                  // if (step.now) {
+                  //   setstep({
+                  //     now: step.now,
+                  //   })
+                  // }
                 }}
-                disabled={!steps[step.now]}
+                // disabled={!steps[step.now]}
               >
                 Save
               </Button>
@@ -357,25 +260,127 @@ function RSS({ setting }) {
               src={logoFull}
             />
           </Row>
-          <Row className="pt-1 pb-3" style={{ zIndex: '2' }}>
-            <Form.Control
-              className="border-0"
-              style={{
-                backgroundColor: 'transparent',
-              }}
-              as="textarea"
-              rows="19"
-              value={datas.Article.Text}
-              onChange={(e) =>
-                handleDataChange('Article', {
-                  ...datas.Article,
-                  Text: e.target.value,
-                })
-              }
-            />
-          </Row>
+          {datas.title && (
+            <>
+              <Form.Label className="px-2 mb-0 h4">Heading</Form.Label>
+              <Row
+                className="p-3 d-flex flex-column"
+                style={{
+                  height: '60vh',
+                  zIndex: '2',
+                }}
+              >
+                <ListGroup
+                  className="h-100 w-100 stepList overflow-scroll"
+                  title="上下拖曳以排序"
+                >
+                  <ListGroupItem className="rounded-radius d-flex my-1 border rounded-top rounded-bottom">
+                    <Form.Control
+                      size="sm"
+                      className="my-auto border-0"
+                      placeholder="Add Your Own Heading"
+                      value={tempHeadText}
+                      onChange={(e) => settempHeadText(e.target.value)}
+                    />
+                    <FontAwesomeIcon
+                      onClick={() => {
+                        handleDataChange('heading', [
+                          tempText,
+                          ...datas.heading,
+                        ])
+                        settempHeadText('')
+                      }}
+                      icon={faCirclePlus}
+                      className="my-auto mx-3"
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                    />
+                  </ListGroupItem>
+                  <DragDropContext
+                    onDragEnd={(e) => {
+                      if (!e.destination) return
+                      const result = Array.from(datas.heading)
+                      const [removed] = result.splice(e.source.index, 1)
+                      result.splice(e.destination.index, 0, removed)
+                      handleDataChange('heading', result)
+                    }}
+                  >
+                    <Droppable
+                      className="w-100"
+                      droppableId="droppable"
+                      direction="vertical"
+                    >
+                      {(dropProvided, dropSnapshot) => (
+                        <div
+                          {...dropProvided.droppableProps}
+                          ref={dropProvided.innerRef}
+                          style={getListStyle(dropSnapshot.isDraggingOver)}
+                          className="w-100 h-100 d-flex flex-column overflow-scroll"
+                        >
+                          {datas.heading.map((label, i) => (
+                            <Draggable
+                              className="w-100"
+                              key={`${label}`}
+                              draggableId={`${label}`}
+                              index={i}
+                            >
+                              {(dragProvided, dragSnapshot) => (
+                                <div
+                                  className="d-flex rounded-radius my-1 border rounded-top rounded-bottom px-3"
+                                  ref={dragProvided.innerRef}
+                                  {...dragProvided.draggableProps}
+                                  {...dragProvided.dragHandleProps}
+                                  style={{
+                                    ...getItemStyle(
+                                      dragSnapshot.isDragging,
+                                      dragProvided.draggableProps.style
+                                    ),
+                                    height: '90px',
+                                    maxHeight: '90px',
+                                    minHeight: '90px',
+                                    // minWidth: '32%',
+                                    // height: '40vh',
+                                  }}
+                                >
+                                  {/* <ListGroupItem
+                              key={i}
+                              action
+                              className="h-100 rounded-radius d-flex my-1 border rounded-top rounded-bottom"
+                              style={{
+                                pointerEvents: 'none',
+                              }}
+                            > */}
+                                  <Form.Control
+                                    className="my-auto border-0"
+                                    style={{
+                                      backgroundColor: 'transparent',
+                                    }}
+                                    value={label}
+                                    onChange={(e) => {
+                                      handleDataChange(
+                                        'heading',
+                                        datas.heading.map((h, j) =>
+                                          j === i ? e.target.value : h
+                                        )
+                                      )
+                                    }}
+                                  />
+                                  {/* </ListGroupItem> */}
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                        </div>
+                      )}
+                    </Droppable>
+                  </DragDropContext>
+                </ListGroup>
+              </Row>
+            </>
+          )}
           <Row
-            className="d-flex"
+            className="d-flex mt-auto"
             title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
             style={{ cursor: 'help' }}
           >
@@ -1484,6 +1489,17 @@ function SettingModal({ setting }) {
         copyTarget,
         handleCopy,
         saveDatas,
+        handleStV: async () => {
+          await apiServices.data({
+            path: `article/rss/${article_id}`,
+            method: 'put',
+            data: {
+              datas,
+              action: '',
+            },
+          })
+          setting.handleStV()
+        },
       }}
     />,
     <Speed
