@@ -59,6 +59,7 @@ import {
 import apiServices from '../services/apiServices'
 import { LoadingButton, Loading, SettingModal } from '../components'
 import { logoFull } from '../asset'
+import ScriptToVideo from '../components/ScriptToVideo'
 
 function Book({ setting }) {
   const {
@@ -468,6 +469,7 @@ function Home() {
   // ]
 
   const [showSetting, setshowSetting] = useState(false)
+  const [showStV, setshowStV] = useState(false)
   const [id, setid] = useState('')
 
   const handleArticleAdd = async (setting = {}) => {
@@ -1394,6 +1396,10 @@ function Home() {
             setshowSetting(false)
             setcopyTarget(null)
           },
+          handleStV: () => {
+            setshowSetting(false)
+            setshowStV(true)
+          },
           copyTarget,
           handleCopy: () => {
             setshowSetting(false)
@@ -1401,6 +1407,15 @@ function Home() {
               ...copyTarget,
               title: `複製 - ${copyTarget.title}`,
             })
+          },
+          article_id: id,
+        }}
+      />
+      <ScriptToVideo
+        setting={{
+          show: showStV,
+          handleClose: () => {
+            setshowStV(false)
           },
           article_id: id,
         }}
