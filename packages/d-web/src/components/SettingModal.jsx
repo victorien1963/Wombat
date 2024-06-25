@@ -782,14 +782,15 @@ function SettingModal({ setting }) {
             <Col xs={8}>
               <Tabs
                 defaultActiveKey={0}
-                className="border-0"
+                className="border-0 fs-6"
                 onSelect={(k) => {
                   console.log(k)
                   setmode(parseInt(k, 10))
                 }}
               >
-                <Tab title="快速建立" eventKey={0} />
-                <Tab title="詳細設定" eventKey={1} />
+                <Tab title="Introducing Articles" eventKey={0} />
+                <Tab title="Quick Generation" eventKey={1} />
+                <Tab title="Detailed Settings" eventKey={2} />
               </Tabs>
             </Col>
           </Row>
@@ -856,13 +857,14 @@ function SettingModal({ setting }) {
                     <>
                       <Col
                         xs={8}
-                        className="my-auto"
+                        className="my-auto text-grey"
                         title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
                         style={{ cursor: 'help' }}
                       >
                         <FontAwesomeIcon icon={faLightbulb} />
-                        &ensp;
-                        若不滿意生成結果，可再次點擊生成按鈕，或回上一步驟以重新生成。
+                        &ensp; If you are not satisfied with the result, you can
+                        click the Generate button again or go back to the
+                        previous step to generate again.
                       </Col>
                       <Col xs={2} className="ms-auto d-flex">
                         <Button
@@ -1113,10 +1115,11 @@ function SettingModal({ setting }) {
                   title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
                   style={{ cursor: 'help' }}
                 >
-                  <Col xs={12} className="my-auto">
+                  <Col xs={12} className="my-auto text-grey">
                     <FontAwesomeIcon icon={faLightbulb} />
-                    &ensp;
-                    若不滿意生成結果，可再次點擊生成按鈕，或回上一步驟以重新生成。
+                    &ensp; If you are not satisfied with the result, you can
+                    click the Generate button again or go back to the previous
+                    step to generate again.
                   </Col>
                 </Row>
               </div>
