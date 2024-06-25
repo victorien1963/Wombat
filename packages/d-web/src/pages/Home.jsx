@@ -59,6 +59,7 @@ import {
 import apiServices from '../services/apiServices'
 import { LoadingButton, Loading, SettingModal } from '../components'
 import { logoFull } from '../asset'
+import ScriptToVideo from '../components/ScriptToVideo'
 
 function Book({ setting }) {
   const {
@@ -468,6 +469,7 @@ function Home() {
   // ]
 
   const [showSetting, setshowSetting] = useState(false)
+  const [showStV, setshowStV] = useState(false)
   const [id, setid] = useState('')
 
   const handleArticleAdd = async (setting = {}) => {
@@ -678,7 +680,9 @@ function Home() {
               }}
             >
               {/* 1 */}
-              <Row className="px-3 pt-3 fs-5 fw-bold text-wom">最近的模板</Row>
+              <Row className="px-3 pt-3 fs-5 fw-bold text-wom">
+                Recently used templates
+              </Row>
               {articles &&
               articles.filter(({ setting }) => {
                 const { name, project_id, category } = setting
@@ -811,13 +815,13 @@ function Home() {
                     minHeight: '40vh',
                   }}
                 >
-                  <h4 className="m-auto">尚無資料</h4>
+                  <h4 className="m-auto text-grey">There is no data yet!</h4>
                 </div>
               )}
 
               {/* 2 */}
               <Row className="px-3 pt-3 fs-5 fw-bold text-wom">
-                你可能會喜歡...
+                You might like...
               </Row>
               {articles &&
               articles.filter(({ setting }) => {
@@ -1392,6 +1396,10 @@ function Home() {
             setshowSetting(false)
             setcopyTarget(null)
           },
+          handleStV: () => {
+            setshowSetting(false)
+            setshowStV(true)
+          },
           copyTarget,
           handleCopy: () => {
             setshowSetting(false)
@@ -1399,6 +1407,15 @@ function Home() {
               ...copyTarget,
               title: `複製 - ${copyTarget.title}`,
             })
+          },
+          article_id: id,
+        }}
+      />
+      <ScriptToVideo
+        setting={{
+          show: showStV,
+          handleClose: () => {
+            setshowStV(false)
           },
           article_id: id,
         }}
