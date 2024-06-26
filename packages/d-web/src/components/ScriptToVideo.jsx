@@ -2,7 +2,7 @@
 /* eslint-disable no-promise-executor-return */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react'
-import { Modal, Row, Col, Image, Form, Spinner, Button } from 'react-bootstrap'
+import { Modal, Row, Col, Form, Spinner, Image, Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 // import { useNavigate } from 'react-router-dom'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -210,10 +210,7 @@ function ScriptToVideo({ setting }) {
       >
         <Modal.Title className="w-100 my-0 py-0">
           <Row className="pb-0 w-100 my-0">
-            {/* <Col xs={2}>
-              <h4>新建專案</h4>
-            </Col> */}
-            <Col xs={8}>
+            <Col xs={12} className="text-start">
               <h4>Script To Video</h4>
             </Col>
           </Row>
@@ -225,25 +222,41 @@ function ScriptToVideo({ setting }) {
           height: '80vh',
         }}
       >
+        <Row style={{ zIndex: '1' }} className="position-absolute w-100 d-flex">
+          <Image
+            className="position-absolute w-50 mx-auto"
+            style={{ opacity: '.15', left: '25%', userSelect: 'none' }}
+            src={logoFull}
+          />
+        </Row>
         <Row className="w-100">
           <Col xs={6} className="d-flex h-100">
             <div className="h-100 w-100 d-flex flex-column">
-              <Form.Label>
-                <h5>Script</h5>
+              <Form.Label className="w-100 d-flex">
+                <Col xs={8} className="my-auto">
+                  <h5 className="text-grey">Script</h5>
+                </Col>
+                <Col xs={4} className="d-flex m-auto">
+                  <Button
+                    size="sm"
+                    variant="outline-wom ms-auto"
+                    id="button-addon2"
+                    title="Generate Article"
+                    onClick={() => {
+                      setloading({
+                        ...loading,
+                        Script: true,
+                      })
+                      handlePtS()
+                    }}
+                  >
+                    Regenerate Script
+                  </Button>
+                </Col>
               </Form.Label>
-              <Row style={{ zIndex: '1' }} className="w-100 d-flex">
-                <Image
-                  className="position-absolute w-50 mx-auto"
-                  style={{ opacity: '.15' }}
-                  src={logoFull}
-                />
-              </Row>
-              <Row
-                className="pt-1 pb-3"
-                style={{ zIndex: '2', height: '60vh' }}
-              >
+              <Row className="px-3" style={{ zIndex: '2', height: '60vh' }}>
                 {loading.Script ? (
-                  <div className="h-100 w-100 d-flex justify-content-center">
+                  <div className="h-100 w-100 d-flex justify-content-center border rounded">
                     <Spinner size="sm" className="my-auto" />
                     <span className="my-auto">&ensp;資料載入中</span>
                   </div>
@@ -260,23 +273,9 @@ function ScriptToVideo({ setting }) {
                   />
                 )}
               </Row>
-              <Row className="p-3 d-flex flex-column">
+              <Row className="px-3 d-flex flex-column">
                 <div className="d-flex w-100 mt-2 px-0">
-                  <Button
-                    variant="outline-wom ms-auto"
-                    id="button-addon2"
-                    title="Generate Article"
-                    onClick={() => {
-                      setloading({
-                        ...loading,
-                        Script: true,
-                      })
-                      handlePtS()
-                    }}
-                  >
-                    ReGenerate Script
-                  </Button>
-                  <Col xs={2} className="ms-3 d-flex">
+                  <Col xs={3} className="d-flex">
                     <Button
                       className="d-flex w-100 justify-content-center"
                       variant="secondary"
@@ -291,13 +290,13 @@ function ScriptToVideo({ setting }) {
                       }}
                       // disabled={!steps[step.now]}
                     >
-                      Back
+                      Previous Step
                     </Button>
                   </Col>
-                  <Col xs={2} className="ms-3 d-flex">
+                  <Col xs={3} className="ms-3 d-flex ms-auto">
                     <Button
                       className="d-flex w-100 justify-content-center"
-                      variant="wom"
+                      variant="dark"
                       onClick={() => {
                         handleStV()
                         // saveDatas()
@@ -309,7 +308,7 @@ function ScriptToVideo({ setting }) {
                       }}
                       // disabled={!steps[step.now]}
                     >
-                      Next
+                      Next Step
                     </Button>
                   </Col>
                 </div>
@@ -319,17 +318,17 @@ function ScriptToVideo({ setting }) {
           <Col xs={6} className="d-flex h-100">
             <div className="h-100 w-100 d-flex flex-column">
               <Form.Label>
-                <h5>Video</h5>
+                <h5 className="text-grey">Video</h5>
               </Form.Label>
-              <Row style={{ zIndex: '1' }} className="w-100 d-flex">
+              {/* <Row style={{ zIndex: '1' }} className="w-100 d-flex">
                 <Image
                   className="position-absolute w-50 mx-auto"
                   style={{ opacity: '.15' }}
                   src={logoFull}
                 />
-              </Row>
+              </Row> */}
               <Row
-                className="pt-1 pb-3 border rounded-radius"
+                className="pt-1 pb-3 border rounded"
                 style={{ zIndex: '2', height: '60vh' }}
               >
                 {loading.Video === 1 ? (
@@ -351,10 +350,10 @@ function ScriptToVideo({ setting }) {
                   <div />
                 )}
               </Row>
-              <Row className="p-3 d-flex flex-column">
+              <Row className="ps-3 d-flex flex-column">
                 <div className="d-flex w-100 mt-2 px-0">
                   <LoadingButton
-                    variant="outline-wom ms-auto"
+                    variant="outline-danger ms-auto"
                     id="button-addon2"
                     title="Upload to Youtube"
                     onClick={async () => {
@@ -374,7 +373,7 @@ function ScriptToVideo({ setting }) {
                     btnText={btnText}
                     disabled={loading.Video !== 2}
                   />
-                  <Col xs={2} className="ms-3 d-flex">
+                  <Col xs={3} className="ms-3 d-flex pe-0">
                     <Button
                       className="d-flex w-100 justify-content-center"
                       variant="wom"

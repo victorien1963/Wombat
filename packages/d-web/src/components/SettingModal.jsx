@@ -20,7 +20,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faCircleMinus,
   faCirclePlus,
-  faLightbulb,
+  faCircleQuestion,
 } from '@fortawesome/free-solid-svg-icons'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { logoFull } from '../asset'
@@ -105,14 +105,26 @@ function RSS({ setting }) {
         </div>
       )}
       <Col className="overflow-scroll h-100" xs={5}>
-        <Row className="d-flex flex-column p-3">
-          <Form.Label className="mb-0">Topic</Form.Label>
+        <Row className="d-flex flex-column p-3 pb-1">
+          <Form.Label className="d-flex mb-0 w-100 px-1">
+            <Col xs={10}>Topic／link</Col>
+            <Col
+              className="d-flex mt-auto ms-auto px-0"
+              title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
+              style={{ cursor: 'help' }}
+            >
+              <FontAwesomeIcon
+                className="mb-auto pb-1 text-dark ms-auto pe-1"
+                icon={faCircleQuestion}
+              />
+            </Col>
+          </Form.Label>
           <ListGroup className="w-100 stepList pe-0">
-            <ListGroupItem className="rounded-radius d-flex my-1 border rounded-top rounded-bottom">
+            <ListGroupItem className="rounded-radius d-flex my-1 py-1 px-1 border rounded-top rounded-bottom">
               <Form.Control
                 size="sm"
                 className="my-auto border-0"
-                placeholder="Add Your Own Keyword"
+                placeholder="add link..."
                 value={tempText}
                 onChange={(e) => settempText(e.target.value)}
               />
@@ -125,21 +137,22 @@ function RSS({ setting }) {
                   settempText('')
                 }}
                 icon={faCirclePlus}
-                className="my-auto mx-3"
+                className="my-auto mx-3 text-lightgreen"
                 style={{
                   cursor: 'pointer',
                 }}
+                title="add link"
               />
             </ListGroupItem>
             {datas.links.map(({ link }, i) => (
               <ListGroupItem
                 key={i}
-                className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
+                className="rounded-radius d-flex my-1 py-1 px-1 border rounded-top rounded-bottom"
               >
                 <Form.Control
                   size="sm"
                   className="my-auto border-0"
-                  placeholder="Add Your Own Keyword"
+                  placeholder="add link..."
                   value={link}
                   onChange={(e) => {
                     handleDataChange(
@@ -162,7 +175,8 @@ function RSS({ setting }) {
                     )
                   }}
                   icon={faCircleMinus}
-                  className="my-auto mx-3"
+                  className="my-auto mx-3 text-lightred"
+                  title="remove"
                   style={{
                     cursor: 'pointer',
                   }}
@@ -171,9 +185,9 @@ function RSS({ setting }) {
             ))}
           </ListGroup>
         </Row>
-        <Row className="p-3 d-flex flex-column">
-          <Col xs={12} className="px-0">
-            <Form.Label className="px-2 mb-0">Language</Form.Label>
+        <Row className="p-3 pb-1 d-flex">
+          <Col xs={6} className="px-0">
+            <Form.Label className="px-1 mb-0">Language</Form.Label>
             <Form.Select
               value={datas.language}
               onChange={(e) => handleDataChange('language', e.target.value)}
@@ -186,10 +200,8 @@ function RSS({ setting }) {
               ))}
             </Form.Select>
           </Col>
-        </Row>
-        <Row className="p-3 d-flex flex-column">
-          <Col xs={12} className="px-0">
-            <Form.Label className="px-2 mb-0">Category</Form.Label>
+          <Col xs={6} className="px-0 ps-1">
+            <Form.Label className="px-1 mb-0">Category</Form.Label>
             <Form.Select
               value={datas.category}
               onChange={(e) => handleDataChange('category', e.target.value)}
@@ -209,7 +221,7 @@ function RSS({ setting }) {
             height: '61%',
           }}
         >
-          <Form.Label className="mb-0">Prompt</Form.Label>
+          <Form.Label className="mb-0 px-1">Prompt</Form.Label>
           <Form.Control
             className="flex-fill"
             as="textarea"
@@ -228,7 +240,7 @@ function RSS({ setting }) {
           <div className="d-flex w-100 mt-2 px-0">
             {datas.links.length ? (
               <Button
-                variant="outline-wom ms-auto"
+                variant="wom ms-auto"
                 id="button-addon2"
                 title="Generate Article"
                 onClick={async () => {
@@ -253,7 +265,7 @@ function RSS({ setting }) {
               </Button>
             ) : (
               <Button
-                variant="outline-wom ms-auto"
+                variant="wom ms-auto"
                 id="button-addon2"
                 title="Generate Article"
                 disabled
@@ -261,18 +273,6 @@ function RSS({ setting }) {
                 Generate
               </Button>
             )}
-            <Col xs={2} className="ms-3 d-flex">
-              <Button
-                className="d-flex w-100 justify-content-center"
-                variant="wom"
-                onClick={() => {
-                  handleStV()
-                }}
-                disabled={!datas.title || !datas.heading.length}
-              >
-                Next
-              </Button>
-            </Col>
           </div>
         </Row>
       </Col>
@@ -282,7 +282,7 @@ function RSS({ setting }) {
             <Row style={{ zIndex: '2' }} className="mb-3">
               <InputGroup className="px-0 py-1 searchBar">
                 <Form.Label className="h-100 px-3 d-flex mb-0">
-                  <h4 className="my-auto">Title</h4>
+                  <h5 className="my-auto text-grey">Title</h5>
                 </Form.Label>
                 <Form.Control
                   value={tempTitleText}
@@ -290,7 +290,7 @@ function RSS({ setting }) {
                   placeholder="Enter Title..."
                 />
                 <Button
-                  variant="outline-wom"
+                  variant="wom"
                   id="button-addon2"
                   title="generate"
                   onClick={async () => {
@@ -311,7 +311,7 @@ function RSS({ setting }) {
                     setdatas(res.setting)
                   }}
                 >
-                  Generate
+                  Generate Headings
                 </Button>
               </InputGroup>
             </Row>
@@ -325,11 +325,13 @@ function RSS({ setting }) {
           </Row>
           {datas.title && (
             <>
-              <Form.Label className="px-2 mb-0 h4">Heading</Form.Label>
+              <Form.Label className="p-2 mb-0 h5 text-grey">
+                Headings
+              </Form.Label>
               <Row
                 className="ps-3 d-flex flex-column"
                 style={{
-                  height: '60vh',
+                  height: '55vh',
                   zIndex: '2',
                 }}
               >
@@ -354,7 +356,7 @@ function RSS({ setting }) {
                         settempHeadText('')
                       }}
                       icon={faCirclePlus}
-                      className="my-auto mx-3"
+                      className="my-auto mx-3 text-lightgreen"
                       style={{
                         cursor: 'pointer',
                       }}
@@ -399,9 +401,9 @@ function RSS({ setting }) {
                                       dragSnapshot.isDragging,
                                       dragProvided.draggableProps.style
                                     ),
-                                    height: '90px',
-                                    maxHeight: '90px',
-                                    minHeight: '90px',
+                                    height: '50px',
+                                    maxHeight: '50px',
+                                    minHeight: '50px',
                                     // minWidth: '32%',
                                     // height: '40vh',
                                   }}
@@ -438,7 +440,7 @@ function RSS({ setting }) {
                                       settempHeadText('')
                                     }}
                                     icon={faCircleMinus}
-                                    className="my-auto mx-3"
+                                    className="my-auto mx-3 text-lightred"
                                     style={{
                                       cursor: 'pointer',
                                     }}
@@ -454,20 +456,22 @@ function RSS({ setting }) {
                   </DragDropContext>
                 </ListGroup>
               </Row>
+              <Row>
+                <Col className="ms-3 d-flex justify-content-end">
+                  <Button
+                    className="d-flex w-25 justify-content-center"
+                    variant="dark"
+                    onClick={() => {
+                      handleStV()
+                    }}
+                    disabled={!datas.title || !datas.heading.length}
+                  >
+                    Next step
+                  </Button>
+                </Col>
+              </Row>
             </>
           )}
-          <Row
-            className="d-flex mt-auto"
-            title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
-            style={{ cursor: 'help' }}
-          >
-            <Col xs={12} className="my-auto text-grey">
-              <FontAwesomeIcon icon={faLightbulb} />
-              &ensp; If you are not satisfied with the result, you can click the
-              Generate button again or go back to the previous step to generate
-              again.
-            </Col>
-          </Row>
         </div>
       </Col>
     </Row>
@@ -507,13 +511,22 @@ function Speed({ setting }) {
         </div>
       )}
       <Col xs={5}>
-        <Row
-          className="p-3"
-          style={{
-            height: '11%',
-          }}
-        >
-          <Form.Label className="mb-0">Topic</Form.Label>
+        <Row className="p-3">
+          <Form.Label className="d-flex row mb-0 pe-0">
+            <Col xs={10} className="px-0">
+              Topic
+            </Col>
+            <Col
+              className="d-flex mt-auto ms-auto px-0"
+              title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
+              style={{ cursor: 'help' }}
+            >
+              <FontAwesomeIcon
+                className="mb-auto pb-1 text-dark ms-auto pe-1"
+                icon={faCircleQuestion}
+              />
+            </Col>
+          </Form.Label>
           <InputGroup className="px-0 py-1 searchBar">
             <Form.Control
               value={datas.topic}
@@ -546,14 +559,9 @@ function Speed({ setting }) {
             </Button>
           </InputGroup>
         </Row>
-        <Row
-          className="p-3 d-flex flex-column"
-          style={{
-            height: '11%',
-          }}
-        >
-          <Col xs={12} className="px-0">
-            <Form.Label className="px-2 mb-0">Language</Form.Label>
+        <Row className="px-3 d-flex w-100">
+          <Col xs={6} className="px-0 my-auto">
+            <Form.Label className="px-1 mb-0">Language</Form.Label>
             <Form.Select
               value={datas.language}
               onChange={(e) => handleDataChange('language', e.target.value)}
@@ -566,15 +574,8 @@ function Speed({ setting }) {
               ))}
             </Form.Select>
           </Col>
-        </Row>
-        <Row
-          className="p-3 d-flex flex-column"
-          style={{
-            height: '11%',
-          }}
-        >
-          <Col xs={12} className="px-0">
-            <Form.Label className="px-2 mb-0">Category</Form.Label>
+          <Col xs={6} className="px-0">
+            <Form.Label className="px-1 mb-0">Category</Form.Label>
             <Form.Select
               value={datas.category}
               onChange={(e) => handleDataChange('category', e.target.value)}
@@ -693,18 +694,6 @@ function Speed({ setting }) {
               }
             />
           </Row>
-          <Row
-            className="d-flex"
-            title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
-            style={{ cursor: 'help' }}
-          >
-            <Col xs={12} className="my-auto text-grey">
-              <FontAwesomeIcon icon={faLightbulb} />
-              &ensp; If you are not satisfied with the result, you can click the
-              Generate button again or go back to the previous step to generate
-              again.
-            </Col>
-          </Row>
         </div>
       </Col>
     </Row>
@@ -768,33 +757,20 @@ function Regular({ setting }) {
           <Row>
             {step.now ? (
               <>
-                <>
-                  <Col
-                    xs={8}
-                    className="my-auto text-grey"
-                    title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
-                    style={{ cursor: 'help' }}
+                <Col xs={2} className="ms-auto d-flex">
+                  <Button
+                    className="d-flex w-100 justify-content-center"
+                    variant="secondary"
+                    onClick={() => {
+                      setstep({
+                        now: step.now - 1,
+                        max: step.max,
+                      })
+                    }}
                   >
-                    <FontAwesomeIcon icon={faLightbulb} />
-                    &ensp; If you are not satisfied with the result, you can
-                    click the Generate button again or go back to the previous
-                    step to generate again.
-                  </Col>
-                  <Col xs={2} className="ms-auto d-flex">
-                    <Button
-                      className="d-flex w-100 justify-content-center"
-                      variant="secondary"
-                      onClick={() => {
-                        setstep({
-                          now: step.now - 1,
-                          max: step.max,
-                        })
-                      }}
-                    >
-                      Back
-                    </Button>
-                  </Col>
-                </>
+                    Back
+                  </Button>
+                </Col>
                 <Col xs={2} className="ms-auto d-flex">
                   <Button
                     className="d-flex w-100 justify-content-center"
@@ -980,13 +956,24 @@ function SettingModal({ setting }) {
               height: '15%',
             }}
           >
-            <Col>
-              <Form.Label>Topic</Form.Label>
-              <Form.Control
-                value={datas.topic}
-                onChange={(e) => handleDataChange('topic', e.target.value)}
-              />
-            </Col>
+            <Form.Label className="d-flex row">
+              <Col xs={11}>Topic</Col>
+              <Col
+                xs={1}
+                className="d-flex mt-auto ms-auto px-0"
+                title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
+                style={{ cursor: 'help' }}
+              >
+                <FontAwesomeIcon
+                  className="mb-auto pb-1 text-dark ms-auto pe-1"
+                  icon={faCircleQuestion}
+                />
+              </Col>
+            </Form.Label>
+            <Form.Control
+              value={datas.topic}
+              onChange={(e) => handleDataChange('topic', e.target.value)}
+            />
           </Row>
           <Row
             style={{
@@ -1200,7 +1187,7 @@ function SettingModal({ setting }) {
                   settempText('')
                 }}
                 icon={faCirclePlus}
-                className="h-50 my-auto mx-3"
+                className="h-50 my-auto mx-3 text-lightgreen"
                 style={{
                   cursor: 'pointer',
                 }}
@@ -1334,7 +1321,7 @@ function SettingModal({ setting }) {
                   settempText('')
                 }}
                 icon={faCirclePlus}
-                className="h-50 my-auto mx-3"
+                className="h-50 my-auto mx-3 text-lightgreen"
                 style={{
                   cursor: 'pointer',
                 }}
@@ -1709,17 +1696,6 @@ function SettingModal({ setting }) {
                 <Row>
                   {step.now ? (
                     <>
-                      <Col
-                        xs={8}
-                        className="my-auto text-grey"
-                        title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
-                        style={{ cursor: 'help' }}
-                      >
-                        <FontAwesomeIcon icon={faLightbulb} />
-                        &ensp; If you are not satisfied with the result, you can
-                        click the Generate button again or go back to the
-                        previous step to generate again.
-                      </Col>
                       <Col xs={2} className="ms-auto d-flex">
                         <Button
                           className="d-flex w-100 justify-content-center"
@@ -1963,18 +1939,6 @@ function SettingModal({ setting }) {
                       })
                     }
                   />
-                </Row>
-                <Row
-                  className="d-flex"
-                  title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
-                  style={{ cursor: 'help' }}
-                >
-                  <Col xs={12} className="my-auto text-grey">
-                    <FontAwesomeIcon icon={faLightbulb} />
-                    &ensp; If you are not satisfied with the result, you can
-                    click the Generate button again or go back to the previous
-                    step to generate again.
-                  </Col>
                 </Row>
               </div>
             </Col>

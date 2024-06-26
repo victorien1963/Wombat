@@ -70,6 +70,26 @@
   color: #979797;
 }
 
+.text-lightred {
+  color: #ce9e9e;
+  cursor: pointer;
+}
+
+.text-lightred:hover {
+  color: #be5d5d;
+  cursor: pointer;
+}
+
+.text-lightgreen {
+  color: #9ecea6;
+  cursor: pointer;
+}
+
+.text-lightgreen:hover {
+  color: #48c55d ;
+  cursor: pointer;
+}
+
 .text-wom-light {
   color: #a54210;
 }
