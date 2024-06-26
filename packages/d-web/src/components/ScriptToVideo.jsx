@@ -222,14 +222,14 @@ function ScriptToVideo({ setting }) {
           height: '80vh',
         }}
       >
-        <Row style={{ zIndex: '1' }} className="position-absolute w-100 d-flex">
+        <Row style={{ zIndex: '0' }} className="position-absolute w-100 d-flex">
           <Image
             className="position-absolute w-50 mx-auto"
             style={{ opacity: '.15', left: '25%', userSelect: 'none' }}
             src={logoFull}
           />
         </Row>
-        <Row className="w-100">
+        <Row className="w-100" style={{ zIndex: '3' }}>
           <Col xs={6} className="d-flex h-100">
             <div className="h-100 w-100 d-flex flex-column">
               <Form.Label className="w-100 d-flex">
@@ -258,7 +258,9 @@ function ScriptToVideo({ setting }) {
                 {loading.Script ? (
                   <div className="h-100 w-100 d-flex justify-content-center border rounded">
                     <Spinner size="sm" className="my-auto" />
-                    <span className="my-auto">&ensp;資料載入中</span>
+                    <span className="my-auto text-grey">
+                      &ensp;Script Generating...
+                    </span>
                   </div>
                 ) : (
                   <Form.Control
@@ -334,7 +336,9 @@ function ScriptToVideo({ setting }) {
                 {loading.Video === 1 ? (
                   <div className="h-100 w-100 d-flex justify-content-center">
                     <Spinner size="sm" className="my-auto" />
-                    <span className="my-auto">&ensp;資料載入中</span>
+                    <span className="my-auto text-grey">
+                      &ensp;Video Generating...
+                    </span>
                   </div>
                 ) : loading.Video === 2 ? (
                   <video
