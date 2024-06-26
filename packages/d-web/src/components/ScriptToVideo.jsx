@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import apiServices from '../services/apiServices'
 import { logoFull } from '../asset'
-import Tim from '../asset/Tim.mp4'
+import Generated from '../asset/Generated.mp4'
 import LoadingButton from './LoadingButton'
 // import { AuthContext } from './ContextProvider'
 
@@ -190,8 +190,8 @@ function ScriptToVideo({ setting }) {
     // const url = URL.createObjectURL(Tim)
     // const file = new File([blob], video.name)
     const link = document.createElement('a')
-    link.setAttribute('href', Tim)
-    link.setAttribute('download', 'Tim.mp4')
+    link.setAttribute('href', Generated)
+    link.setAttribute('download', 'Generated.mp4')
     document.body.appendChild(link)
     link.click()
     link.remove()
@@ -345,7 +345,7 @@ function ScriptToVideo({ setting }) {
                     controls
                   >
                     <track kind="captions" />
-                    <source src={Tim} />
+                    <source src={Generated} />
                   </video>
                 ) : (
                   <div />
