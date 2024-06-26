@@ -24,7 +24,7 @@ function ScriptToVideo({ setting }) {
   //   const navigate = useNavigate()
   const { show, handleClose, handleBack, article_id } = setting
 
-  const [datas, setdatas] = useState({
+  const initDatas = {
     topic: '',
     category: '',
     language: 'English',
@@ -65,6 +65,7 @@ function ScriptToVideo({ setting }) {
     Pkeyword: [],
     Skeyword: [],
     title: '',
+    Script: '',
     setting: {},
     headings: [
       [
@@ -101,7 +102,8 @@ function ScriptToVideo({ setting }) {
       Text: '',
       status: 'pending',
     },
-  })
+  }
+  const [datas, setdatas] = useState(initDatas)
 
   const [loading, setloading] = useState({
     Script: false,
@@ -145,6 +147,13 @@ function ScriptToVideo({ setting }) {
   }
   useEffect(() => {
     if (article_id && show) getArticle()
+    if (!show) {
+      setdatas(initDatas)
+      setloading({
+        Script: false,
+        Video: 0,
+      })
+    }
   }, [article_id, show])
 
   const handleDataChange = (key, value) =>
