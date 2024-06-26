@@ -154,7 +154,7 @@ function ScriptToVideo({ setting }) {
   const handleStV = async () => {
     setloading({
       ...loading,
-      Video: true,
+      Video: 1,
     })
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
     await delay(5000)

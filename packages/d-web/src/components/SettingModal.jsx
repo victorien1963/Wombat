@@ -145,7 +145,9 @@ function RSS({ setting }) {
             >
               <option value="">Select a language</option>
               {['English', '中文'].map((l) => (
-                <option value={l}>{l}</option>
+                <option value={l} key={l}>
+                  {l}
+                </option>
               ))}
             </Form.Select>
           </Col>
@@ -159,7 +161,9 @@ function RSS({ setting }) {
             >
               <option value="">Select a category</option>
               {categories.map((category) => (
-                <option value={category}>{category}</option>
+                <option value={category} key={category}>
+                  {category}
+                </option>
               ))}
             </Form.Select>
           </Col>
@@ -285,7 +289,7 @@ function RSS({ setting }) {
                     <FontAwesomeIcon
                       onClick={() => {
                         handleDataChange('heading', [
-                          tempText,
+                          tempHeadText,
                           ...datas.heading,
                         ])
                         settempHeadText('')
@@ -483,7 +487,9 @@ function Speed({ setting }) {
             >
               <option value="">Select a language</option>
               {['English', '中文'].map((l) => (
-                <option value={l}>{l}</option>
+                <option value={l} key={l}>
+                  {l}
+                </option>
               ))}
             </Form.Select>
           </Col>
@@ -502,7 +508,9 @@ function Speed({ setting }) {
             >
               <option value="">Select a category</option>
               {categories.map((category) => (
-                <option value={category}>{category}</option>
+                <option value={category} key={category}>
+                  {category}
+                </option>
               ))}
             </Form.Select>
           </Col>
@@ -920,7 +928,9 @@ function SettingModal({ setting }) {
               >
                 <option value="">Select a language</option>
                 {['English', '中文'].map((l) => (
-                  <option value={l}>{l}</option>
+                  <option value={l} key={l}>
+                    {l}
+                  </option>
                 ))}
               </Form.Select>
             </Col>
@@ -932,7 +942,9 @@ function SettingModal({ setting }) {
               >
                 <option value="">Select a category</option>
                 {categories.map((category) => (
-                  <option value={category}>{category}</option>
+                  <option value={category} key={category}>
+                    {category}
+                  </option>
                 ))}
               </Form.Select>
             </Col>
