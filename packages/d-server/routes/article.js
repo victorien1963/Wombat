@@ -111,7 +111,7 @@ router.put('/rss/:article_id', async (req, res) => {
   let { setting } = article
   console.log(article)
 
-  if (action === 'rss') {
+  if (action === 'title') {
     const { links } = datas
     const articles = []
     await links.reduce(async (prev, { link }) => {
@@ -137,10 +137,47 @@ router.put('/rss/:article_id', async (req, res) => {
       return []
     }, [])
     await gcr([
-      { role: 'user', content: `請摘錄以下文章：${articles[0]}，包含一個主題和5個大綱，大綱請以「1.」「2.」作為項目符號，大綱每項不超過15個字，${datas.language ? `，請以${datas.language}撰寫全文。` : ''}` }
+      { role: 'user', content: `請為以下文章：${articles[0]}下一個主題，回覆不超過15個字，${datas.language ? `，請以${datas.language}回覆。` : ''}` }
     ], () => {}, async (chat) => {
       console.log(chat)
-      const title = chat.substring(0, chat.indexOf('1.'))
+      const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
+        ...setting,
+        ...datas,
+        heading: [],
+        title: chat,
+      }, req.params.article_id])
+      return res.send(updated)
+    }, 2000, 1)
+  } else if (action === 'rss') {
+    const { links } = datas
+    const articles = []
+    await links.reduce(async (prev, { link }) => {
+      if (prev) await prev
+      const res = await apiServices.send({
+        url: link,
+        method: 'get'
+      })
+      const index = res.indexOf('<section class="mx-4 p-0 mt-4">')
+      let conc = res.substring(index, res.indexOf('</section>', index) + 10)
+      conc = conc.replaceAll(/\s+/g, ' ')
+      conc = conc.replaceAll(/\n+/g, '\n')
+      conc = conc.replaceAll(/\r+/g, '\r')
+      console.log('------------------')
+      conc = conc.replaceAll(/<[^>]+>/g, '')
+      conc = conc.replaceAll(/\([^;]+;/g, '')
+      conc = conc.replaceAll(/a.src[^;]+;/g, '')
+      conc = conc.replaceAll(/window[^;]+;/g, '')
+      conc = conc.replaceAll(/a.async[^;]+;/g, '')
+      conc = conc.replaceAll(/googletag[^;]+;/g, '')
+      conc = conc.replaceAll(/-----[^-]+-----/g, '')
+      articles.push(conc)
+      return []
+    }, [])
+    await gcr([
+      { role: 'user', content: `請以${datas.title}為主題並摘錄以下文章：${articles[0]}，包含5個大綱，大綱請以「1.」「2.」作為項目符號，大綱每項不超過15個字，${datas.language ? `，請以${datas.language}撰寫全文。` : ''}` }
+    ], () => {}, async (chat) => {
+      console.log(chat)
+      // const title = chat.substring(0, chat.indexOf('1.'))
       const heading = [
         chat.substring(chat.indexOf('1.') + 2, chat.indexOf('2.')),
         chat.substring(chat.indexOf('2.') + 2, chat.indexOf('3.')),
@@ -148,12 +185,12 @@ router.put('/rss/:article_id', async (req, res) => {
         chat.substring(chat.indexOf('4.') + 2, chat.indexOf('5.')),
         chat.substring(chat.indexOf('5.') + 2),
       ]
-      console.log(title)
+      // console.log(title)
       console.log(heading)
       const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $1 WHERE article_id = $2 RETURNING *', [{
         ...setting,
         ...datas,
-        title,
+        // title,
         heading,
         step: {
           now: 5,
