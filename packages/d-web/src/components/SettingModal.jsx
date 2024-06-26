@@ -17,7 +17,11 @@ import {
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCirclePlus, faLightbulb } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCircleMinus,
+  faCirclePlus,
+  faLightbulb,
+} from '@fortawesome/free-solid-svg-icons'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { logoFull } from '../asset'
 import apiServices from '../services/apiServices'
@@ -60,13 +64,11 @@ function RSS({ setting }) {
     handleDataChange,
     article_id,
     setstep,
-    copyTarget,
-    handleCopy,
     handleStV,
   } = setting
   const [tempText, settempText] = useState('')
+  const [tempTitleText, settempTitleText] = useState('')
   const [tempHeadText, settempHeadText] = useState('')
-  console.log(datas)
 
   useEffect(() => {
     handleDataChange(
@@ -80,6 +82,10 @@ function RSS({ setting }) {
       } and suitable for use on the TextToVideo platform to generate a video.`
     )
   }, [datas.heading, datas.title])
+
+  useEffect(() => {
+    if (datas.title) settempTitleText(datas.title)
+  }, [datas.title])
 
   return (
     <Row className="w-100 position-relative">
@@ -99,9 +105,9 @@ function RSS({ setting }) {
         </div>
       )}
       <Col className="overflow-scroll h-100" xs={5}>
-        <Row className="p-3 d-flex flex-column">
+        <Row className="d-flex flex-column p-3">
           <Form.Label className="mb-0">Topic</Form.Label>
-          <ListGroup className="w-100 stepList">
+          <ListGroup className="w-100 stepList pe-0">
             <ListGroupItem className="rounded-radius d-flex my-1 border rounded-top rounded-bottom">
               <Form.Control
                 size="sm"
@@ -125,13 +131,42 @@ function RSS({ setting }) {
                 }}
               />
             </ListGroupItem>
-            {datas.links.map(({ link }) => (
+            {datas.links.map(({ link }, i) => (
               <ListGroupItem
-                key={link}
-                action
+                key={i}
                 className="rounded-radius d-flex my-1 border rounded-top rounded-bottom"
               >
-                <span className="my-auto">{link}</span>
+                <Form.Control
+                  size="sm"
+                  className="my-auto border-0"
+                  placeholder="Add Your Own Keyword"
+                  value={link}
+                  onChange={(e) => {
+                    handleDataChange(
+                      'links',
+                      datas.links.map((l, index) =>
+                        index === i
+                          ? {
+                              link: e.target.value,
+                            }
+                          : l
+                      )
+                    )
+                  }}
+                />
+                <FontAwesomeIcon
+                  onClick={() => {
+                    handleDataChange(
+                      'links',
+                      datas.links.filter((l, index) => index !== i)
+                    )
+                  }}
+                  icon={faCircleMinus}
+                  className="my-auto mx-3"
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                />
               </ListGroupItem>
             ))}
           </ListGroup>
@@ -191,56 +226,51 @@ function RSS({ setting }) {
             placeholder="Start by entering your prompt to generate article..."
           />
           <div className="d-flex w-100 mt-2 px-0">
-            {copyTarget && (
+            {datas.links.length ? (
               <Button
-                variant="outline-wom"
-                className="d-flex my-auto ms-auto"
-                title="Apply & copy this template to your project."
-                onClick={handleCopy}
+                variant="outline-wom ms-auto"
+                id="button-addon2"
+                title="Generate Article"
+                onClick={async () => {
+                  setloading(true)
+                  const res = await apiServices.data({
+                    path: `article/rss/${article_id}`,
+                    method: 'put',
+                    data: {
+                      datas,
+                      action: 'title',
+                    },
+                  })
+                  setloading(false)
+                  setdatas(res.setting)
+                  setstep({
+                    now: 6,
+                    max: 6,
+                  })
+                }}
               >
-                Apply this template
+                Generate
+              </Button>
+            ) : (
+              <Button
+                variant="outline-wom ms-auto"
+                id="button-addon2"
+                title="Generate Article"
+                disabled
+              >
+                Generate
               </Button>
             )}
-            <Button
-              variant="outline-wom ms-auto"
-              id="button-addon2"
-              title="Generate Article"
-              onClick={async () => {
-                setloading(true)
-                const res = await apiServices.data({
-                  path: `article/rss/${article_id}`,
-                  method: 'put',
-                  data: {
-                    datas,
-                    action: 'rss',
-                  },
-                })
-                setloading(false)
-                setdatas(res.setting)
-                setstep({
-                  now: 6,
-                  max: 6,
-                })
-              }}
-            >
-              Generate Article
-            </Button>
             <Col xs={2} className="ms-3 d-flex">
               <Button
                 className="d-flex w-100 justify-content-center"
                 variant="wom"
                 onClick={() => {
                   handleStV()
-                  // saveDatas()
-                  // if (step.now) {
-                  //   setstep({
-                  //     now: step.now,
-                  //   })
-                  // }
                 }}
-                // disabled={!steps[step.now]}
+                disabled={!datas.title || !datas.heading.length}
               >
-                Save
+                Next
               </Button>
             </Col>
           </div>
@@ -248,15 +278,44 @@ function RSS({ setting }) {
       </Col>
       <Col xs={7} className="d-flex h-100">
         <div className="h-100 w-100 d-flex flex-column">
-          <Row style={{ zIndex: '2' }} className="mb-3">
-            <Form.Control
-              className="fw-bold p-0 ps-2 border-0 fs-3"
-              value={datas.title}
-              onChange={(e) => {
-                handleDataChange('title', e.target.value)
-              }}
-            />
-          </Row>
+          {datas.title && (
+            <Row style={{ zIndex: '2' }} className="mb-3">
+              <InputGroup className="px-0 py-1 searchBar">
+                <Form.Label className="h-100 px-3 d-flex mb-0">
+                  <h4 className="my-auto">Title</h4>
+                </Form.Label>
+                <Form.Control
+                  value={tempTitleText}
+                  onChange={(e) => settempTitleText(e.target.value)}
+                  placeholder="Enter Title..."
+                />
+                <Button
+                  variant="outline-wom"
+                  id="button-addon2"
+                  title="generate"
+                  onClick={async () => {
+                    setloading(true)
+                    handleDataChange('title', tempTitleText)
+                    const res = await apiServices.data({
+                      path: `article/rss/${article_id}`,
+                      method: 'put',
+                      data: {
+                        datas: {
+                          ...datas,
+                          title: tempTitleText,
+                        },
+                        action: 'rss',
+                      },
+                    })
+                    setloading(false)
+                    setdatas(res.setting)
+                  }}
+                >
+                  Generate
+                </Button>
+              </InputGroup>
+            </Row>
+          )}
           <Row style={{ zIndex: '1' }} className="w-100 d-flex">
             <Image
               className="position-absolute w-50 mx-auto"
@@ -268,14 +327,14 @@ function RSS({ setting }) {
             <>
               <Form.Label className="px-2 mb-0 h4">Heading</Form.Label>
               <Row
-                className="p-3 d-flex flex-column"
+                className="ps-3 d-flex flex-column"
                 style={{
                   height: '60vh',
                   zIndex: '2',
                 }}
               >
                 <ListGroup
-                  className="h-100 w-100 stepList overflow-scroll"
+                  className="h-100 w-100 stepList overflow-scroll pe-0"
                   title="上下拖曳以排序"
                 >
                   <ListGroupItem className="rounded-radius d-flex my-1 border rounded-top rounded-bottom">
@@ -368,6 +427,20 @@ function RSS({ setting }) {
                                           j === i ? e.target.value : h
                                         )
                                       )
+                                    }}
+                                  />
+                                  <FontAwesomeIcon
+                                    onClick={() => {
+                                      handleDataChange(
+                                        'heading',
+                                        datas.heading.filter((h, j) => i !== j)
+                                      )
+                                      settempHeadText('')
+                                    }}
+                                    icon={faCircleMinus}
+                                    className="my-auto mx-3"
+                                    style={{
+                                      cursor: 'pointer',
                                     }}
                                   />
                                   {/* </ListGroupItem> */}
