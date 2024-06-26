@@ -100,7 +100,7 @@ function RSS({ setting }) {
         >
           <div className="h-100 w-100 d-flex justify-content-center">
             <Spinner size="sm" className="my-auto" />
-            <span className="my-auto">&ensp;資料載入中</span>
+            <span className="my-auto">&ensp;Generating...</span>
           </div>
         </div>
       )}
@@ -316,7 +316,7 @@ function RSS({ setting }) {
               </InputGroup>
             </Row>
           )}
-          <Row style={{ zIndex: '1' }} className="w-100 d-flex">
+          <Row style={{ zIndex: '0' }} className="w-100 d-flex">
             <Image
               className="position-absolute w-50 mx-auto"
               style={{ opacity: '.15' }}
@@ -506,7 +506,7 @@ function Speed({ setting }) {
         >
           <div className="h-100 w-100 d-flex justify-content-center">
             <Spinner size="sm" className="my-auto" />
-            <span className="my-auto">&ensp;資料載入中</span>
+            <span className="my-auto">&ensp;Generating...</span>
           </div>
         </div>
       )}
@@ -670,7 +670,7 @@ function Speed({ setting }) {
               }}
             />
           </Row>
-          <Row style={{ zIndex: '1' }} className="w-100 d-flex">
+          <Row style={{ zIndex: '0' }} className="w-100 d-flex">
             <Image
               className="position-absolute w-50 mx-auto"
               style={{ opacity: '.15' }}
@@ -748,7 +748,7 @@ function Regular({ setting }) {
             {loading ? (
               <div className="h-100 w-100 d-flex justify-content-center">
                 <Spinner size="sm" className="my-auto" />
-                <span className="my-auto">&ensp;資料載入中</span>
+                <span className="my-auto">&ensp;Generating...</span>
               </div>
             ) : (
               steps[step.now].form
@@ -1450,7 +1450,7 @@ function SettingModal({ setting }) {
               }}
             />
           </Row>
-          <Row style={{ zIndex: '1' }} className="w-100 d-flex">
+          <Row style={{ zIndex: '0' }} className="w-100 d-flex">
             <Image
               className="position-absolute w-50 mx-auto"
               style={{ opacity: '.15' }}
