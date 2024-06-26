@@ -11,15 +11,18 @@ import PropTypes from 'prop-types'
 // import { logoFull } from '../asset'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faLightbulb } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import apiServices from '../services/apiServices'
 import { logoFull } from '../asset'
 import Tim from '../asset/Tim.mp4'
+import LoadingButton from './LoadingButton'
 // import { AuthContext } from './ContextProvider'
 
 function ScriptToVideo({ setting }) {
   //   const { auth } = useContext(AuthContext)
   //   const navigate = useNavigate()
-  const { show, handleClose, article_id } = setting
+  const { show, handleClose, handleBack, article_id } = setting
 
   const [datas, setdatas] = useState({
     topic: '',
@@ -154,7 +157,7 @@ function ScriptToVideo({ setting }) {
   const handleStV = async () => {
     setloading({
       ...loading,
-      Video: true,
+      Video: 1,
     })
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
     await delay(5000)
@@ -162,6 +165,27 @@ function ScriptToVideo({ setting }) {
       ...loading,
       Video: 2,
     })
+  }
+
+  const [btnText, setbtnText] = useState('Upload to Youtube')
+  const reUpload = async () => {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+    await delay(5000)
+    setbtnText('Upload to Youtube')
+  }
+  useEffect(() => {
+    if (btnText !== 'Upload to Youtube') reUpload()
+  }, [btnText])
+
+  const handleDownload = async () => {
+    // const url = URL.createObjectURL(Tim)
+    // const file = new File([blob], video.name)
+    const link = document.createElement('a')
+    link.setAttribute('href', Tim)
+    link.setAttribute('download', 'Tim.mp4')
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
   }
 
   return (
@@ -246,6 +270,24 @@ function ScriptToVideo({ setting }) {
                   <Col xs={2} className="ms-3 d-flex">
                     <Button
                       className="d-flex w-100 justify-content-center"
+                      variant="secondary"
+                      onClick={() => {
+                        handleBack()
+                        // saveDatas()
+                        // if (step.now) {
+                        //   setstep({
+                        //     now: step.now,
+                        //   })
+                        // }
+                      }}
+                      // disabled={!steps[step.now]}
+                    >
+                      Back
+                    </Button>
+                  </Col>
+                  <Col xs={2} className="ms-3 d-flex">
+                    <Button
+                      className="d-flex w-100 justify-content-center"
                       variant="wom"
                       onClick={() => {
                         handleStV()
@@ -258,7 +300,7 @@ function ScriptToVideo({ setting }) {
                       }}
                       // disabled={!steps[step.now]}
                     >
-                      Save
+                      Next
                     </Button>
                   </Col>
                 </div>
@@ -278,7 +320,7 @@ function ScriptToVideo({ setting }) {
                 />
               </Row>
               <Row
-                className="pt-1 pb-3"
+                className="pt-1 pb-3 border rounded-radius"
                 style={{ zIndex: '2', height: '60vh' }}
               >
                 {loading.Video === 1 ? (
@@ -300,18 +342,41 @@ function ScriptToVideo({ setting }) {
                   <div />
                 )}
               </Row>
-              {/* <Row
-                className="d-flex"
-                title="If you are not satisfied with the result, you can click the Generate button again or go back to the previous step to generate again."
-                style={{ cursor: 'help' }}
-              >
-                <Col xs={12} className="my-auto text-grey">
-                  <FontAwesomeIcon icon={faLightbulb} />
-                  &ensp; If you are not satisfied with the result, you can click
-                  the Generate button again or go back to the previous step to
-                  generate again.
-                </Col>
-              </Row> */}
+              <Row className="p-3 d-flex flex-column">
+                <div className="d-flex w-100 mt-2 px-0">
+                  <LoadingButton
+                    variant="outline-wom ms-auto"
+                    id="button-addon2"
+                    title="Upload to Youtube"
+                    onClick={async () => {
+                      const delay = (ms) =>
+                        new Promise((resolve) => setTimeout(resolve, ms))
+                      await delay(5000)
+                      setbtnText(
+                        <div>
+                          <FontAwesomeIcon
+                            icon={faCircleCheck}
+                            className="my-auto fs-7 me-2"
+                          />
+                          Upload Success!
+                        </div>
+                      )
+                    }}
+                    btnText={btnText}
+                    disabled={loading.Video !== 2}
+                  />
+                  <Col xs={2} className="ms-3 d-flex">
+                    <Button
+                      className="d-flex w-100 justify-content-center"
+                      variant="wom"
+                      onClick={handleDownload}
+                      disabled={loading.Video !== 2}
+                    >
+                      Download
+                    </Button>
+                  </Col>
+                </div>
+              </Row>
             </div>
           </Col>
         </Row>

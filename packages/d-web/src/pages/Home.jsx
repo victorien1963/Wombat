@@ -1417,6 +1417,10 @@ function Home() {
           handleClose: () => {
             setshowStV(false)
           },
+          handleBack: () => {
+            setshowStV(false)
+            setshowSetting(true)
+          },
           article_id: id,
         }}
       />
