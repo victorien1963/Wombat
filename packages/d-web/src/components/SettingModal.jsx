@@ -63,12 +63,13 @@ function RSS({ setting }) {
     setdatas,
     handleDataChange,
     article_id,
-    setstep,
+    // setstep,
     handleStV,
   } = setting
   const [tempText, settempText] = useState('')
   const [tempTitleText, settempTitleText] = useState('')
   const [tempHeadText, settempHeadText] = useState('')
+  const [tempLinkText, settempLinkText] = useState('')
 
   useEffect(() => {
     handleDataChange(
@@ -221,7 +222,7 @@ function RSS({ setting }) {
             height: '61%',
           }}
         >
-          <Form.Label className="mb-0 px-1">Prompt</Form.Label>
+          {/* <Form.Label className="mb-0 px-1">Prompt</Form.Label>
           <Form.Control
             className="flex-fill"
             as="textarea"
@@ -236,8 +237,8 @@ function RSS({ setting }) {
             } and suitable for use on the TextToVideo platform to generate a video.`}
             onChange={(e) => handleDataChange('prompt', e.target.value)}
             placeholder="Start by entering your prompt to generate article..."
-          />
-          <div className="d-flex w-100 mt-2 px-0">
+          /> */}
+          <div className="d-flex w-100 mt-auto px-0">
             {datas.links.length ? (
               <Button
                 variant="wom ms-auto"
@@ -255,10 +256,10 @@ function RSS({ setting }) {
                   })
                   setloading(false)
                   setdatas(res.setting)
-                  setstep({
-                    now: 6,
-                    max: 6,
-                  })
+                  // setstep({
+                  //   now: 6,
+                  //   max: 6,
+                  // })
                 }}
               >
                 Generate
@@ -347,10 +348,17 @@ function RSS({ setting }) {
                       value={tempHeadText}
                       onChange={(e) => settempHeadText(e.target.value)}
                     />
+                    <Form.Control
+                      size="sm"
+                      className="my-auto border-0"
+                      placeholder="Add Reference Link"
+                      value={tempLinkText}
+                      onChange={(e) => settempLinkText(e.target.value)}
+                    />
                     <FontAwesomeIcon
                       onClick={() => {
                         handleDataChange('heading', [
-                          tempHeadText,
+                          `${tempHeadText}_${tempLinkText}`,
                           ...datas.heading,
                         ])
                         settempHeadText('')
@@ -386,7 +394,7 @@ function RSS({ setting }) {
                           {datas.heading.map((label, i) => (
                             <Draggable
                               className="w-100"
-                              key={`${label}`}
+                              key={`${i}`}
                               draggableId={`${label}`}
                               index={i}
                             >
@@ -421,12 +429,36 @@ function RSS({ setting }) {
                                     style={{
                                       backgroundColor: 'transparent',
                                     }}
-                                    value={label}
+                                    value={label.split('_')[0]}
                                     onChange={(e) => {
                                       handleDataChange(
                                         'heading',
                                         datas.heading.map((h, j) =>
-                                          j === i ? e.target.value : h
+                                          j === i
+                                            ? `${e.target.value}_${
+                                                h.split('_')[1] || ''
+                                              }`
+                                            : h
+                                        )
+                                      )
+                                    }}
+                                  />
+                                  <Form.Control
+                                    className="my-auto border-0"
+                                    style={{
+                                      backgroundColor: 'transparent',
+                                    }}
+                                    placeholder="Add Reference Link"
+                                    value={label.split('_')[1]}
+                                    onChange={(e) => {
+                                      handleDataChange(
+                                        'heading',
+                                        datas.heading.map((h, j) =>
+                                          j === i
+                                            ? `${h.split('_')[0] || ''}_${
+                                                e.target.value
+                                              }`
+                                            : h
                                         )
                                       )
                                     }}

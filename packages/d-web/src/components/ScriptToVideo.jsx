@@ -12,7 +12,7 @@ import PropTypes from 'prop-types'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faLightbulb } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faRoadBarrier } from '@fortawesome/free-solid-svg-icons'
 import apiServices from '../services/apiServices'
 import { logoFull } from '../asset'
 import Generated from '../asset/Generated.mp4'
@@ -267,10 +267,13 @@ function ScriptToVideo({ setting }) {
                     className="border-0"
                     style={{
                       backgroundColor: 'transparent',
+                      lineHeight: '30px',
                     }}
                     as="textarea"
-                    rows="19"
-                    value={datas.Script || ''}
+                    rows="13"
+                    value={
+                      datas.Script ? datas.Script.replaceAll('\n', '\n\n') : ''
+                    }
                     onChange={(e) => handleDataChange('Script', e.target.value)}
                   />
                 )}
@@ -333,7 +336,14 @@ function ScriptToVideo({ setting }) {
                 className="pt-1 pb-3 border rounded"
                 style={{ zIndex: '2', height: '60vh' }}
               >
-                {loading.Video === 1 ? (
+                <div className="h-100 w-100 d-flex justify-content-center">
+                  <FontAwesomeIcon
+                    icon={faRoadBarrier}
+                    className="my-auto fs-3 me-2"
+                  />
+                  <p className="my-auto fs-4">During Construction</p>
+                </div>
+                {/* {loading.Video === 1 ? (
                   <div className="h-100 w-100 d-flex justify-content-center">
                     <Spinner size="sm" className="my-auto" />
                     <span className="my-auto text-grey">
@@ -352,7 +362,7 @@ function ScriptToVideo({ setting }) {
                   </video>
                 ) : (
                   <div />
-                )}
+                )} */}
               </Row>
               <Row className="ps-3 d-flex flex-column">
                 <div className="d-flex w-100 mt-2 px-0">
@@ -375,14 +385,16 @@ function ScriptToVideo({ setting }) {
                       )
                     }}
                     btnText={btnText}
-                    disabled={loading.Video !== 2}
+                    // disabled={loading.Video !== 2}
+                    disabled
                   />
                   <Col xs={3} className="ms-3 d-flex pe-0">
                     <Button
                       className="d-flex w-100 justify-content-center"
                       variant="wom"
                       onClick={handleDownload}
-                      disabled={loading.Video !== 2}
+                      //   disabled={loading.Video !== 2}
+                      disabled
                     >
                       Download
                     </Button>
