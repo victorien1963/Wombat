@@ -24,6 +24,7 @@ function ScriptToVideo({ setting }) {
   //   const navigate = useNavigate()
   const { show, handleClose, handleBack, article_id } = setting
 
+  const [inited, setinited] = useState(false)
   const initDatas = {
     topic: '',
     category: '',
@@ -110,16 +111,35 @@ function ScriptToVideo({ setting }) {
     Video: 0,
   })
 
-  const handlePtS = async () => {
+  const saveArticle = async () => {
+    console.log('---realtime saving---')
+    await apiServices.data({
+      path: `/article/save/${article_id}`,
+      method: 'put',
+      data: {
+        ...datas,
+        StV: true,
+      },
+    })
+    console.log('---realtime saving completed---')
+  }
+  useEffect(() => {
+    if (article_id && show && inited) saveArticle()
+  }, [datas, article_id, show, inited])
+
+  const handlePtS = async (value) => {
+    setloading({
+      ...loading,
+      Script: true,
+    })
     const res = await apiServices.data({
       path: `article/rss/${article_id}`,
       method: 'put',
       data: {
-        datas,
+        datas: value,
         action: 'script',
       },
     })
-    console.log(res)
     setdatas({
       ...datas,
       ...res.setting,
@@ -128,6 +148,7 @@ function ScriptToVideo({ setting }) {
       ...loading,
       Script: false,
     })
+    setinited(true)
   }
 
   const getArticle = async () => {
@@ -139,16 +160,16 @@ function ScriptToVideo({ setting }) {
       ...datas,
       ...res.setting,
     })
-    setloading({
-      ...loading,
-      Script: true,
-    })
-    handlePtS()
+    if (!res.setting.Script) handlePtS(res.setting)
+    else {
+      setinited(true)
+    }
   }
   useEffect(() => {
     if (article_id && show) getArticle()
     if (!show) {
       setdatas(initDatas)
+      setinited(false)
       setloading({
         Script: false,
         Video: 0,
@@ -161,20 +182,19 @@ function ScriptToVideo({ setting }) {
       ...datas,
       [key]: value,
     })
-  console.log(datas)
 
-  const handleStV = async () => {
-    setloading({
-      ...loading,
-      Video: 1,
-    })
-    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-    await delay(5000)
-    setloading({
-      ...loading,
-      Video: 2,
-    })
-  }
+  // const handleStV = async () => {
+  //   setloading({
+  //     ...loading,
+  //     Video: 1,
+  //   })
+  //   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+  //   await delay(5000)
+  //   setloading({
+  //     ...loading,
+  //     Video: 2,
+  //   })
+  // }
 
   const [btnText, setbtnText] = useState('Upload to Youtube')
   const reUpload = async () => {
@@ -247,7 +267,7 @@ function ScriptToVideo({ setting }) {
                         ...loading,
                         Script: true,
                       })
-                      handlePtS()
+                      handlePtS(datas)
                     }}
                   >
                     Regenerate Script
@@ -302,18 +322,20 @@ function ScriptToVideo({ setting }) {
                     <Button
                       className="d-flex w-100 justify-content-center"
                       variant="dark"
-                      onClick={() => {
-                        handleStV()
+                      onClick={async () => {
+                        // handleStV()
                         // saveDatas()
                         // if (step.now) {
                         //   setstep({
                         //     now: step.now,
                         //   })
                         // }
+                        await saveArticle()
+                        handleClose(false)
                       }}
                       // disabled={!steps[step.now]}
                     >
-                      Next Step
+                      Save
                     </Button>
                   </Col>
                 </div>
