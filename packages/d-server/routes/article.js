@@ -120,6 +120,7 @@ router.put('/rss/:article_id', async (req, res) => {
         url: link,
         method: 'get'
       })
+      console.log(res)
       const index = res.indexOf('<section class="mx-4 p-0 mt-4">')
       let conc = res.substring(index, res.indexOf('</section>', index) + 10)
       conc = conc.replaceAll(/\s+/g, ' ')
@@ -220,7 +221,7 @@ router.put('/rss/:article_id', async (req, res) => {
     conc = conc.replaceAll(/-----[^-]+-----/g, '')
     const prompt = `請你成為一位有十年以上經驗的科學記者，你擅長將艱深的科學知識，以深入淺出的方式說給大眾聽，你也會深挖來賓有趣的人生故事，讓採訪變得更有趣，請使用${setting.language}回覆
     請以輕鬆的podcast風格，參考${conc}等資訊，整理成一份採訪訪綱，訪綱要有5個主題可以採訪，主題請盡量貼近個人研究成果或專業領域，並且要有起承轉合的脈絡
-    每個主題最多200字，請以「1.」「2.」作為項目符號`
+    每個主題最少200字，請以「1.」「2.」作為項目符號`
     await gcr([
       { role: 'user', content: prompt }
     ], () => {}, async (chat) => {
@@ -388,11 +389,24 @@ router.put('/simple/:article_id', async (req, res) => {
   }
 })
 
+router.put('/save/:article_id', async (req, res) => {
+  if (!req.user) return res.send({ error: 'user not found' })
+  const { user_id } = req.user
+  let datas = req.body
+  const article = await pg.exec('one', 'SELECT * FROM articles WHERE article_id = $1', [req.params.article_id])
+  let { setting } = article
+  const updated = await pg.exec('oneOrNone', 'UPDATE articles SET setting = $2 WHERE article_id = $1', [req.params.article_id, {
+    ...setting,
+    ...datas,
+  }])
+  return res.send(updated)
+})
+
 router.put('/:article_id', async (req, res) => {
     if (!req.user) return res.send({ error: 'user not found' })
     const { user_id } = req.user
     const { datas, step } = req.body
-    const article = await pg.exec('SELECT * FROM articles WHERE article_id = $1', [req.params.article_id])
+    const article = await pg.exec('ONE', 'SELECT * FROM articles WHERE article_id = $1 RETURNING *', [req.params.article_id])
     let { setting } = article
 
     const gptFuncs = [

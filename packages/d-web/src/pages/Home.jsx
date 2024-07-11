@@ -320,7 +320,6 @@ function Home() {
     getProjects()
   }, [])
   const handleEdit = async () => {
-    console.log(projects.find(({ project_id }) => project_id === editing))
     const updated = await apiServices.data({
       path: `/project/${editing}`,
       method: 'put',
@@ -517,8 +516,6 @@ function Home() {
         : {},
     [projectId, projects]
   )
-
-  console.log(selectedProject)
 
   return (
     <Container
@@ -781,10 +778,18 @@ function Home() {
                                             setshowWarn(article_id)
                                             e.stopPropagation()
                                           },
-                                          handleOpen: () => {
+                                          handleOpen: async () => {
                                             setid(article_id)
-                                            setshowSetting(true)
-                                            setcopyTarget(setting)
+                                            const res = await apiServices.data({
+                                              path: `/article/${article_id}`,
+                                              method: 'get',
+                                            })
+                                            if (res.setting.StV) {
+                                              setshowStV(true)
+                                            } else {
+                                              setshowSetting(true)
+                                              setcopyTarget(setting)
+                                            }
                                           },
                                         }}
                                       />
@@ -913,10 +918,18 @@ function Home() {
                                             setshowWarn(article_id)
                                             e.stopPropagation()
                                           },
-                                          handleOpen: () => {
+                                          handleOpen: async () => {
                                             setid(article_id)
-                                            setshowSetting(true)
-                                            setcopyTarget(setting)
+                                            const res = await apiServices.data({
+                                              path: `/article/${article_id}`,
+                                              method: 'get',
+                                            })
+                                            if (res.setting.StV) {
+                                              setshowStV(true)
+                                            } else {
+                                              setshowSetting(true)
+                                              setcopyTarget(setting)
+                                            }
                                           },
                                           handleCopy: (e) => {
                                             e.stopPropagation()
