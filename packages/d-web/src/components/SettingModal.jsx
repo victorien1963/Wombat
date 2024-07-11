@@ -78,7 +78,7 @@ function RSS({ setting }) {
         datas.title
       }' with ${datas.heading
         .map((h) => `[${h}]`)
-        .join()} as the outline. The script should be in ${
+        .join()} as the outline. at least 200 words each part, The script should be in ${
         datas.language
       } and suitable for use on the TextToVideo platform to generate a video.`
     )
@@ -953,6 +953,22 @@ function SettingModal({ setting }) {
     if (article_id) getArticle()
   }, [article_id])
 
+  const saveArticle = async () => {
+    console.log('---realtime saving---')
+    await apiServices.data({
+      path: `/article/save/${article_id}`,
+      method: 'put',
+      data: {
+        ...datas,
+        StV: false,
+      },
+    })
+    console.log('---realtime saving completed---')
+  }
+  useEffect(() => {
+    if (article_id && show) saveArticle()
+  }, [datas, article_id, show])
+
   const handleDataChange = (key, value) =>
     setdatas({
       ...datas,
@@ -1594,14 +1610,14 @@ function SettingModal({ setting }) {
         handleCopy,
         saveDatas,
         handleStV: async () => {
-          await apiServices.data({
-            path: `article/rss/${article_id}`,
-            method: 'put',
-            data: {
-              datas,
-              action: '',
-            },
-          })
+          // await apiServices.data({
+          //   path: `article/rss/${article_id}`,
+          //   method: 'put',
+          //   data: {
+          //     datas,
+          //     action: '',
+          //   },
+          // })
           setting.handleStV()
         },
       }}
@@ -1656,7 +1672,6 @@ function SettingModal({ setting }) {
                 defaultActiveKey={0}
                 className="border-0 fs-6"
                 onSelect={(k) => {
-                  console.log(k)
                   setmode(parseInt(k, 10))
                 }}
               >
