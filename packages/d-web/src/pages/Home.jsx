@@ -1057,7 +1057,7 @@ function Home() {
                       style={getListStyle(dropSnapshot.isDraggingOver)}
                       className="w-100 h-100 d-flex flex-column overflow-scroll"
                     >
-                      {projects ? (
+                      {projects && projects.length ? (
                         projects
                           .filter(({ setting }) => {
                             const { name } = setting
@@ -1297,14 +1297,13 @@ function Home() {
                             )
                           )
                       ) : (
-                        <Row>
-                          <Col>專案名</Col>
-                          <Col>狀態</Col>
-                          <Col>建立日期</Col>
-                          <Col>更新時間</Col>
-                          <Col>備註</Col>
-                          <Col>操作</Col>
-                        </Row>
+                        <div className="h-100 pt-3">
+                          <div className="h-100 d-flex border">
+                            <span className="m-auto h4 text-secondary">
+                              尚無資料
+                            </span>
+                          </div>
+                        </div>
                       )}
                       {dropProvided.placeholder}
                     </div>
