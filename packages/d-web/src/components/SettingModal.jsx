@@ -146,42 +146,42 @@ function RSS({ setting }) {
               />
             </ListGroupItem>
             {datas.links.map(({ link }, i) => (
-              <ListGroupItem
-                key={i}
-                className="rounded-radius d-flex my-1 py-1 px-1 border rounded-top rounded-bottom"
-              >
-                <Form.Control
-                  size="sm"
-                  className="my-auto border-0"
-                  placeholder="add link..."
-                  value={link}
-                  onChange={(e) => {
-                    handleDataChange(
-                      'links',
-                      datas.links.map((l, index) =>
-                        index === i
-                          ? {
-                              link: e.target.value,
-                            }
-                          : l
+              <ListGroupItem key={i} className="d-flex mt-1 px-0 border-0">
+                <span className="my-auto me-1">{i + 1}.</span>
+                <div className="rounded-radius flex-fill d-flex border py-1 px-1 rounded-top rounded-bottom">
+                  <Form.Control
+                    size="sm"
+                    className="my-auto border-0"
+                    placeholder="add link..."
+                    value={link}
+                    onChange={(e) => {
+                      handleDataChange(
+                        'links',
+                        datas.links.map((l, index) =>
+                          index === i
+                            ? {
+                                link: e.target.value,
+                              }
+                            : l
+                        )
                       )
-                    )
-                  }}
-                />
-                <FontAwesomeIcon
-                  onClick={() => {
-                    handleDataChange(
-                      'links',
-                      datas.links.filter((l, index) => index !== i)
-                    )
-                  }}
-                  icon={faCircleMinus}
-                  className="my-auto mx-3 text-lightred"
-                  title="remove"
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                />
+                    }}
+                  />
+                  <FontAwesomeIcon
+                    onClick={() => {
+                      handleDataChange(
+                        'links',
+                        datas.links.filter((l, index) => index !== i)
+                      )
+                    }}
+                    icon={faCircleMinus}
+                    className="my-auto mx-3 text-lightred"
+                    title="remove"
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                  />
+                </div>
               </ListGroupItem>
             ))}
           </ListGroup>
