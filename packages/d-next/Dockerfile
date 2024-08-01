@@ -10,8 +10,10 @@ RUN apt-get update -qqy && \
 
 WORKDIR /d-next
 COPY . /d-next
-RUN yarn install && \
-    if [ -n "${APP_VERSION}" ]; then yarn install --production; fi
+RUN yarn install
+# RUN yarn install && \
+    # yarn build && \
+    # if [ -n "${APP_VERSION}" ]; then yarn install --production; fi
 
 EXPOSE 7002
-CMD yarn start
+CMD yarn run dev

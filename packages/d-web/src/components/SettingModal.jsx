@@ -1649,6 +1649,7 @@ function SettingModal({ setting }) {
         handleCopy,
       }}
     />,
+    <iframe title="v0" src="http://141.147.160.153:7005/" width="1280px" />,
   ]
 
   return (
@@ -1678,6 +1679,7 @@ function SettingModal({ setting }) {
                 <Tab title="Introducing Articles" eventKey={0} />
                 <Tab title="Quick Generation" eventKey={1} />
                 <Tab title="Detailed Settings" eventKey={2} />
+                <Tab title="v0 Settings" eventKey={3} />
               </Tabs>
             </Col>
           </Row>
