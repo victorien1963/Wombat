@@ -68,6 +68,14 @@ services:
       - "postgres"
     container_name: "d-server"
 
+  d-next:
+    build:
+      context: ./packages/d-next
+    restart: always
+    ports:
+      - 7002:7002
+    container_name: "d-next"
+
   postgres:
     image: postgres:14.3
     restart: always
